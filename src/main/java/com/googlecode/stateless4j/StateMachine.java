@@ -21,11 +21,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 
-/// <summary>
-/// Models behaviour as transitions between a finite set of states.
-/// </summary>
-/// <typeparam name="TState">The type used to represent the states.</typeparam>
-/// <typeparam name="TTrigger">The type used to represent the triggers that cause state transitions.</typeparam>
+/**
+ * Models behaviour as transitions between a finite set of states
+ *
+ * @param <TState>   The type used to represent the states
+ * @param <TTrigger> The type used to represent the triggers that cause state transitions
+ */
 public class StateMachine<TState, TTrigger> {
     final Map<TState, StateRepresentation<TState, TTrigger>> _stateConfiguration = new HashMap<TState, StateRepresentation<TState, TTrigger>>();
     final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> _triggerConfiguration = new HashMap<TTrigger, TriggerWithParameters<TState, TTrigger>>();
@@ -43,10 +44,11 @@ public class StateMachine<TState, TTrigger> {
 
     };
 
-    /// <summary>
-    /// Construct a state machine.
-    /// </summary>
-    /// <param name="initialState">The initial state.</param>
+    /**
+     * Construct a state machine
+     *
+     * @param initialState The initial state
+     */
     public StateMachine(TState initialState) {
         final StateReference<TState, TTrigger> reference = new StateReference<TState, TTrigger>();
         reference.setState(initialState);
@@ -65,9 +67,12 @@ public class StateMachine<TState, TTrigger> {
         };
     }
 
-    /// <summary>
-    /// The current state.
-    /// </summary>
+
+    /**
+     * The current state
+     *
+     * @return The current state
+     */
     public TState getState() throws Exception {
         return _stateAccessor.call();
     }
@@ -76,9 +81,11 @@ public class StateMachine<TState, TTrigger> {
         _stateMutator.doIt(value);
     }
 
-    /// <summary>
-    /// The currently-permissible trigger values.
-    /// </summary>
+    /**
+     * The currently-permissible trigger values
+     *
+     * @return The currently-permissible trigger values
+     */
     public List<TTrigger> getPermittedTriggers() throws Exception {
         return getCurrentRepresentation().getPermittedTriggers();
     }
@@ -97,12 +104,14 @@ public class StateMachine<TState, TTrigger> {
         return _stateConfiguration.get(state);
     }
 
-    /// <summary>
-    /// Begin configuration of the entry/exit actions and allowed transitions
-    /// when the state machine is in a particular state.
-    /// </summary>
-    /// <param name="state">The state to configure.</param>
-    /// <returns>A configuration object through which the state can be configured.</returns>
+
+    /**
+     * Begin configuration of the entry/exit actions and allowed transitions
+     * when the state machine is in a particular state
+     *
+     * @param state The state to configure
+     * @return A configuration object through which the state can be configured
+     */
     public StateConfiguration<TState, TTrigger> Configure(TState state) throws Exception {
         return new StateConfiguration<TState, TTrigger>(GetRepresentation(state), new Func2<TState, StateRepresentation<TState, TTrigger>>() {
 
@@ -112,68 +121,72 @@ public class StateMachine<TState, TTrigger> {
         });
     }
 
-    /// <summary>
-    /// Transition from the current state via the specified trigger.
-    /// The target state is determined by the configuration of the current state.
-    /// Actions associated with leaving the current state and entering the new one
-    /// will be invoked.
-    /// </summary>
-    /// <param name="trigger">The trigger to fire.</param>
-    /// <exception cref="System.InvalidOperationException">The current state does
-    /// not allow the trigger to be fired.</exception>
+
+    /**
+     * Transition from the current state via the specified trigger.
+     * The target state is determined by the configuration of the current state.
+     * Actions associated with leaving the current state and entering the new one
+     * will be invoked
+     *
+     * @param trigger The trigger to fire
+     * @throws Exception The current state does not allow the trigger to be fired
+     */
     public void Fire(TTrigger trigger) throws Exception {
         publicFire(trigger, new Object[0]);
     }
 
-    /// <summary>
-    /// Transition from the current state via the specified trigger.
-    /// The target state is determined by the configuration of the current state.
-    /// Actions associated with leaving the current state and entering the new one
-    /// will be invoked.
-    /// </summary>
-    /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
-    /// <param name="trigger">The trigger to fire.</param>
-    /// <param name="arg0">The first argument.</param>
-    /// <exception cref="System.InvalidOperationException">The current state does
-    /// not allow the trigger to be fired.</exception>
+
+    /**
+     * Transition from the current state via the specified trigger.
+     * The target state is determined by the configuration of the current state.
+     * Actions associated with leaving the current state and entering the new one
+     * will be invoked.
+     *
+     * @param trigger The trigger to fire
+     * @param arg0    The first argument
+     * @param <TArg0> Type of the first trigger argument
+     * @throws Exception The current state does not allow the trigger to be fired
+     */
     public <TArg0> void Fire(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, TArg0 arg0) throws Exception {
         Enforce.ArgumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0);
     }
 
-    /// <summary>
-    /// Transition from the current state via the specified trigger.
-    /// The target state is determined by the configuration of the current state.
-    /// Actions associated with leaving the current state and entering the new one
-    /// will be invoked.
-    /// </summary>
-    /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
-    /// <typeparam name="TArg1">Type of the second trigger argument.</typeparam>
-    /// <param name="arg0">The first argument.</param>
-    /// <param name="arg1">The second argument.</param>
-    /// <param name="trigger">The trigger to fire.</param>
-    /// <exception cref="System.InvalidOperationException">The current state does
-    /// not allow the trigger to be fired.</exception>
+
+    /**
+     * Transition from the current state via the specified trigger.
+     * The target state is determined by the configuration of the current state.
+     * Actions associated with leaving the current state and entering the new one
+     * will be invoked.
+     *
+     * @param trigger The trigger to fire
+     * @param arg0    The first argument
+     * @param arg1    The second argument
+     * @param <TArg0> Type of the first trigger argument
+     * @param <TArg1> Type of the second trigger argument
+     * @throws Exception The current state does not allow the trigger to be fired
+     */
     public <TArg0, TArg1> void Fire(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1) throws Exception {
         Enforce.ArgumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0, arg1);
     }
 
-    /// <summary>
-    /// Transition from the current state via the specified trigger.
-    /// The target state is determined by the configuration of the current state.
-    /// Actions associated with leaving the current state and entering the new one
-    /// will be invoked.
-    /// </summary>
-    /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
-    /// <typeparam name="TArg1">Type of the second trigger argument.</typeparam>
-    /// <typeparam name="TArg2">Type of the third trigger argument.</typeparam>
-    /// <param name="arg0">The first argument.</param>
-    /// <param name="arg1">The second argument.</param>
-    /// <param name="arg2">The third argument.</param>
-    /// <param name="trigger">The trigger to fire.</param>
-    /// <exception cref="System.InvalidOperationException">The current state does
-    /// not allow the trigger to be fired.</exception>
+
+    /**
+     * Transition from the current state via the specified trigger.
+     * The target state is determined by the configuration of the current state.
+     * Actions associated with leaving the current state and entering the new one
+     * will be invoked.
+     *
+     * @param trigger The trigger to fire
+     * @param arg0    The first argument
+     * @param arg1    The second argument
+     * @param arg2    The third argument
+     * @param <TArg0> Type of the first trigger argument
+     * @param <TArg1> Type of the second trigger argument
+     * @param <TArg2> Type of the third trigger argument
+     * @throws Exception The current state does not allow the trigger to be fired
+     */
     public <TArg0, TArg1, TArg2> void Fire(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) throws Exception {
         Enforce.ArgumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0, arg1, arg2);
@@ -209,40 +222,46 @@ public class StateMachine<TState, TTrigger> {
         }
     }
 
-    /// <summary>
-    /// Override the default behaviour of throwing an exception when an unhandled trigger
-    /// is fired.
-    /// </summary>
-    /// <param name="unhandledTriggerAction">An action to call when an unhandled trigger is fired.</param>
+
+    /**
+     * Override the default behaviour of throwing an exception when an unhandled trigger is fired
+     *
+     * @param unhandledTriggerAction An action to call when an unhandled trigger is fired
+     */
     public void OnUnhandledTrigger(Action2<TState, TTrigger> unhandledTriggerAction) throws Exception {
         if (unhandledTriggerAction == null) throw new Exception("unhandledTriggerAction");
         _unhandledTriggerAction = unhandledTriggerAction;
     }
 
-    /// <summary>
-    /// Determine if the state machine is in the supplied state.
-    /// </summary>
-    /// <param name="state">The state to test for.</param>
-    /// <returns>True if the current state is equal to, or a substate of,
-    /// the supplied state.</returns>
+
+    /**
+     * Determine if the state machine is in the supplied state
+     *
+     * @param state The state to test for
+     * @return True if the current state is equal to, or a substate of, the supplied state
+     * @throws Exception
+     */
     public Boolean IsInState(TState state) throws Exception {
         return getCurrentRepresentation().IsIncludedIn(state);
     }
 
-    /// <summary>
-    /// Returns true if <paramref name="trigger"/> can be fired
-    /// in the current state.
-    /// </summary>
-    /// <param name="trigger">Trigger to test.</param>
-    /// <returns>True if the trigger can be fired, false otherwise.</returns>
+
+    /**
+     * Returns true if {@code trigger} can be fired  in the current state
+     *
+     * @param trigger Trigger to test
+     * @return True if the trigger can be fired, false otherwise
+     */
     public Boolean CanFire(TTrigger trigger) throws Exception {
         return getCurrentRepresentation().CanHandle(trigger);
     }
 
-    /// <summary>
-    /// A human-readable representation of the state machine.
-    /// </summary>
-    /// <returns>A description of the current state and permitted triggers.</returns>
+
+    /**
+     * A human-readable representation of the state machine
+     *
+     * @return A description of the current state and permitted triggers
+     */
     public String toString() {
         try {
             List<TTrigger> permittedTriggers = getPermittedTriggers();
@@ -257,47 +276,57 @@ public class StateMachine<TState, TTrigger> {
                     getState(),
                     StringUtils.join(parameters, ", "));
         } catch (Exception e) {
-            // I'm not sure if this is the best thing to do?
+            // I'm not sure if this is the best thing to do but don't have any better ideas
+            // J. Oxley 2014/04/04
             throw new RuntimeException(e);
         }
     }
 
-    /// <summary>
-    /// Specify the arguments that must be supplied when a specific trigger is fired.
-    /// </summary>
-    /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
-    /// <param name="trigger">The underlying trigger value.</param>
-    /// <returns>An object that can be passed to the Fire() method in order to
-    /// fire the parameterised trigger.</returns>
+
+    /**
+     * Specify the arguments that must be supplied when a specific trigger is fired
+     *
+     * @param trigger The underlying trigger value
+     * @param classe0 Class argument
+     * @param <TArg0> Type of the first trigger argument
+     * @return An object that can be passed to the Fire() method in order to fire the parameterised trigger
+     */
     public <TArg0> TriggerWithParameters1<TArg0, TState, TTrigger> SetTriggerParameters(TTrigger trigger, Class<TArg0> classe0) throws Exception {
         TriggerWithParameters1<TArg0, TState, TTrigger> configuration = new TriggerWithParameters1<TArg0, TState, TTrigger>(trigger, classe0);
         SaveTriggerConfiguration(configuration);
         return configuration;
     }
 
-    /// <summary>
-    /// Specify the arguments that must be supplied when a specific trigger is fired.
-    /// </summary>
-    /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
-    /// <typeparam name="TArg1">Type of the second trigger argument.</typeparam>
-    /// <param name="trigger">The underlying trigger value.</param>
-    /// <returns>An object that can be passed to the Fire() method in order to
-    /// fire the parameterised trigger.</returns>
+
+    /**
+     * Specify the arguments that must be supplied when a specific trigger is fired
+     *
+     * @param trigger The underlying trigger value
+     * @param classe0 Class argument
+     * @param classe1 Class argument
+     * @param <TArg0> Type of the first trigger argument
+     * @param <TArg1> Type of the second trigger argument
+     * @return An object that can be passed to the Fire() method in order to fire the parameterised trigger
+     */
     public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> SetTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1) throws Exception {
         TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> configuration = new TriggerWithParameters2<TArg0, TArg1, TState, TTrigger>(trigger, classe0, classe1);
         SaveTriggerConfiguration(configuration);
         return configuration;
     }
 
-    /// <summary>
-    /// Specify the arguments that must be supplied when a specific trigger is fired.
-    /// </summary>
-    /// <typeparam name="TArg0">Type of the first trigger argument.</typeparam>
-    /// <typeparam name="TArg1">Type of the second trigger argument.</typeparam>
-    /// <typeparam name="TArg2">Type of the third trigger argument.</typeparam>
-    /// <param name="trigger">The underlying trigger value.</param>
-    /// <returns>An object that can be passed to the Fire() method in order to
-    /// fire the parameterised trigger.</returns>
+
+    /**
+     * Specify the arguments that must be supplied when a specific trigger is fired
+     *
+     * @param trigger The underlying trigger value
+     * @param classe0 Class argument
+     * @param classe1 Class argument
+     * @param classe2 Class argument
+     * @param <TArg0> Type of the first trigger argument
+     * @param <TArg1> Type of the second trigger argument
+     * @param <TArg2> Type of the third trigger argument
+     * @return An object that can be passed to the Fire() method in order to fire the parameterised trigger
+     */
     public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> SetTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) throws Exception {
         TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> configuration = new TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger>(trigger, classe0, classe1, classe2);
         SaveTriggerConfiguration(configuration);
