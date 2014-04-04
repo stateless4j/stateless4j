@@ -1,6 +1,5 @@
-package com.github.oxo42;
+package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;

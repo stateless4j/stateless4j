@@ -1,9 +1,9 @@
-package com.github.oxo42.graphviz;
+package com.github.oxo42.stateless4j.graphviz;
 
-import com.github.oxo42.State;
+import com.github.oxo42.stateless4j.State;
 import com.github.oxo42.stateless4j.StateMachine;
-import com.github.oxo42.Trigger;
-import com.github.oxo42.helpers.InputStreamHelper;
+import com.github.oxo42.stateless4j.Trigger;
+import com.github.oxo42.stateless4j.helpers.InputStreamHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

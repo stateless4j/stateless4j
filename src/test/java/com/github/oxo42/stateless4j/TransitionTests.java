@@ -1,4 +1,4 @@
-package com.github.oxo42;
+package com.github.oxo42.stateless4j;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import org.junit.Assert;
 import org.junit.Test;

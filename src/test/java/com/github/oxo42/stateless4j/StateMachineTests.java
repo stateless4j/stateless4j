@@ -1,6 +1,5 @@
-package com.github.oxo42;
+package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.stateless4j.delegates.Action;
 import com.github.oxo42.stateless4j.delegates.Func;
 import org.junit.Test;

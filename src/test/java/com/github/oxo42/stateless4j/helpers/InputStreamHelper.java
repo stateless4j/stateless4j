@@ -1,4 +1,4 @@
-package com.github.oxo42.helpers;
+package com.github.oxo42.stateless4j.helpers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
