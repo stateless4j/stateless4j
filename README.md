@@ -1,3 +1,5 @@
+Forked from [stateless4j](https://code.google.com/p/stateless4j/).
+
 ## Introduction ##
 Create **state machines** and lightweight state machine-based workflows **directly in java code**:
 
