@@ -9,7 +9,6 @@ import com.googlecode.stateless4j.transitions.Transition;
 import com.googlecode.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.googlecode.stateless4j.triggers.*;
 import com.googlecode.stateless4j.validation.Enforce;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -271,10 +270,19 @@ public class StateMachine<TState, TTrigger> {
                 parameters.add(tTrigger.toString());
             }
 
+            StringBuilder params = new StringBuilder();
+            String delim = "";
+            for (String param : parameters) {
+                params.append(delim);
+                params.append(param);
+                delim = ", ";
+            }
+
+
             return String.format(
                     "StateMachine {{ State = %s, PermittedTriggers = {{ %s }}}}",
                     getState(),
-                    StringUtils.join(parameters, ", "));
+                    params.toString());
         } catch (Exception e) {
             // I'm not sure if this is the best thing to do but don't have any better ideas
             // J. Oxley 2014/04/04

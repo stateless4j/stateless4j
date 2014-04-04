@@ -6,7 +6,6 @@ import com.googlecode.stateless4j.resources.StateRepresentationResources;
 import com.googlecode.stateless4j.transitions.Transition;
 import com.googlecode.stateless4j.triggers.TriggerBehaviour;
 import com.googlecode.stateless4j.validation.Enforce;
-import org.apache.commons.collections.ListUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +20,8 @@ public class StateRepresentation<TState, TTrigger> {
 
     final List<Action2<Transition<TState, TTrigger>, Object[]>> _entryActions = new ArrayList<Action2<Transition<TState, TTrigger>, Object[]>>();
     final List<Action1<Transition<TState, TTrigger>>> _exitActions = new ArrayList<Action1<Transition<TState, TTrigger>>>();
-
-    StateRepresentation<TState, TTrigger> _superstate; // null
-
     final List<StateRepresentation<TState, TTrigger>> _substates = new ArrayList<StateRepresentation<TState, TTrigger>>();
+    StateRepresentation<TState, TTrigger> _superstate; // null
 
     public StateRepresentation(TState state) {
         _state = state;
@@ -191,8 +188,9 @@ public class StateRepresentation<TState, TTrigger> {
             }
         }
 
-        if (getSuperstate() != null)
-            result = ListUtils.sum(result, getSuperstate().getPermittedTriggers());
+        if (getSuperstate() != null) {
+            result.addAll(getSuperstate().getPermittedTriggers());
+        }
 
         return result;
     }
