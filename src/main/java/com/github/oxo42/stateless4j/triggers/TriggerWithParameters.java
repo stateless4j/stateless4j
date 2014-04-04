@@ -1,7 +1,7 @@
-package com.github.oxo42.stateless.triggers;
+package com.github.oxo42.stateless4j.triggers;
 
-import com.github.oxo42.stateless.conversion.ParameterConversion;
-import com.github.oxo42.stateless.validation.Enforce;
+import com.github.oxo42.stateless4j.conversion.ParameterConversion;
+import com.github.oxo42.stateless4j.validation.Enforce;
 
 public abstract class TriggerWithParameters<TState, TTrigger> {
     private final TTrigger underlyingTrigger;

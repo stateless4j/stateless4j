@@ -3,8 +3,8 @@ package com.github.oxo42;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.github.oxo42.stateless.delegates.Func;
-import com.github.oxo42.stateless.triggers.IgnoredTriggerBehaviour;
+import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
 
 
 public class IgnoredTriggerBehaviourTests {

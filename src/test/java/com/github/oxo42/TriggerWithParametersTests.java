@@ -3,8 +3,8 @@ package com.github.oxo42;
 
 import org.junit.Test;
 
-import com.github.oxo42.stateless.triggers.TriggerWithParameters1;
-import com.github.oxo42.stateless.triggers.TriggerWithParameters2;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 
 import static org.junit.Assert.*;
 

@@ -1,9 +1,9 @@
 package com.github.oxo42;
 
-import com.github.oxo42.stateless.StateMachine;
-import com.github.oxo42.stateless.delegates.Func;
-import com.github.oxo42.stateless.delegates.Func2;
-import com.github.oxo42.stateless.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.StateMachine;
+import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.Func2;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import org.junit.Assert;
 import org.junit.Test;
 

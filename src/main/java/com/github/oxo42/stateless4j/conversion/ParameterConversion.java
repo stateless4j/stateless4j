@@ -1,6 +1,6 @@
-package com.github.oxo42.stateless.conversion;
+package com.github.oxo42.stateless4j.conversion;
 
-import com.github.oxo42.stateless.validation.Enforce;
+import com.github.oxo42.stateless4j.validation.Enforce;
 
 public final class ParameterConversion {
     private ParameterConversion() {

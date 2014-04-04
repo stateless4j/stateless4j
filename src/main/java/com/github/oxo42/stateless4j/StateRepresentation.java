@@ -1,10 +1,10 @@
-package com.github.oxo42.stateless;
+package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless.delegates.Action1;
-import com.github.oxo42.stateless.delegates.Action2;
-import com.github.oxo42.stateless.transitions.Transition;
-import com.github.oxo42.stateless.triggers.TriggerBehaviour;
-import com.github.oxo42.stateless.validation.Enforce;
+import com.github.oxo42.stateless4j.delegates.Action1;
+import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
+import com.github.oxo42.stateless4j.validation.Enforce;
 
 import java.util.ArrayList;
 import java.util.HashMap;

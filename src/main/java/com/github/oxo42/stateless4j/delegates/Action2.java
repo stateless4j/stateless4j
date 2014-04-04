@@ -1,4 +1,4 @@
-package com.github.oxo42.stateless.delegates;
+package com.github.oxo42.stateless4j.delegates;
 
 /**
  * Represents an operation that accepts an input and returns no result

@@ -3,7 +3,7 @@ package com.github.oxo42;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.github.oxo42.stateless.transitions.TransitioningTriggerBehaviour;
+import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 
 
 public class TriggerBehaviourTests {

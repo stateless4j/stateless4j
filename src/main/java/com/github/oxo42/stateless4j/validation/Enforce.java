@@ -1,4 +1,4 @@
-package com.github.oxo42.stateless.validation;
+package com.github.oxo42.stateless4j.validation;
 
 public final class Enforce {
     private Enforce() {

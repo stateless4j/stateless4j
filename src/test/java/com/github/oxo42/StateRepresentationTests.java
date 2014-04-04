@@ -1,10 +1,10 @@
 package com.github.oxo42;
 
-import com.github.oxo42.stateless.StateRepresentation;
-import com.github.oxo42.stateless.delegates.Action1;
-import com.github.oxo42.stateless.delegates.Action2;
-import com.github.oxo42.stateless.transitions.Transition;
-import com.github.oxo42.stateless.triggers.IgnoredTriggerBehaviour;
+import com.github.oxo42.stateless4j.StateRepresentation;
+import com.github.oxo42.stateless4j.delegates.Action1;
+import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
 import org.junit.Assert;
 import org.junit.Test;
 

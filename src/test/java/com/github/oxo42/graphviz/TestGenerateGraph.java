@@ -1,7 +1,7 @@
 package com.github.oxo42.graphviz;
 
 import com.github.oxo42.State;
-import com.github.oxo42.stateless.StateMachine;
+import com.github.oxo42.stateless4j.StateMachine;
 import com.github.oxo42.Trigger;
 import com.github.oxo42.helpers.InputStreamHelper;
 

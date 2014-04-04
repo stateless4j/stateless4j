@@ -1,8 +1,8 @@
-package com.github.oxo42.stateless.triggers;
+package com.github.oxo42.stateless4j.triggers;
 
-import com.github.oxo42.stateless.delegates.Func;
-import com.github.oxo42.stateless.delegates.Func2;
-import com.github.oxo42.stateless.validation.Enforce;
+import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.Func2;
+import com.github.oxo42.stateless4j.validation.Enforce;
 
 public class DynamicTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<TState, TTrigger> {
     private Func2<Object[], TState> destination;

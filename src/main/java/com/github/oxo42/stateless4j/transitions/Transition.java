@@ -1,4 +1,4 @@
-package com.github.oxo42.stateless.transitions;
+package com.github.oxo42.stateless4j.transitions;
 
 public class Transition<TState, TTrigger> {
     private final TState source;

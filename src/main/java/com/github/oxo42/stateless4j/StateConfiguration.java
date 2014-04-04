@@ -1,10 +1,10 @@
-package com.github.oxo42.stateless;
+package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless.delegates.*;
-import com.github.oxo42.stateless.transitions.Transition;
-import com.github.oxo42.stateless.transitions.TransitioningTriggerBehaviour;
-import com.github.oxo42.stateless.triggers.*;
-import com.github.oxo42.stateless.validation.Enforce;
+import com.github.oxo42.stateless4j.delegates.*;
+import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
+import com.github.oxo42.stateless4j.triggers.*;
+import com.github.oxo42.stateless4j.validation.Enforce;
 
 public class StateConfiguration<TState, TTrigger> {
     private static final Func<Boolean> NO_GUARD = new Func<Boolean>() {

@@ -1,13 +1,13 @@
-package com.github.oxo42.stateless;
+package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless.delegates.Action1;
-import com.github.oxo42.stateless.delegates.Action2;
-import com.github.oxo42.stateless.delegates.Func;
-import com.github.oxo42.stateless.delegates.Func2;
-import com.github.oxo42.stateless.transitions.Transition;
-import com.github.oxo42.stateless.transitions.TransitioningTriggerBehaviour;
-import com.github.oxo42.stateless.triggers.*;
-import com.github.oxo42.stateless.validation.Enforce;
+import com.github.oxo42.stateless4j.delegates.Action1;
+import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.Func2;
+import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
+import com.github.oxo42.stateless4j.triggers.*;
+import com.github.oxo42.stateless4j.validation.Enforce;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

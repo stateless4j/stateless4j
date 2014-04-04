@@ -1,6 +1,6 @@
 package com.github.oxo42;
 
-import com.github.oxo42.stateless.transitions.TransitioningTriggerBehaviour;
+import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import org.junit.Assert;
 import org.junit.Test;
 

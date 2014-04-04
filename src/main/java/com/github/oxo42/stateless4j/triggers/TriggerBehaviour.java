@@ -1,6 +1,6 @@
-package com.github.oxo42.stateless.triggers;
+package com.github.oxo42.stateless4j.triggers;
 
-import com.github.oxo42.stateless.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.Func;
 
 
 public abstract class TriggerBehaviour<TState, TTrigger> {
