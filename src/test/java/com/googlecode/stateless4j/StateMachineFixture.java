@@ -1,248 +1,231 @@
 package com.googlecode.stateless4j;
-import java.util.List;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-
-import com.googlecode.stateless4j.StateMachine;
 import com.googlecode.stateless4j.delegates.Action;
 import com.googlecode.stateless4j.delegates.Func;
+import junit.framework.Assert;
+import org.junit.Test;
+
+import java.util.List;
 
 
-    public class StateMachineFixture
-    {
-        final String
+public class StateMachineFixture {
+    final String
             StateA = "A", StateB = "B", StateC = "C",
             TriggerX = "X", TriggerY = "Y";
 
 
-        @Test
-        public void CanUseReferenceTypeMarkers() throws Exception
-        {
-            RunSimpleTest(
-                new String[] { StateA, StateB, StateC },
-                new String[] { TriggerX, TriggerY });
-        }
+    @Test
+    public void CanUseReferenceTypeMarkers() throws Exception {
+        RunSimpleTest(
+                new String[]{StateA, StateB, StateC},
+                new String[]{TriggerX, TriggerY});
+    }
 
 
-        @Test
-        public void CanUseValueTypeMarkers() throws Exception
-        {
-            RunSimpleTest(State.values(), Trigger.values());
-        }
+    @Test
+    public void CanUseValueTypeMarkers() throws Exception {
+        RunSimpleTest(State.values(), Trigger.values());
+    }
 
-        <TState, TTransition> void RunSimpleTest(TState[] states, TTransition[] transitions) throws Exception
-        {
-            TState a = states[0];
-            TState b = states[1];
-            TTransition x = transitions[0];
+    <TState, TTransition> void RunSimpleTest(TState[] states, TTransition[] transitions) throws Exception {
+        TState a = states[0];
+        TState b = states[1];
+        TTransition x = transitions[0];
 
-            StateMachine<TState, TTransition> sm = new StateMachine<TState, TTransition>(a);
-            
-            sm.Configure(a)
+        StateMachine<TState, TTransition> sm = new StateMachine<TState, TTransition>(a);
+
+        sm.Configure(a)
                 .Permit(x, b);
 
-            sm.Fire(x);
+        sm.Fire(x);
 
-            Assert.assertEquals(b, sm.getState());
-        }
-
-
-        @Test
-        public void InitialStateIsCurrent()
-        {
-            State initial = State.B;
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial);
-            Assert.assertEquals(initial, sm.getState());
-        }
-
-        @Test
-        public void SubstateIsIncludedInCurrentState() throws Exception
-        {
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-            sm.Configure(State.B).SubstateOf(State.C);
-
-            Assert.assertEquals(State.B, sm.getState());
-            Assert.assertTrue(sm.IsInState(State.C));
-        }
+        Assert.assertEquals(b, sm.getState());
+    }
 
 
-        @Test
-        public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() throws Exception
-        {
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-            
-            sm.Configure(State.B)
+    @Test
+    public void InitialStateIsCurrent() throws Exception {
+        State initial = State.B;
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial);
+        Assert.assertEquals(initial, sm.getState());
+    }
+
+    @Test
+    public void SubstateIsIncludedInCurrentState() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        sm.Configure(State.B).SubstateOf(State.C);
+
+        Assert.assertEquals(State.B, sm.getState());
+        Assert.assertTrue(sm.IsInState(State.C));
+    }
+
+
+    @Test
+    public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+
+        sm.Configure(State.B)
                 .SubstateOf(State.C);
 
-            sm.Configure(State.C)
+        sm.Configure(State.C)
                 .Ignore(Trigger.X);
 
-            sm.Fire(Trigger.X);
+        sm.Fire(Trigger.X);
 
-            Assert.assertEquals(State.B, sm.getState());
-        }
+        Assert.assertEquals(State.B, sm.getState());
+    }
 
 
-        @Test
-        public void PermittedTriggersIncludeSuperstatePermittedTriggers() throws Exception
-        {
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+    @Test
+    public void PermittedTriggersIncludeSuperstatePermittedTriggers() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.Configure(State.A)
+        sm.Configure(State.A)
                 .Permit(Trigger.Z, State.B);
-            
-            sm.Configure(State.B)
+
+        sm.Configure(State.B)
                 .SubstateOf(State.C)
                 .Permit(Trigger.X, State.A);
 
-            sm.Configure(State.C)
+        sm.Configure(State.C)
                 .Permit(Trigger.Y, State.A);
 
-            List<Trigger> permitted = sm.getPermittedTriggers();
+        List<Trigger> permitted = sm.getPermittedTriggers();
 
-            Assert.assertTrue(permitted.contains(Trigger.X));
-            Assert.assertTrue(permitted.contains(Trigger.Y));
-            Assert.assertFalse(permitted.contains(Trigger.Z));
-        }
+        Assert.assertTrue(permitted.contains(Trigger.X));
+        Assert.assertTrue(permitted.contains(Trigger.Y));
+        Assert.assertFalse(permitted.contains(Trigger.Z));
+    }
 
 
-        @Test
-        public void PermittedTriggersAreDistinctValues() throws Exception
-        {
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+    @Test
+    public void PermittedTriggersAreDistinctValues() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.Configure(State.B)
+        sm.Configure(State.B)
                 .SubstateOf(State.C)
                 .Permit(Trigger.X, State.A);
 
-            sm.Configure(State.C)
+        sm.Configure(State.C)
                 .Permit(Trigger.X, State.B);
 
-            List<Trigger> permitted = sm.getPermittedTriggers();
-            Assert.assertEquals(1, permitted.size());
-            Assert.assertEquals(Trigger.X, permitted.get(0));
-        }
+        List<Trigger> permitted = sm.getPermittedTriggers();
+        Assert.assertEquals(1, permitted.size());
+        Assert.assertEquals(Trigger.X, permitted.get(0));
+    }
 
 
-        @Test
-        public void AcceptedTriggersRespectGuards() throws Exception
-        {
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+    @Test
+    public void AcceptedTriggersRespectGuards() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.Configure(State.B)
+        sm.Configure(State.B)
                 .PermitIf(Trigger.X, State.A, new Func<Boolean>() {
-					
-					public Boolean call() {
-						return false;
-					}
-				});
 
-            Assert.assertEquals(0, sm.getPermittedTriggers().size());
-        }
+                    public Boolean call() {
+                        return false;
+                    }
+                });
+
+        Assert.assertEquals(0, sm.getPermittedTriggers().size());
+    }
 
 
-        @Test
-        public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() throws Exception
-        {
-        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+    @Test
+    public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.Configure(State.B)
+        sm.Configure(State.B)
                 .PermitIf(Trigger.X, State.A, IgnoredTriggerBehaviourFixture.returnFalse)
                 .PermitIf(Trigger.X, State.C, IgnoredTriggerBehaviourFixture.returnTrue);
 
-            sm.Fire(Trigger.X);
+        sm.Fire(Trigger.X);
 
-            Assert.assertEquals(State.C, sm.getState());
-        }
+        Assert.assertEquals(State.C, sm.getState());
+    }
 
-        Boolean fired = false;
-        
-        private void setFired() {
-        	fired = true;
-        }
-        	
+    Boolean fired = false;
 
-        @Test
-        public void WhenTriggerIsIgnored_ActionsNotExecuted() throws Exception
-        {
-        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+    private void setFired() {
+        fired = true;
+    }
 
-        	fired = false;
-        	
-            sm.Configure(State.B)
+
+    @Test
+    public void WhenTriggerIsIgnored_ActionsNotExecuted() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+
+        fired = false;
+
+        sm.Configure(State.B)
                 .OnEntry(new Action() {
-					
-					
-					public void doIt() {
-						setFired();
-					}
-				})
+
+
+                    public void doIt() {
+                        setFired();
+                    }
+                })
                 .Ignore(Trigger.X);
 
-            sm.Fire(Trigger.X);
+        sm.Fire(Trigger.X);
 
-            Assert.assertFalse(fired);
-        }
+        Assert.assertFalse(fired);
+    }
 
 
-        @Test
-        public void IfSelfTransitionPermited_ActionsFire() throws Exception
-        {
-        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+    @Test
+    public void IfSelfTransitionPermited_ActionsFire() throws Exception {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            fired = false;
+        fired = false;
 
-            sm.Configure(State.B)
+        sm.Configure(State.B)
                 .OnEntry(new Action() {
-					
-					
-					public void doIt() {
-						setFired();
-					}
-				})
+
+
+                    public void doIt() {
+                        setFired();
+                    }
+                })
                 .PermitReentry(Trigger.X);
 
-            sm.Fire(Trigger.X);
+        sm.Fire(Trigger.X);
 
-            Assert.assertTrue(fired);
+        Assert.assertTrue(fired);
+    }
+
+
+    @Test
+    //[Test, ExpectedException(typeof(ArgumentException))]
+    public void ImplicitReentryIsDisallowed() {
+        try {
+
+            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+
+            sm.Configure(State.B)
+                    .Permit(Trigger.X, State.B);
+        } catch (Exception e) {
+
         }
+    }
 
-
-        @Test
-        //[Test, ExpectedException(typeof(ArgumentException))]
-        public void ImplicitReentryIsDisallowed()
-        {
-            try {
-                
-            	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-                
-                sm.Configure(State.B)
-                .Permit(Trigger.X, State.B);
-            } catch (Exception e) {
-                
-            }
-        }
-
-        @Test
+    @Test
 //        [Test, ExpectedException(typeof(InvalidOperationException))]
-        public void TriggerParametersAreImmutableOnceSet() throws Exception
-        {
-        	try {
-	        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-	        	
-	            sm.SetTriggerParameters(Trigger.X, String.class, int.class);
-	            sm.SetTriggerParameters(Trigger.X, String.class);
-	            Assert.fail();
-        	} catch (Exception e) {
-        		
-        	}
-        }
+    public void TriggerParametersAreImmutableOnceSet() throws Exception {
+        try {
+            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-        String entryArgS = null;
-        int entryArgI = 0;
-        
+            sm.SetTriggerParameters(Trigger.X, String.class, int.class);
+            sm.SetTriggerParameters(Trigger.X, String.class);
+            Assert.fail();
+        } catch (Exception e) {
+
+        }
+    }
+
+    String entryArgS = null;
+    int entryArgI = 0;
+
 //        @Test
 //        public void ParametersSuppliedToFireArePassedToEntryAction()
 //        {
@@ -288,5 +271,5 @@ import com.googlecode.stateless4j.delegates.Func;
 //            Assert.AreEqual(State.B, state);
 //            Assert.AreEqual(Trigger.Z, trigger);
 //        }
-    }
+}
 
