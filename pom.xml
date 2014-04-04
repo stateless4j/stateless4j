@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.googlecode</groupId>
+	<artifactId>stateless4j</artifactId>
+	<version>1.1</version>
+	<packaging>jar</packaging>
+	<name>stateless4j</name>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	<description>A fluent interface for state machines</description>
+	<url>http://code.google.com/p/stateless4j/</url>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://stateless4j.googlecode.com/svn/tags/stateless4j-1.0</url>
+		<connection>scm:svn:https://stateless4j.googlecode.com/svn/tags/stateless4j-1.0</connection>
+		<developerConnection>scm:svn:https://stateless4j.googlecode.com/svn/tags/stateless4j-1.0</developerConnection>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>20040616</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<developers>
+		<developer>
+			<name>Arnaud SYLVESTRE</name>
+		</developer>
+	</developers>
+<!-- 	<build> -->
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-gpg-plugin</artifactId> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>sign-artifacts</id> -->
+<!-- 						<phase>verify</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>sign</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
+<!-- 		</plugins> -->
+<!-- 	</build> -->
+</project>
