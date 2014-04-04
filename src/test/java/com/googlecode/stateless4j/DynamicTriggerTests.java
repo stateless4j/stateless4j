@@ -1,13 +1,12 @@
 package com.googlecode.stateless4j;
-import org.junit.Assert;
-import org.junit.Test;
 
-import com.googlecode.stateless4j.StateMachine;
 import com.googlecode.stateless4j.delegates.Func;
 import com.googlecode.stateless4j.delegates.Func2;
 import com.googlecode.stateless4j.triggers.TriggerWithParameters1;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class DynamicTriggerBehaviour {
+public class DynamicTriggerTests {
     @Test
     public void DestinationStateIsDynamic() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);

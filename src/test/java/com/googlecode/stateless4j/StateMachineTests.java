@@ -8,11 +8,13 @@ import org.junit.Test;
 import java.util.List;
 
 
-public class StateMachineFixture {
+public class StateMachineTests {
     final String
             StateA = "A", StateB = "B", StateC = "C",
             TriggerX = "X", TriggerY = "Y";
-
+    Boolean fired = false;
+    String entryArgS = null;
+    int entryArgI = 0;
 
     @Test
     public void CanUseReferenceTypeMarkers() throws Exception {
@@ -20,7 +22,6 @@ public class StateMachineFixture {
                 new String[]{StateA, StateB, StateC},
                 new String[]{TriggerX, TriggerY});
     }
-
 
     @Test
     public void CanUseValueTypeMarkers() throws Exception {
@@ -42,7 +43,6 @@ public class StateMachineFixture {
         Assert.assertEquals(b, sm.getState());
     }
 
-
     @Test
     public void InitialStateIsCurrent() throws Exception {
         State initial = State.B;
@@ -59,7 +59,6 @@ public class StateMachineFixture {
         Assert.assertTrue(sm.IsInState(State.C));
     }
 
-
     @Test
     public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
@@ -74,7 +73,6 @@ public class StateMachineFixture {
 
         Assert.assertEquals(State.B, sm.getState());
     }
-
 
     @Test
     public void PermittedTriggersIncludeSuperstatePermittedTriggers() throws Exception {
@@ -97,7 +95,6 @@ public class StateMachineFixture {
         Assert.assertFalse(permitted.contains(Trigger.Z));
     }
 
-
     @Test
     public void PermittedTriggersAreDistinctValues() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
@@ -114,7 +111,6 @@ public class StateMachineFixture {
         Assert.assertEquals(Trigger.X, permitted.get(0));
     }
 
-
     @Test
     public void AcceptedTriggersRespectGuards() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
@@ -130,26 +126,22 @@ public class StateMachineFixture {
         Assert.assertEquals(0, sm.getPermittedTriggers().size());
     }
 
-
     @Test
     public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         sm.Configure(State.B)
-                .PermitIf(Trigger.X, State.A, IgnoredTriggerBehaviourFixture.returnFalse)
-                .PermitIf(Trigger.X, State.C, IgnoredTriggerBehaviourFixture.returnTrue);
+                .PermitIf(Trigger.X, State.A, IgnoredTriggerBehaviourTests.returnFalse)
+                .PermitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue);
 
         sm.Fire(Trigger.X);
 
         Assert.assertEquals(State.C, sm.getState());
     }
 
-    Boolean fired = false;
-
     private void setFired() {
         fired = true;
     }
-
 
     @Test
     public void WhenTriggerIsIgnored_ActionsNotExecuted() throws Exception {
@@ -172,7 +164,6 @@ public class StateMachineFixture {
         Assert.assertFalse(fired);
     }
 
-
     @Test
     public void IfSelfTransitionPermited_ActionsFire() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
@@ -193,7 +184,6 @@ public class StateMachineFixture {
 
         Assert.assertTrue(fired);
     }
-
 
     @Test
     //[Test, ExpectedException(typeof(ArgumentException))]
@@ -222,9 +212,6 @@ public class StateMachineFixture {
 
         }
     }
-
-    String entryArgS = null;
-    int entryArgI = 0;
 
 //        @Test
 //        public void ParametersSuppliedToFireArePassedToEntryAction()

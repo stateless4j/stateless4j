@@ -7,7 +7,7 @@ import com.googlecode.stateless4j.delegates.Func;
 import com.googlecode.stateless4j.triggers.IgnoredTriggerBehaviour;
 
 
-public class IgnoredTriggerBehaviourFixture {
+public class IgnoredTriggerBehaviourTests {
     public static Func<Boolean> returnTrue = new Func<Boolean>() {
 
         public Boolean call() {

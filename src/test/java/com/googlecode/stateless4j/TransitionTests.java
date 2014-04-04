@@ -5,7 +5,7 @@ import org.junit.Test;
 import com.googlecode.stateless4j.transitions.Transition;
 
 
-public class TransitionFixture
+public class TransitionTests
 {
     
     @Test
