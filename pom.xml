@@ -21,9 +21,9 @@
         </license>
     </licenses>
     <scm>
-        <url>https://stateless4j.googlecode.com/svn/tags/stateless4j-1.0</url>
-        <connection>scm:svn:https://stateless4j.googlecode.com/svn/tags/stateless4j-1.0</connection>
-        <developerConnection>scm:svn:https://stateless4j.googlecode.com/svn/tags/stateless4j-1.0</developerConnection>
+        <url>https://github.com/oxo42/stateless4j</url>
+        <connection>scm:git:https://github.com/oxo42/stateless4j.git</connection>
+        <developerConnection>scm:git:https://github.com/oxo42/stateless4j.git</developerConnection>
     </scm>
     <dependencies>
         <dependency>
@@ -36,6 +36,9 @@
     <developers>
         <developer>
             <name>Arnaud SYLVESTRE</name>
+        </developer>
+        <developer>
+            <name>John Oxley</name>
         </developer>
     </developers>
     <build>
@@ -52,21 +55,4 @@
             </plugin>
         </plugins>
     </build>
-    <!-- 	<build> -->
-    <!-- 		<plugins> -->
-    <!-- 			<plugin> -->
-    <!-- 				<groupId>org.apache.maven.plugins</groupId> -->
-    <!-- 				<artifactId>maven-gpg-plugin</artifactId> -->
-    <!-- 				<executions> -->
-    <!-- 					<execution> -->
-    <!-- 						<id>sign-artifacts</id> -->
-    <!-- 						<phase>verify</phase> -->
-    <!-- 						<goals> -->
-    <!-- 							<goal>sign</goal> -->
-    <!-- 						</goals> -->
-    <!-- 					</execution> -->
-    <!-- 				</executions> -->
-    <!-- 			</plugin> -->
-    <!-- 		</plugins> -->
-    <!-- 	</build> -->
 </project>
