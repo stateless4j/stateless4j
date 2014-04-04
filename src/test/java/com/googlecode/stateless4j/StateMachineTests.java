@@ -2,10 +2,11 @@ package com.googlecode.stateless4j;
 
 import com.googlecode.stateless4j.delegates.Action;
 import com.googlecode.stateless4j.delegates.Func;
-import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 
 public class StateMachineTests {
@@ -40,14 +41,14 @@ public class StateMachineTests {
 
         sm.Fire(x);
 
-        Assert.assertEquals(b, sm.getState());
+        assertEquals(b, sm.getState());
     }
 
     @Test
     public void InitialStateIsCurrent() throws Exception {
         State initial = State.B;
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial);
-        Assert.assertEquals(initial, sm.getState());
+        assertEquals(initial, sm.getState());
     }
 
     @Test
@@ -55,8 +56,8 @@ public class StateMachineTests {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
         sm.Configure(State.B).SubstateOf(State.C);
 
-        Assert.assertEquals(State.B, sm.getState());
-        Assert.assertTrue(sm.IsInState(State.C));
+        assertEquals(State.B, sm.getState());
+        assertTrue(sm.IsInState(State.C));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class StateMachineTests {
 
         sm.Fire(Trigger.X);
 
-        Assert.assertEquals(State.B, sm.getState());
+        assertEquals(State.B, sm.getState());
     }
 
     @Test
@@ -90,9 +91,9 @@ public class StateMachineTests {
 
         List<Trigger> permitted = sm.getPermittedTriggers();
 
-        Assert.assertTrue(permitted.contains(Trigger.X));
-        Assert.assertTrue(permitted.contains(Trigger.Y));
-        Assert.assertFalse(permitted.contains(Trigger.Z));
+        assertTrue(permitted.contains(Trigger.X));
+        assertTrue(permitted.contains(Trigger.Y));
+        assertFalse(permitted.contains(Trigger.Z));
     }
 
     @Test
@@ -107,8 +108,8 @@ public class StateMachineTests {
                 .Permit(Trigger.X, State.B);
 
         List<Trigger> permitted = sm.getPermittedTriggers();
-        Assert.assertEquals(1, permitted.size());
-        Assert.assertEquals(Trigger.X, permitted.get(0));
+        assertEquals(1, permitted.size());
+        assertEquals(Trigger.X, permitted.get(0));
     }
 
     @Test
@@ -123,7 +124,7 @@ public class StateMachineTests {
                     }
                 });
 
-        Assert.assertEquals(0, sm.getPermittedTriggers().size());
+        assertEquals(0, sm.getPermittedTriggers().size());
     }
 
     @Test
@@ -136,7 +137,7 @@ public class StateMachineTests {
 
         sm.Fire(Trigger.X);
 
-        Assert.assertEquals(State.C, sm.getState());
+        assertEquals(State.C, sm.getState());
     }
 
     private void setFired() {
@@ -161,7 +162,7 @@ public class StateMachineTests {
 
         sm.Fire(Trigger.X);
 
-        Assert.assertFalse(fired);
+        assertFalse(fired);
     }
 
     @Test
@@ -182,7 +183,7 @@ public class StateMachineTests {
 
         sm.Fire(Trigger.X);
 
-        Assert.assertTrue(fired);
+        assertTrue(fired);
     }
 
     @Test
@@ -207,7 +208,7 @@ public class StateMachineTests {
 
             sm.SetTriggerParameters(Trigger.X, String.class, int.class);
             sm.SetTriggerParameters(Trigger.X, String.class);
-            Assert.fail();
+            fail();
         } catch (Exception e) {
 
         }
@@ -236,8 +237,8 @@ public class StateMachineTests {
 //
 //            sm.Fire(x, suppliedArgS, suppliedArgI);
 //
-//            Assert.AreEqual(suppliedArgS, entryArgS);
-//            Assert.AreEqual(suppliedArgI, entryArgI);
+//            AreEqual(suppliedArgS, entryArgS);
+//            AreEqual(suppliedArgI, entryArgI);
 //        }
 //
 //        @Test
@@ -255,8 +256,8 @@ public class StateMachineTests {
 //
 //            sm.Fire(Trigger.Z);
 //
-//            Assert.AreEqual(State.B, state);
-//            Assert.AreEqual(Trigger.Z, trigger);
+//            AreEqual(State.B, state);
+//            AreEqual(Trigger.Z, trigger);
 //        }
 }
 

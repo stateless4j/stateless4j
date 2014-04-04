@@ -1,18 +1,19 @@
 package com.googlecode.stateless4j;
 
-import junit.framework.Assert;
 
 import org.junit.Test;
 
 import com.googlecode.stateless4j.triggers.TriggerWithParameters1;
 import com.googlecode.stateless4j.triggers.TriggerWithParameters2;
 
+import static org.junit.Assert.*;
+
 
 public class TriggerWithParametersTests {
     @Test
     public void DescribesUnderlyingTrigger() throws Exception {
         TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
-        Assert.assertEquals(Trigger.X, twp.getTrigger());
+        assertEquals(Trigger.X, twp.getTrigger());
     }
 
     @Test
@@ -32,7 +33,7 @@ public class TriggerWithParametersTests {
         try {
             TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
             twp.ValidateParameters(new Object[]{123});
-            Assert.fail();
+            fail();
         } catch (Exception e) {
         }
     }
@@ -42,7 +43,7 @@ public class TriggerWithParametersTests {
         try {
             TriggerWithParameters2<String, String, State, Trigger> twp = new TriggerWithParameters2<String, String, State, Trigger>(Trigger.X, String.class, String.class);
             twp.ValidateParameters(new Object[]{"a"});
-            Assert.fail();
+            fail();
         } catch (Exception e) {
         }
     }
@@ -52,7 +53,7 @@ public class TriggerWithParametersTests {
         try {
             TriggerWithParameters2<String, String, State, Trigger> twp = new TriggerWithParameters2<String, String, State, Trigger>(Trigger.X, String.class, String.class);
             twp.ValidateParameters(new Object[]{"a", "b", "c"});
-            Assert.fail();
+            fail();
         } catch (Exception e) {
         }
     }

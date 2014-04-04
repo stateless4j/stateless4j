@@ -4,10 +4,11 @@ import com.googlecode.stateless4j.State;
 import com.googlecode.stateless4j.StateMachine;
 import com.googlecode.stateless4j.Trigger;
 import com.googlecode.stateless4j.helpers.InputStreamHelper;
-import junit.framework.Assert;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+
+import static org.junit.Assert.*;
 
 public class TestGenerateGraph {
 
@@ -32,6 +33,6 @@ public class TestGenerateGraph {
         String expectedStr = InputStreamHelper.readAsString(expected);
         String actual = new String(dotFile.toByteArray(), "UTF-8");
 
-        Assert.assertEquals(expectedStr, actual);
+        assertEquals(expectedStr, actual);
     }
 }
