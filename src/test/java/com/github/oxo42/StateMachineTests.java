@@ -99,7 +99,7 @@ public class StateMachineTests {
 
     @Test
     public void PermittedTriggersAreDistinctValues() throws Exception {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.B)
                 .substateOf(State.C)

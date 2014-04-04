@@ -530,8 +530,6 @@ public class StateConfiguration<TState, TTrigger> {
 
     StateConfiguration<TState, TTrigger> publicPermit(TTrigger trigger, TState destinationState) throws Exception {
         return publicPermitIf(trigger, destinationState, new Func<Boolean>() {
-
-
             public Boolean call() {
                 return true;
             }

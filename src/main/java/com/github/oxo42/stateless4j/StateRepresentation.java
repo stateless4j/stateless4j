@@ -6,10 +6,7 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
 import com.github.oxo42.stateless4j.validation.Enforce;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StateRepresentation<TState, TTrigger> {
     private final TState state;
@@ -179,10 +176,10 @@ public class StateRepresentation<TState, TTrigger> {
 
     @SuppressWarnings("unchecked")
     public List<TTrigger> getPermittedTriggers() throws Exception {
-        List<TTrigger> result = new ArrayList<>();
+        Set<TTrigger> result = new HashSet<>();
 
         for (TTrigger t : triggerBehaviours.keySet()) {
-            Boolean isOk = false;
+            boolean isOk = false;
             for (TriggerBehaviour<TState, TTrigger> v : triggerBehaviours.get(t)) {
                 if (v.isGuardConditionMet()) {
                     isOk = true;
@@ -197,6 +194,6 @@ public class StateRepresentation<TState, TTrigger> {
             result.addAll(getSuperstate().getPermittedTriggers());
         }
 
-        return result;
+        return new ArrayList<>(result);
     }
 }
