@@ -4,8 +4,8 @@ import com.googlecode.stateless4j.conversion.ParameterConversion;
 import com.googlecode.stateless4j.validation.Enforce;
 
 public abstract class TriggerWithParameters<TState, TTrigger> {
-    final TTrigger _underlyingTrigger;
-    final Class<?>[] _argumentTypes;
+    private final TTrigger underlyingTrigger;
+    private final Class<?>[] argumentTypes;
 
 
     /**
@@ -15,10 +15,10 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
      * @param argumentTypes     The argument types expected by the trigger
      */
     public TriggerWithParameters(TTrigger underlyingTrigger, Class<?>... argumentTypes) throws Exception {
-        Enforce.ArgumentNotNull(argumentTypes, "argumentTypes");
+        Enforce.argumentNotNull(argumentTypes, "argumentTypes");
 
-        _underlyingTrigger = underlyingTrigger;
-        _argumentTypes = argumentTypes;
+        this.underlyingTrigger = underlyingTrigger;
+        this.argumentTypes = argumentTypes;
     }
 
 
@@ -28,7 +28,7 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
      * @return Gets the underlying trigger value that has been configured
      */
     public TTrigger getTrigger() {
-        return _underlyingTrigger;
+        return underlyingTrigger;
     }
 
 
@@ -37,8 +37,8 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
      *
      * @param args Args
      */
-    public void ValidateParameters(Object[] args) throws Exception {
-        Enforce.ArgumentNotNull(args, "args");
-        ParameterConversion.Validate(args, _argumentTypes);
+    public void validateParameters(Object[] args) throws Exception {
+        Enforce.argumentNotNull(args, "args");
+        ParameterConversion.validate(args, argumentTypes);
     }
 }

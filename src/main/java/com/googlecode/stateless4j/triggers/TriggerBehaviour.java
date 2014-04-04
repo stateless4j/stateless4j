@@ -4,21 +4,21 @@ import com.googlecode.stateless4j.delegates.Func;
 
 
 public abstract class TriggerBehaviour<TState, TTrigger> {
-    final TTrigger _trigger;
-    final Func<Boolean> _guard;
+    private final TTrigger trigger;
+    private final Func<Boolean> guard;
 
     protected TriggerBehaviour(TTrigger trigger, Func<Boolean> guard) {
-        _trigger = trigger;
-        _guard = guard;
+        this.trigger = trigger;
+        this.guard = guard;
     }
 
     public TTrigger getTrigger() {
-        return _trigger;
+        return trigger;
     }
 
     public Boolean isGuardConditionMet() throws Exception {
-        return _guard.call();
+        return guard.call();
     }
 
-    public abstract TState ResultsInTransitionFrom(TState source, Object... args) throws Exception;
+    public abstract TState resultsInTransitionFrom(TState source, Object... args) throws Exception;
 }

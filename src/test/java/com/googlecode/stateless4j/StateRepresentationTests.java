@@ -22,7 +22,7 @@ public class StateRepresentationTests {
         Transition<State, Trigger>
                 transition = new Transition<State, Trigger>(State.A, State.B, Trigger.X);
         actualTransition = null;
-        stateRepresentation.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        stateRepresentation.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> t, Object[] a)
@@ -30,7 +30,7 @@ public class StateRepresentationTests {
                 actualTransition = t;
             }
         });
-        stateRepresentation.Enter(transition);
+        stateRepresentation.enter(transition);
         Assert.assertEquals(transition, actualTransition);
     }
 
@@ -40,7 +40,7 @@ public class StateRepresentationTests {
         Transition<State, Trigger>
                 transition = new Transition<State, Trigger>(State.A, State.B, Trigger.X);
         actualTransition = null;
-        stateRepresentation.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        stateRepresentation.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> t, Object[] a)
@@ -48,7 +48,7 @@ public class StateRepresentationTests {
                 actualTransition = t;
             }
         });
-        stateRepresentation.Exit(transition);
+        stateRepresentation.exit(transition);
         Assert.assertNull(actualTransition);
     }
 
@@ -59,13 +59,13 @@ public class StateRepresentationTests {
         Transition<State, Trigger>
                 transition = new Transition<State, Trigger>(State.A, State.B, Trigger.X);
         actualTransition = null;
-        stateRepresentation.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        stateRepresentation.addExitAction(new Action1<Transition<State, Trigger>>() {
 
             public void doIt(Transition<State, Trigger> t) {
                 actualTransition = t;
             }
         });
-        stateRepresentation.Exit(transition);
+        stateRepresentation.exit(transition);
         Assert.assertEquals(transition, actualTransition);
     }
 
@@ -75,76 +75,76 @@ public class StateRepresentationTests {
         Transition<State, Trigger>
                 transition = new Transition<State, Trigger>(State.A, State.B, Trigger.X);
         actualTransition = null;
-        stateRepresentation.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        stateRepresentation.addExitAction(new Action1<Transition<State, Trigger>>() {
 
             public void doIt(Transition<State, Trigger> t) {
                 actualTransition = t;
             }
         });
-        stateRepresentation.Enter(transition);
+        stateRepresentation.enter(transition);
         Assert.assertNull(actualTransition);
     }
 
     @Test
     public void IncludesUnderlyingState() {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
-        Assert.assertTrue(stateRepresentation.Includes(State.B));
+        Assert.assertTrue(stateRepresentation.includes(State.B));
     }
 
     @Test
     public void DoesNotIncludeUnrelatedState() {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
-        Assert.assertFalse(stateRepresentation.Includes(State.C));
+        Assert.assertFalse(stateRepresentation.includes(State.C));
     }
 
     @Test
     public void IncludesSubstate() throws Exception {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
-        stateRepresentation.AddSubstate(CreateRepresentation(State.C));
-        Assert.assertTrue(stateRepresentation.Includes(State.C));
+        stateRepresentation.addSubstate(CreateRepresentation(State.C));
+        Assert.assertTrue(stateRepresentation.includes(State.C));
     }
 
     @Test
     public void DoesNotIncludeSuperstate() {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
         stateRepresentation.setSuperstate(CreateRepresentation(State.C));
-        Assert.assertFalse(stateRepresentation.Includes(State.C));
+        Assert.assertFalse(stateRepresentation.includes(State.C));
     }
 
     @Test
     public void IsIncludedInUnderlyingState() {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
-        Assert.assertTrue(stateRepresentation.IsIncludedIn(State.B));
+        Assert.assertTrue(stateRepresentation.isIncludedIn(State.B));
     }
 
     @Test
     public void IsNotIncludedInUnrelatedState() {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
-        Assert.assertFalse(stateRepresentation.IsIncludedIn(State.C));
+        Assert.assertFalse(stateRepresentation.isIncludedIn(State.C));
     }
 
     @Test
     public void IsNotIncludedInSubstate() throws Exception {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
-        stateRepresentation.AddSubstate(CreateRepresentation(State.C));
-        Assert.assertFalse(stateRepresentation.IsIncludedIn(State.C));
+        stateRepresentation.addSubstate(CreateRepresentation(State.C));
+        Assert.assertFalse(stateRepresentation.isIncludedIn(State.C));
     }
 
     @Test
     public void IsIncludedInSuperstate() {
         StateRepresentation<State, Trigger> stateRepresentation = CreateRepresentation(State.B);
         stateRepresentation.setSuperstate(CreateRepresentation(State.C));
-        Assert.assertTrue(stateRepresentation.IsIncludedIn(State.C));
+        Assert.assertTrue(stateRepresentation.isIncludedIn(State.C));
     }
 
     @Test
     public void WhenTransitioningFromSubToSuperstate_SubstateEntryActionsExecuted() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
-        sub.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        sub.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> t, Object[] a)
@@ -153,7 +153,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(superState.getUnderlyingState(), sub.getUnderlyingState(), Trigger.X);
-        sub.Enter(transition);
+        sub.enter(transition);
         Assert.assertTrue(executed);
     }
 
@@ -161,11 +161,11 @@ public class StateRepresentationTests {
     public void WhenTransitioningFromSubToSuperstate_SubstateExitActionsExecuted() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         executed = false;
-        sub.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        sub.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
@@ -173,7 +173,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(sub.getUnderlyingState(), superState.getUnderlyingState(), Trigger.X);
-        sub.Exit(transition);
+        sub.exit(transition);
         Assert.assertTrue(executed);
     }
 
@@ -181,11 +181,11 @@ public class StateRepresentationTests {
     public void WhenTransitioningToSuperFromSubstate_SuperEntryActionsNotExecuted() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         executed = false;
-        superState.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        superState.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> t, Object[] a)
@@ -194,7 +194,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(superState.getUnderlyingState(), sub.getUnderlyingState(), Trigger.X);
-        superState.Enter(transition);
+        superState.enter(transition);
         Assert.assertFalse(executed);
     }
 
@@ -202,11 +202,11 @@ public class StateRepresentationTests {
     public void WhenTransitioningFromSuperToSubstate_SuperExitActionsNotExecuted() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         executed = false;
-        superState.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        superState.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
@@ -214,7 +214,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(superState.getUnderlyingState(), sub.getUnderlyingState(), Trigger.X);
-        superState.Exit(transition);
+        superState.exit(transition);
         Assert.assertFalse(executed);
     }
 
@@ -222,11 +222,11 @@ public class StateRepresentationTests {
     public void WhenEnteringSubstate_SuperEntryActionsExecuted() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         executed = false;
-        superState.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        superState.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> t, Object[] a)
@@ -235,7 +235,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(State.C, sub.getUnderlyingState(), Trigger.X);
-        sub.Enter(transition);
+        sub.enter(transition);
         Assert.assertTrue(executed);
     }
 
@@ -243,11 +243,11 @@ public class StateRepresentationTests {
     public void WhenLeavingSubstate_SuperExitActionsExecuted() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         executed = false;
-        superState.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        superState.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
@@ -255,7 +255,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(sub.getUnderlyingState(), State.C, Trigger.X);
-        sub.Exit(transition);
+        sub.exit(transition);
         Assert.assertTrue(executed);
     }
 
@@ -264,7 +264,7 @@ public class StateRepresentationTests {
         final ArrayList<Integer> actual = new ArrayList<Integer>();
 
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
-        rep.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        rep.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
@@ -273,7 +273,7 @@ public class StateRepresentationTests {
 
             }
         });
-        rep.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        rep.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
@@ -283,7 +283,7 @@ public class StateRepresentationTests {
             }
         });
 
-        rep.Enter(new Transition<State, Trigger>(State.A, State.B, Trigger.X));
+        rep.enter(new Transition<State, Trigger>(State.A, State.B, Trigger.X));
 
         Assert.assertEquals(2, actual.size());
         Assert.assertEquals(0, actual.get(0).intValue());
@@ -295,14 +295,14 @@ public class StateRepresentationTests {
         final List<Integer> actual = new ArrayList<Integer>();
 
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
-        rep.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        rep.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
                 actual.add(0);
             }
         });
-        rep.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        rep.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
@@ -310,7 +310,7 @@ public class StateRepresentationTests {
             }
         });
 
-        rep.Exit(new Transition<State, Trigger>(State.B, State.C, Trigger.X));
+        rep.exit(new Transition<State, Trigger>(State.B, State.C, Trigger.X));
 
         Assert.assertEquals(2, actual.size());
         Assert.assertEquals(0, actual.get(0).intValue());
@@ -320,37 +320,37 @@ public class StateRepresentationTests {
     @Test
     public void WhenTransitionExists_TriggerCanBeFired() {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
-        Assert.assertFalse(rep.CanHandle(Trigger.X));
+        Assert.assertFalse(rep.canHandle(Trigger.X));
     }
 
     @Test
     public void WhenTransitionDoesNotExist_TriggerCannotBeFired() {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
-        rep.AddTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue));
-        Assert.assertTrue(rep.CanHandle(Trigger.X));
+        rep.addTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue));
+        Assert.assertTrue(rep.canHandle(Trigger.X));
     }
 
     @Test
     public void WhenTransitionExistsInSupersate_TriggerCanBeFired() throws Exception {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
-        rep.AddTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue));
+        rep.addTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue));
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.C);
         sub.setSuperstate(rep);
-        rep.AddSubstate(sub);
-        Assert.assertTrue(sub.CanHandle(Trigger.X));
+        rep.addSubstate(sub);
+        Assert.assertTrue(sub.canHandle(Trigger.X));
     }
 
     @Test
     public void WhenEnteringSubstate_SuperstateEntryActionsExecuteBeforeSubstate() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         order = 0;
         subOrder = 0;
         superOrder = 0;
-        superState.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        superState.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
@@ -358,7 +358,7 @@ public class StateRepresentationTests {
                 superOrder = order++;
             }
         });
-        sub.AddEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
+        sub.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
@@ -367,7 +367,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(State.C, sub.getUnderlyingState(), Trigger.X);
-        sub.Enter(transition);
+        sub.enter(transition);
         Assert.assertTrue(superOrder < subOrder);
     }
 
@@ -375,20 +375,20 @@ public class StateRepresentationTests {
     public void WhenExitingSubstate_SubstateEntryActionsExecuteBeforeSuperstate() throws Exception {
         StateRepresentation<State, Trigger> superState = CreateRepresentation(State.A);
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.B);
-        superState.AddSubstate(sub);
+        superState.addSubstate(sub);
         sub.setSuperstate(superState);
 
         order = 0;
         subOrder = 0;
         superOrder = 0;
-        superState.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        superState.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
                 superOrder = order++;
             }
         });
-        sub.AddExitAction(new Action1<Transition<State, Trigger>>() {
+        sub.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
             public void doIt(Transition<State, Trigger> arg1) {
@@ -396,7 +396,7 @@ public class StateRepresentationTests {
             }
         });
         Transition<State, Trigger> transition = new Transition<State, Trigger>(sub.getUnderlyingState(), State.C, Trigger.X);
-        sub.Exit(transition);
+        sub.exit(transition);
         Assert.assertTrue(subOrder < superOrder);
     }
 

@@ -36,10 +36,10 @@ public class StateMachineTests {
 
         StateMachine<TState, TTransition> sm = new StateMachine<TState, TTransition>(a);
 
-        sm.Configure(a)
-                .Permit(x, b);
+        sm.configure(a)
+                .permit(x, b);
 
-        sm.Fire(x);
+        sm.fire(x);
 
         assertEquals(b, sm.getState());
     }
@@ -54,23 +54,23 @@ public class StateMachineTests {
     @Test
     public void SubstateIsIncludedInCurrentState() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-        sm.Configure(State.B).SubstateOf(State.C);
+        sm.configure(State.B).substateOf(State.C);
 
         assertEquals(State.B, sm.getState());
-        assertTrue(sm.IsInState(State.C));
+        assertTrue(sm.isInState(State.C));
     }
 
     @Test
     public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-        sm.Configure(State.B)
-                .SubstateOf(State.C);
+        sm.configure(State.B)
+                .substateOf(State.C);
 
-        sm.Configure(State.C)
-                .Ignore(Trigger.X);
+        sm.configure(State.C)
+                .ignore(Trigger.X);
 
-        sm.Fire(Trigger.X);
+        sm.fire(Trigger.X);
 
         assertEquals(State.B, sm.getState());
     }
@@ -79,15 +79,15 @@ public class StateMachineTests {
     public void PermittedTriggersIncludeSuperstatePermittedTriggers() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-        sm.Configure(State.A)
-                .Permit(Trigger.Z, State.B);
+        sm.configure(State.A)
+                .permit(Trigger.Z, State.B);
 
-        sm.Configure(State.B)
-                .SubstateOf(State.C)
-                .Permit(Trigger.X, State.A);
+        sm.configure(State.B)
+                .substateOf(State.C)
+                .permit(Trigger.X, State.A);
 
-        sm.Configure(State.C)
-                .Permit(Trigger.Y, State.A);
+        sm.configure(State.C)
+                .permit(Trigger.Y, State.A);
 
         List<Trigger> permitted = sm.getPermittedTriggers();
 
@@ -100,12 +100,12 @@ public class StateMachineTests {
     public void PermittedTriggersAreDistinctValues() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-        sm.Configure(State.B)
-                .SubstateOf(State.C)
-                .Permit(Trigger.X, State.A);
+        sm.configure(State.B)
+                .substateOf(State.C)
+                .permit(Trigger.X, State.A);
 
-        sm.Configure(State.C)
-                .Permit(Trigger.X, State.B);
+        sm.configure(State.C)
+                .permit(Trigger.X, State.B);
 
         List<Trigger> permitted = sm.getPermittedTriggers();
         assertEquals(1, permitted.size());
@@ -116,8 +116,8 @@ public class StateMachineTests {
     public void AcceptedTriggersRespectGuards() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-        sm.Configure(State.B)
-                .PermitIf(Trigger.X, State.A, new Func<Boolean>() {
+        sm.configure(State.B)
+                .permitIf(Trigger.X, State.A, new Func<Boolean>() {
 
                     public Boolean call() {
                         return false;
@@ -131,11 +131,11 @@ public class StateMachineTests {
     public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-        sm.Configure(State.B)
-                .PermitIf(Trigger.X, State.A, IgnoredTriggerBehaviourTests.returnFalse)
-                .PermitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue);
+        sm.configure(State.B)
+                .permitIf(Trigger.X, State.A, IgnoredTriggerBehaviourTests.returnFalse)
+                .permitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue);
 
-        sm.Fire(Trigger.X);
+        sm.fire(Trigger.X);
 
         assertEquals(State.C, sm.getState());
     }
@@ -150,17 +150,17 @@ public class StateMachineTests {
 
         fired = false;
 
-        sm.Configure(State.B)
-                .OnEntry(new Action() {
+        sm.configure(State.B)
+                .onEntry(new Action() {
 
 
                     public void doIt() {
                         setFired();
                     }
                 })
-                .Ignore(Trigger.X);
+                .ignore(Trigger.X);
 
-        sm.Fire(Trigger.X);
+        sm.fire(Trigger.X);
 
         assertFalse(fired);
     }
@@ -171,17 +171,17 @@ public class StateMachineTests {
 
         fired = false;
 
-        sm.Configure(State.B)
-                .OnEntry(new Action() {
+        sm.configure(State.B)
+                .onEntry(new Action() {
 
 
                     public void doIt() {
                         setFired();
                     }
                 })
-                .PermitReentry(Trigger.X);
+                .permitReentry(Trigger.X);
 
-        sm.Fire(Trigger.X);
+        sm.fire(Trigger.X);
 
         assertTrue(fired);
     }
@@ -193,8 +193,8 @@ public class StateMachineTests {
 
             StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.Configure(State.B)
-                    .Permit(Trigger.X, State.B);
+            sm.configure(State.B)
+                    .permit(Trigger.X, State.B);
         } catch (Exception e) {
 
         }
@@ -206,8 +206,8 @@ public class StateMachineTests {
         try {
             StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.SetTriggerParameters(Trigger.X, String.class, int.class);
-            sm.SetTriggerParameters(Trigger.X, String.class);
+            sm.setTriggerParameters(Trigger.X, String.class, int.class);
+            sm.setTriggerParameters(Trigger.X, String.class);
             fail();
         } catch (Exception e) {
 
@@ -219,14 +219,14 @@ public class StateMachineTests {
 //        {
 //        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 //
-//        	TriggerWithParameters2<String, Integer, State, Trigger> x = sm.SetTriggerParameters(Trigger.X, String.class, int.class);
+//        	TriggerWithParameters2<String, Integer, State, Trigger> x = sm.setTriggerParameters(Trigger.X, String.class, int.class);
 //
-//            sm.Configure(State.B)
-//                .Permit(Trigger.X, State.C);
+//            sm.configure(State.B)
+//                .permit(Trigger.X, State.C);
 //
 //
-//            sm.Configure(State.C)
-//                .OnEntryFrom(x, new Action2<String, int>() {
+//            sm.configure(State.C)
+//                .onEntryFrom(x, new Action2<String, int>() {
 //                	public void doIt(String s, int i) {
 //                		entryArgS = s;
 //                        entryArgI = i;
@@ -235,7 +235,7 @@ public class StateMachineTests {
 //            var suppliedArgS = "something";
 //            var suppliedArgI = 42;
 //
-//            sm.Fire(x, suppliedArgS, suppliedArgI);
+//            sm.fire(x, suppliedArgS, suppliedArgI);
 //
 //            AreEqual(suppliedArgS, entryArgS);
 //            AreEqual(suppliedArgI, entryArgI);
@@ -248,13 +248,13 @@ public class StateMachineTests {
 //
 //            State? state = null;
 //            Trigger? trigger = null;
-//            sm.OnUnhandledTrigger((s, t) =>
+//            sm.onUnhandledTrigger((s, t) =>
 //                                      {
 //                                          state = s;
 //                                          trigger = t;
 //                                      });
 //
-//            sm.Fire(Trigger.Z);
+//            sm.fire(Trigger.Z);
 //
 //            AreEqual(State.B, state);
 //            AreEqual(Trigger.Z, trigger);

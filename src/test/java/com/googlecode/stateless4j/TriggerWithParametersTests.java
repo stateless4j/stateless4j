@@ -19,20 +19,20 @@ public class TriggerWithParametersTests {
     @Test
     public void ParametersOfCorrectTypeAreAccepted() throws Exception {
         TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
-        twp.ValidateParameters(new Object[]{"arg"});
+        twp.validateParameters(new Object[]{"arg"});
     }
 
     @Test
     public void ParametersArePolymorphic() throws Exception {
         TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
-        twp.ValidateParameters(new Object[]{"arg"});
+        twp.validateParameters(new Object[]{"arg"});
     }
 
     @Test
     public void IncompatibleParametersAreNotValid() {
         try {
             TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
-            twp.ValidateParameters(new Object[]{123});
+            twp.validateParameters(new Object[]{123});
             fail();
         } catch (Exception e) {
         }
@@ -42,7 +42,7 @@ public class TriggerWithParametersTests {
     public void TooFewParametersDetected() throws Exception {
         try {
             TriggerWithParameters2<String, String, State, Trigger> twp = new TriggerWithParameters2<String, String, State, Trigger>(Trigger.X, String.class, String.class);
-            twp.ValidateParameters(new Object[]{"a"});
+            twp.validateParameters(new Object[]{"a"});
             fail();
         } catch (Exception e) {
         }
@@ -52,7 +52,7 @@ public class TriggerWithParametersTests {
     public void TooManyParametersDetected() throws Exception {
         try {
             TriggerWithParameters2<String, String, State, Trigger> twp = new TriggerWithParameters2<String, String, State, Trigger>(Trigger.X, String.class, String.class);
-            twp.ValidateParameters(new Object[]{"a", "b", "c"});
+            twp.validateParameters(new Object[]{"a", "b", "c"});
             fail();
         } catch (Exception e) {
         }

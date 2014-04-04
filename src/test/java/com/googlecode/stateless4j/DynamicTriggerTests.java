@@ -10,14 +10,14 @@ public class DynamicTriggerTests {
     @Test
     public void DestinationStateIsDynamic() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
-        sm.Configure(State.A).PermitDynamic(Trigger.X, new Func<State>() {
+        sm.configure(State.A).permitDynamic(Trigger.X, new Func<State>() {
 
             public State call() {
                 return State.B;
             }
         });
 
-        sm.Fire(Trigger.X);
+        sm.fire(Trigger.X);
 
         Assert.assertEquals(State.B, sm.getState());
     }
@@ -25,15 +25,15 @@ public class DynamicTriggerTests {
     @Test
     public void DestinationStateIsCalculatedBasedOnTriggerParameters() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
-        TriggerWithParameters1<Integer, State, Trigger> trigger = sm.SetTriggerParameters(
+        TriggerWithParameters1<Integer, State, Trigger> trigger = sm.setTriggerParameters(
                 Trigger.X, Integer.class);
-        sm.Configure(State.A).PermitDynamic(trigger, new Func2<Integer, State>() {
+        sm.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
             public State call(Integer i) throws Exception {
                 return i == 1 ? State.B : State.C;
             }
         });
 
-        sm.Fire(trigger, 1);
+        sm.fire(trigger, 1);
 
         Assert.assertEquals(State.B, sm.getState());
     }

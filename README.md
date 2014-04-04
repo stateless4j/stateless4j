@@ -7,35 +7,35 @@ Create **state machines** and lightweight state machine-based workflows **direct
 Action callStartTimer = new Action() {
         @Override
         public void doIt() {
-                StartCallTimer();
+                startCallTimer();
         }
 };
 Action callStopTimer = new Action() {
         @Override
         public void doIt() {
-                StopCallTimer();
+                stopCallTimer();
         }
 };
 StateMachine<State, Trigger> phoneCall = new StateMachine<State, Trigger>(State.OffHook);
 
-phoneCall.Configure(State.OffHook)
-                  .Permit(Trigger.CallDialed, State.Ringing);
+phoneCall.configure(State.OffHook)
+                  .permit(Trigger.CallDialed, State.Ringing);
 
-phoneCall.Configure(State.Ringing)
-                  .Permit(Trigger.HungUp, State.OffHook)
-                  .Permit(Trigger.CallConnected, State.Connected);
+phoneCall.configure(State.Ringing)
+                  .permit(Trigger.HungUp, State.OffHook)
+                  .permit(Trigger.CallConnected, State.Connected);
 
-phoneCall.Configure(State.Connected)
-                  .OnEntry(callStartTimer)
-                  .OnExit(callStopTimer)
-                  .Permit(Trigger.LeftMessage, State.OffHook)
-                  .Permit(Trigger.HungUp, State.OffHook)
-                  .Permit(Trigger.PlacedOnHold, State.OnHold);
+phoneCall.configure(State.Connected)
+                  .onEntry(callStartTimer)
+                  .onExit(callStopTimer)
+                  .permit(Trigger.LeftMessage, State.OffHook)
+                  .permit(Trigger.HungUp, State.OffHook)
+                  .permit(Trigger.PlacedOnHold, State.OnHold);
 
 // ...
 
-phoneCall.Fire(Trigger.CallDialed);
-Assert.assertEquals(State.Ringing, phoneCall.getState());
+phoneCall.fire(Trigger.CallDialed);
+assertEquals(State.Ringing, phoneCall.getState());
 ```
 
 stateless4j is a port of [stateless](http://code.google.com/p/stateless/) for java
@@ -69,22 +69,22 @@ In the example below, the `OnHold` state is a substate of the `Connected` state.
 still connected.
 
 ```java
-phoneCall.Configure(State.OnHold)
-    .SubstateOf(State.Connected)
-    .Permit(Trigger.TakenOffHold, State.Connected)
-    .Permit(Trigger.HungUp, State.OffHook)
-    .Permit(Trigger.PhoneHurledAgainstWall, State.PhoneDestroyed);
+phoneCall.configure(State.OnHold)
+    .substateOf(State.Connected)
+    .permit(Trigger.TakenOffHold, State.Connected)
+    .permit(Trigger.HungUp, State.OffHook)
+    .permit(Trigger.PhoneHurledAgainstWall, State.PhoneDestroyed);
 ```
 
-In addition to the `StateMachine.State` property, which will report the precise current state, an `IsInState(State)`
-method is provided. `IsInState(State)` will take substates into account, so that if the example above was in the
-`OnHold` state, `IsInState(State.Connected)` would also evaluate to `true`.
+In addition to the `StateMachine.getState()` property, which will report the precise current state, an `isInState(State)`
+method is provided. `isInState(State)` will take substates into account, so that if the example above was in the
+`OnHold` state, `isInState(State.Connected)` would also evaluate to `true`.
 
 ## Entry/Exit Events ##
-In the example, the `StartCallTimer()` method will be executed when a call is connected. The `StopCallTimer()` will be
+In the example, the `startCallTimer()` method will be executed when a call is connected. The `stopCallTimer()` will be
 executed when call completes (by either hanging up or hurling the phone against the wall.)
 
-The call can move between the `Connected` and `OnHold` states without the `StartCallTimer(`) and `StopCallTimer()`
+The call can move between the `Connected` and `OnHold` states without the `startCallTimer(`) and `stopCallTimer()`
 methods being called repeatedly because the `OnHold` state is a substate of the `Connected` state.
 
 Entry/Exit event handlers can be supplied with a parameter of type `Transition` that describes the trigger,

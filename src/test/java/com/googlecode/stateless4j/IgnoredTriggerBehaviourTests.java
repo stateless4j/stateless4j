@@ -26,7 +26,7 @@ public class IgnoredTriggerBehaviourTests {
     public void StateRemainsUnchanged() {
         IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, returnTrue);
         try {
-            ignored.ResultsInTransitionFrom(State.B, new Object[0]);
+            ignored.resultsInTransitionFrom(State.B, new Object[0]);
             Assert.fail();
         } catch (Exception e) {
 

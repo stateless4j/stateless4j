@@ -1,9 +1,9 @@
 package com.googlecode.stateless4j.transitions;
 
 public class Transition<TState, TTrigger> {
-    final TState _source;
-    final TState _destination;
-    final TTrigger _trigger;
+    private final TState source;
+    private final TState destination;
+    private final TTrigger trigger;
 
 
     /**
@@ -14,9 +14,9 @@ public class Transition<TState, TTrigger> {
      * @param trigger     The trigger that caused the transition
      */
     public Transition(TState source, TState destination, TTrigger trigger) {
-        _source = source;
-        _destination = destination;
-        _trigger = trigger;
+        this.source = source;
+        this.destination = destination;
+        this.trigger = trigger;
     }
 
     /**
@@ -25,7 +25,7 @@ public class Transition<TState, TTrigger> {
      * @return The state transitioned from
      */
     public TState getSource() {
-        return _source;
+        return source;
     }
 
 
@@ -35,7 +35,7 @@ public class Transition<TState, TTrigger> {
      * @return The state transitioned to
      */
     public TState getDestination() {
-        return _destination;
+        return destination;
     }
 
 
@@ -45,7 +45,7 @@ public class Transition<TState, TTrigger> {
      * @return The trigger that caused the transition
      */
     public TTrigger getTrigger() {
-        return _trigger;
+        return trigger;
     }
 
 

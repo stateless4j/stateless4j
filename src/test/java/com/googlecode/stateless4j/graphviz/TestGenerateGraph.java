@@ -17,18 +17,18 @@ public class TestGenerateGraph {
     // @Test
     public void testGenerateSimpleGraph() throws Exception {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
-        sm.Configure(State.A)
-                .Permit(Trigger.X, State.B)
-                .Permit(Trigger.Y, State.C);
+        sm.configure(State.A)
+                .permit(Trigger.X, State.B)
+                .permit(Trigger.Y, State.C);
 
-        sm.Configure(State.B)
-                .Permit(Trigger.Y, State.C);
+        sm.configure(State.B)
+                .permit(Trigger.Y, State.C);
 
-        sm.Configure(State.C)
-                .Permit(Trigger.X, State.A);
+        sm.configure(State.C)
+                .permit(Trigger.X, State.A);
 
         ByteArrayOutputStream dotFile = new ByteArrayOutputStream();
-        sm.GenerateDotFileInto(dotFile);
+        sm.generateDotFileInto(dotFile);
         InputStream expected = this.getClass().getResourceAsStream("/simpleGraph.txt");
         String expectedStr = InputStreamHelper.readAsString(expected);
         String actual = new String(dotFile.toByteArray(), "UTF-8");

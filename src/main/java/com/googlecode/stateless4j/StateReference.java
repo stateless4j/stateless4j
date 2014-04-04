@@ -1,7 +1,7 @@
 package com.googlecode.stateless4j;
 
 public class StateReference<TState, TTrigger> {
-    TState state;
+    private TState state;
 
     public TState getState() {
         return state;
