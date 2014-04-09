@@ -87,6 +87,10 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         entryActions.add(Enforce.argumentNotNull(action, "action"));
     }
 
+    public void insertEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) throws Exception {
+        entryActions.add(0, Enforce.argumentNotNull(action, "action"));
+    }
+
     public void addExitAction(Action1<Transition<TState, TTrigger>> action) throws Exception {
         exitActions.add(Enforce.argumentNotNull(action, "action"));
     }

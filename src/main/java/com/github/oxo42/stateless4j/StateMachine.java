@@ -86,7 +86,7 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
         return getRepresentation(getState());
     }
 
-    StateRepresentation<TState, TTrigger> getRepresentation(TState state) {
+    protected StateRepresentation<TState, TTrigger> getRepresentation(TState state) {
 
         if (!stateConfiguration.containsKey(state)) {
             StateRepresentation<TState, TTrigger> result = new StateRepresentation<>(state);
