@@ -10,9 +10,9 @@ import static org.junit.Assert.*;
 
 
 public class StateMachineTests {
-    final String
-            StateA = "A", StateB = "B", StateC = "C",
-            TriggerX = "X", TriggerY = "Y";
+    final Enum
+            StateA = State.A, StateB = State.B, StateC = State.C,
+            TriggerX = Trigger.X, TriggerY = Trigger.Y;
     Boolean fired = false;
     String entryArgS = null;
     int entryArgI = 0;
@@ -20,8 +20,8 @@ public class StateMachineTests {
     @Test
     public void CanUseReferenceTypeMarkers() throws Exception {
         RunSimpleTest(
-                new String[]{StateA, StateB, StateC},
-                new String[]{TriggerX, TriggerY});
+                new Enum[]{StateA, StateB, StateC},
+                new Enum[]{TriggerX, TriggerY});
     }
 
     @Test
@@ -29,7 +29,7 @@ public class StateMachineTests {
         RunSimpleTest(State.values(), Trigger.values());
     }
 
-    <TState, TTransition> void RunSimpleTest(TState[] states, TTransition[] transitions) throws Exception {
+    <TState extends Enum, TTransition extends Enum> void RunSimpleTest(TState[] states, TTransition[] transitions) throws Exception {
         TState a = states[0];
         TState b = states[1];
         TTransition x = transitions[0];

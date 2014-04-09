@@ -6,7 +6,7 @@ import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
 import com.github.oxo42.stateless4j.validation.Enforce;
 
-public class StateConfiguration<TState, TTrigger> {
+public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
     private static final Func<Boolean> NO_GUARD = new Func<Boolean>() {
         public Boolean call() {
             return true;

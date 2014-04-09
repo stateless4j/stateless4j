@@ -1,9 +1,6 @@
 package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless4j.delegates.Action1;
-import com.github.oxo42.stateless4j.delegates.Action2;
-import com.github.oxo42.stateless4j.delegates.Func;
-import com.github.oxo42.stateless4j.delegates.Func2;
+import com.github.oxo42.stateless4j.delegates.*;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
@@ -25,12 +22,12 @@ import java.util.Map.Entry;
  * @param <TState>   The type used to represent the states
  * @param <TTrigger> The type used to represent the triggers that cause state transitions
  */
-public class StateMachine<TState, TTrigger> {
-    private final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
-    private final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<>();
-    private final Func<TState> stateAccessor;
-    private final Action1<TState> stateMutator;
-    private Action2<TState, TTrigger> unhandledTriggerAction = new Action2<TState, TTrigger>() {
+public class StateMachine<TState extends Enum, TTrigger extends Enum> {
+    protected final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
+    protected final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<>();
+    protected final Func<TState> stateAccessor;
+    protected final Action1<TState> stateMutator;
+    protected Action2<TState, TTrigger> unhandledTriggerAction = new Action2<TState, TTrigger>() {
 
         public void doIt(TState state, TTrigger trigger) throws Exception {
             throw new Exception(
@@ -187,7 +184,7 @@ public class StateMachine<TState, TTrigger> {
         publicFire(trigger.getTrigger(), arg0, arg1, arg2);
     }
 
-    void publicFire(TTrigger trigger, Object... args) throws Exception {
+    protected void publicFire(TTrigger trigger, Object... args) throws Exception {
         TriggerWithParameters<TState, TTrigger> configuration;
         if (triggerConfiguration.containsKey(trigger)) {
             configuration = triggerConfiguration.get(trigger);
@@ -209,9 +206,8 @@ public class StateMachine<TState, TTrigger> {
             Transition<TState, TTrigger> transition = new Transition<>(source, destination, trigger);
 
             getCurrentRepresentation().exit(transition);
-            setState(transition.getDestination());
+            setState(destination);
             getCurrentRepresentation().enter(transition, args);
-
         } catch (Exception e) {
 
         }
