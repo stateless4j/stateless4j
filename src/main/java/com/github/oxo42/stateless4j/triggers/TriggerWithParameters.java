@@ -14,7 +14,7 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
      * @param underlyingTrigger Trigger represented by this trigger configuration
      * @param argumentTypes     The argument types expected by the trigger
      */
-    public TriggerWithParameters(TTrigger underlyingTrigger, Class<?>... argumentTypes) throws Exception {
+    public TriggerWithParameters(TTrigger underlyingTrigger, Class<?>... argumentTypes) {
         Enforce.argumentNotNull(argumentTypes, "argumentTypes");
 
         this.underlyingTrigger = underlyingTrigger;
@@ -37,7 +37,7 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
      *
      * @param args Args
      */
-    public void validateParameters(Object[] args) throws Exception {
+    public void validateParameters(Object[] args) {
         Enforce.argumentNotNull(args, "args");
         ParameterConversion.validate(args, argumentTypes);
     }

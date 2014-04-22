@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class DynamicTriggerTests {
     @Test
-    public void DestinationStateIsDynamic() throws Exception {
+    public void DestinationStateIsDynamic() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
         sm.configure(State.A).permitDynamic(Trigger.X, new Func<State>() {
 
@@ -23,12 +23,12 @@ public class DynamicTriggerTests {
     }
 
     @Test
-    public void DestinationStateIsCalculatedBasedOnTriggerParameters() throws Exception {
+    public void DestinationStateIsCalculatedBasedOnTriggerParameters() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
         TriggerWithParameters1<Integer, State, Trigger> trigger = sm.setTriggerParameters(
                 Trigger.X, Integer.class);
         sm.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
-            public State call(Integer i) throws Exception {
+            public State call(Integer i) {
                 return i == 1 ? State.B : State.C;
             }
         });

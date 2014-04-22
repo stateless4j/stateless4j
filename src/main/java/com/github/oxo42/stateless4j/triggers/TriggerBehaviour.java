@@ -16,9 +16,9 @@ public abstract class TriggerBehaviour<TState, TTrigger> {
         return trigger;
     }
 
-    public Boolean isGuardConditionMet() throws Exception {
+    public Boolean isGuardConditionMet() {
         return guard.call();
     }
 
-    public abstract TState resultsInTransitionFrom(TState source, Object... args) throws Exception;
+    public abstract TState resultsInTransitionFrom(TState source, Object... args);
 }

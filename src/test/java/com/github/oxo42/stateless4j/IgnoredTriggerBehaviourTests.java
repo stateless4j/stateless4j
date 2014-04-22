@@ -42,7 +42,7 @@ public class IgnoredTriggerBehaviourTests {
     }
 
     @Test
-    public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() throws Exception {
+    public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() {
         IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(
                 Trigger.X, returnFalse);
 
@@ -50,7 +50,7 @@ public class IgnoredTriggerBehaviourTests {
     }
 
     @Test
-    public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() throws Exception {
+    public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() {
         IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(
                 Trigger.X, returnTrue);
 

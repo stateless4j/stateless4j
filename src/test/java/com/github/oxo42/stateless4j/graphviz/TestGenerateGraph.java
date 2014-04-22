@@ -7,6 +7,7 @@ import com.github.oxo42.stateless4j.helpers.InputStreamHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.*;
 
@@ -15,7 +16,7 @@ public class TestGenerateGraph {
     // This isn't going to work because the StateMachine uses a HashMap which does not maintain a consistent output
     // Changing it to LinkedHashMap will make this test work all the time but will incur a runtime performance penalty
     // @Test
-    public void testGenerateSimpleGraph() throws Exception {
+    public void testGenerateSimpleGraph() throws UnsupportedEncodingException {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
         sm.configure(State.A)
                 .permit(Trigger.X, State.B)

@@ -13,5 +13,5 @@ public interface Func2<T1, R> {
      * @param arg1 Input argument
      * @return Result
      */
-    R call(T1 arg1) throws Exception;
+    R call(T1 arg1);
 }

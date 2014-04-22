@@ -18,18 +18,18 @@ public class StateMachineTests {
     int entryArgI = 0;
 
     @Test
-    public void CanUseReferenceTypeMarkers() throws Exception {
+    public void CanUseReferenceTypeMarkers() {
         RunSimpleTest(
                 new Enum[]{StateA, StateB, StateC},
                 new Enum[]{TriggerX, TriggerY});
     }
 
     @Test
-    public void CanUseValueTypeMarkers() throws Exception {
+    public void CanUseValueTypeMarkers() {
         RunSimpleTest(State.values(), Trigger.values());
     }
 
-    <TState extends Enum, TTransition extends Enum> void RunSimpleTest(TState[] states, TTransition[] transitions) throws Exception {
+    <TState extends Enum, TTransition extends Enum> void RunSimpleTest(TState[] states, TTransition[] transitions) {
         TState a = states[0];
         TState b = states[1];
         TTransition x = transitions[0];
@@ -45,14 +45,14 @@ public class StateMachineTests {
     }
 
     @Test
-    public void InitialStateIsCurrent() throws Exception {
+    public void InitialStateIsCurrent() {
         State initial = State.B;
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial);
         assertEquals(initial, sm.getState());
     }
 
     @Test
-    public void SubstateIsIncludedInCurrentState() throws Exception {
+    public void SubstateIsIncludedInCurrentState() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
         sm.configure(State.B).substateOf(State.C);
 
@@ -61,7 +61,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() throws Exception {
+    public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         sm.configure(State.B)
@@ -76,7 +76,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void PermittedTriggersIncludeSuperstatePermittedTriggers() throws Exception {
+    public void PermittedTriggersIncludeSuperstatePermittedTriggers() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         sm.configure(State.A)
@@ -97,7 +97,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void PermittedTriggersAreDistinctValues() throws Exception {
+    public void PermittedTriggersAreDistinctValues() {
         StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.B)
@@ -113,7 +113,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void AcceptedTriggersRespectGuards() throws Exception {
+    public void AcceptedTriggersRespectGuards() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         sm.configure(State.B)
@@ -128,7 +128,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() throws Exception {
+    public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         sm.configure(State.B)
@@ -145,7 +145,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void WhenTriggerIsIgnored_ActionsNotExecuted() throws Exception {
+    public void WhenTriggerIsIgnored_ActionsNotExecuted() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         fired = false;
@@ -166,7 +166,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void IfSelfTransitionPermited_ActionsFire() throws Exception {
+    public void IfSelfTransitionPermited_ActionsFire() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         fired = false;
@@ -202,7 +202,7 @@ public class StateMachineTests {
 
     @Test
 //        [Test, ExpectedException(typeof(InvalidOperationException))]
-    public void TriggerParametersAreImmutableOnceSet() throws Exception {
+    public void TriggerParametersAreImmutableOnceSet() {
         try {
             StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 

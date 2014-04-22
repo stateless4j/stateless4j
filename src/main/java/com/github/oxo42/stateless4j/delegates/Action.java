@@ -7,5 +7,5 @@ public interface Action {
     /**
      * Performs this operation
      */
-    void doIt() throws Exception;
+    void doIt();
 }

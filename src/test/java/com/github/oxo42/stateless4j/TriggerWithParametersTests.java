@@ -11,19 +11,19 @@ import static org.junit.Assert.*;
 
 public class TriggerWithParametersTests {
     @Test
-    public void DescribesUnderlyingTrigger() throws Exception {
+    public void DescribesUnderlyingTrigger() {
         TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
         assertEquals(Trigger.X, twp.getTrigger());
     }
 
     @Test
-    public void ParametersOfCorrectTypeAreAccepted() throws Exception {
+    public void ParametersOfCorrectTypeAreAccepted() {
         TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
         twp.validateParameters(new Object[]{"arg"});
     }
 
     @Test
-    public void ParametersArePolymorphic() throws Exception {
+    public void ParametersArePolymorphic() {
         TriggerWithParameters1<String, State, Trigger> twp = new TriggerWithParameters1<String, State, Trigger>(Trigger.X, String.class);
         twp.validateParameters(new Object[]{"arg"});
     }
@@ -39,7 +39,7 @@ public class TriggerWithParametersTests {
     }
 
     @Test
-    public void TooFewParametersDetected() throws Exception {
+    public void TooFewParametersDetected() {
         try {
             TriggerWithParameters2<String, String, State, Trigger> twp = new TriggerWithParameters2<String, String, State, Trigger>(Trigger.X, String.class, String.class);
             twp.validateParameters(new Object[]{"a"});
@@ -49,7 +49,7 @@ public class TriggerWithParametersTests {
     }
 
     @Test
-    public void TooManyParametersDetected() throws Exception {
+    public void TooManyParametersDetected() {
         try {
             TriggerWithParameters2<String, String, State, Trigger> twp = new TriggerWithParameters2<String, String, State, Trigger>(Trigger.X, String.class, String.class);
             twp.validateParameters(new Object[]{"a", "b", "c"});

@@ -11,5 +11,5 @@ public interface Action1<T> {
      *
      * @param arg1 Input argument
      */
-    void doIt(T arg1) throws Exception;
+    void doIt(T arg1);
 }

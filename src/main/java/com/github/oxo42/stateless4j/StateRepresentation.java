@@ -42,10 +42,10 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         }
     }
 
-    TriggerBehaviour<TState, TTrigger> tryFindLocalHandler(TTrigger trigger/*, out TriggerBehaviour handler*/) throws Exception {
+    TriggerBehaviour<TState, TTrigger> tryFindLocalHandler(TTrigger trigger/*, out TriggerBehaviour handler*/) {
         List<TriggerBehaviour<TState, TTrigger>> possible;
         if (!triggerBehaviours.containsKey(trigger)) {
-            throw new Exception();
+            throw new IllegalStateException();
         }
         possible = triggerBehaviours.get(trigger);
 
@@ -57,7 +57,7 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         }
 
         if (actual.size() > 1) {
-            throw new Exception(
+            throw new IllegalStateException(
                     String.format("Multiple permitted exit transitions are configured from state '%s' for trigger '%s'. Guard clauses must be mutually exclusive.",
                             trigger, state)
             );
@@ -65,17 +65,18 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
 
         TriggerBehaviour<TState, TTrigger> handler = actual.get(0);
         if (handler == null) {
-            throw new Exception();
+            throw new IllegalStateException();
         }
         return handler;
     }
 
-    public void addEntryAction(final TTrigger trigger, final Action2<Transition<TState, TTrigger>, Object[]> action) throws Exception {
+    public void addEntryAction(final TTrigger trigger, final Action2<Transition<TState, TTrigger>, Object[]> action) {
         Enforce.argumentNotNull(action, "action");
 
 
         entryActions.add(new Action2<Transition<TState, TTrigger>, Object[]>() {
-            public void doIt(Transition<TState, TTrigger> t, Object[] args) throws Exception {
+            @Override
+            public void doIt(Transition<TState, TTrigger> t, Object[] args) {
                 if (t.getTrigger().equals(trigger)) {
                     action.doIt(t, args);
                 }
@@ -83,19 +84,19 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         });
     }
 
-    public void addEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) throws Exception {
+    public void addEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) {
         entryActions.add(Enforce.argumentNotNull(action, "action"));
     }
 
-    public void insertEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) throws Exception {
+    public void insertEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) {
         entryActions.add(0, Enforce.argumentNotNull(action, "action"));
     }
 
-    public void addExitAction(Action1<Transition<TState, TTrigger>> action) throws Exception {
+    public void addExitAction(Action1<Transition<TState, TTrigger>> action) {
         exitActions.add(Enforce.argumentNotNull(action, "action"));
     }
 
-    public void enter(Transition<TState, TTrigger> transition, Object... entryArgs) throws Exception {
+    public void enter(Transition<TState, TTrigger> transition, Object... entryArgs) {
         Enforce.argumentNotNull(transition, "transtion");
 
         if (transition.isReentry()) {
@@ -109,7 +110,7 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         }
     }
 
-    public void exit(Transition<TState, TTrigger> transition) throws Exception {
+    public void exit(Transition<TState, TTrigger> transition) {
         Enforce.argumentNotNull(transition, "transtion");
 
         if (transition.isReentry()) {
@@ -122,7 +123,7 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         }
     }
 
-    void executeEntryActions(Transition<TState, TTrigger> transition, Object[] entryArgs) throws Exception {
+    void executeEntryActions(Transition<TState, TTrigger> transition, Object[] entryArgs) {
         Enforce.argumentNotNull(transition, "transtion");
         Enforce.argumentNotNull(entryArgs, "entryArgs");
         for (Action2<Transition<TState, TTrigger>, Object[]> action : entryActions) {
@@ -130,7 +131,7 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         }
     }
 
-    void executeExitActions(Transition<TState, TTrigger> transition) throws Exception {
+    void executeExitActions(Transition<TState, TTrigger> transition) {
         Enforce.argumentNotNull(transition, "transtion");
         for (Action1<Transition<TState, TTrigger>> action : exitActions) {
             action.doIt(transition);
@@ -159,7 +160,7 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
         return state;
     }
 
-    public void addSubstate(StateRepresentation<TState, TTrigger> substate) throws Exception {
+    public void addSubstate(StateRepresentation<TState, TTrigger> substate) {
         Enforce.argumentNotNull(substate, "substate");
         substates.add(substate);
     }
@@ -179,7 +180,7 @@ public class StateRepresentation<TState extends Enum, TTrigger> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<TTrigger> getPermittedTriggers() throws Exception {
+    public List<TTrigger> getPermittedTriggers() {
         Set<TTrigger> result = new HashSet<>();
 
         for (TTrigger t : triggerBehaviours.keySet()) {

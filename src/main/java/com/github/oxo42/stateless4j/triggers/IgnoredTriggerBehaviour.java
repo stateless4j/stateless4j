@@ -7,7 +7,7 @@ public class IgnoredTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<
         super(trigger, guard);
     }
 
-    public TState resultsInTransitionFrom(TState source, Object... args) throws Exception {
-        throw new Exception();
+    public TState resultsInTransitionFrom(TState source, Object... args) {
+        throw new IllegalStateException();
     }
 }

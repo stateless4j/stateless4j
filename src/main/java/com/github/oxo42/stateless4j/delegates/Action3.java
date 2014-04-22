@@ -15,5 +15,5 @@ public interface Action3<T, T1, T2> {
      * @param arg2 Input argument
      * @param arg3 Input argument
      */
-    void doIt(T arg1, T1 arg2, T2 arg3) throws Exception;
+    void doIt(T arg1, T1 arg2, T2 arg3);
 }

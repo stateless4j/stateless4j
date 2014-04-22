@@ -6,6 +6,7 @@ import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
 import com.github.oxo42.stateless4j.validation.Enforce;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -29,8 +30,8 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
     protected final Action1<TState> stateMutator;
     protected Action2<TState, TTrigger> unhandledTriggerAction = new Action2<TState, TTrigger>() {
 
-        public void doIt(TState state, TTrigger trigger) throws Exception {
-            throw new Exception(
+        public void doIt(TState state, TTrigger trigger) {
+            throw new IllegalStateException(
                     String.format(
                             "No valid leaving transitions are permitted from state '%s' for trigger '%s'. Consider ignoring the trigger.",
                             state, trigger)
@@ -65,11 +66,11 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      *
      * @return The current state
      */
-    public TState getState() throws Exception {
+    public TState getState() {
         return stateAccessor.call();
     }
 
-    private void setState(TState value) throws Exception {
+    private void setState(TState value) {
         stateMutator.doIt(value);
     }
 
@@ -78,11 +79,11 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      *
      * @return The currently-permissible trigger values
      */
-    public List<TTrigger> getPermittedTriggers() throws Exception {
+    public List<TTrigger> getPermittedTriggers() {
         return getCurrentRepresentation().getPermittedTriggers();
     }
 
-    StateRepresentation<TState, TTrigger> getCurrentRepresentation() throws Exception {
+    StateRepresentation<TState, TTrigger> getCurrentRepresentation() {
         return getRepresentation(getState());
     }
 
@@ -104,7 +105,7 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param state The state to configure
      * @return A configuration object through which the state can be configured
      */
-    public StateConfiguration<TState, TTrigger> configure(TState state) throws Exception {
+    public StateConfiguration<TState, TTrigger> configure(TState state) {
         return new StateConfiguration<>(getRepresentation(state), new Func2<TState, StateRepresentation<TState, TTrigger>>() {
 
             public StateRepresentation<TState, TTrigger> call(TState arg0) {
@@ -121,9 +122,9 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * will be invoked
      *
      * @param trigger The trigger to fire
-     * @throws Exception The current state does not allow the trigger to be fired
+     * @The current state does not allow the trigger to be fired
      */
-    public void fire(TTrigger trigger) throws Exception {
+    public void fire(TTrigger trigger) {
         publicFire(trigger);
     }
 
@@ -137,9 +138,9 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param trigger The trigger to fire
      * @param arg0    The first argument
      * @param <TArg0> Type of the first trigger argument
-     * @throws Exception The current state does not allow the trigger to be fired
+     * @The current state does not allow the trigger to be fired
      */
-    public <TArg0> void fire(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, TArg0 arg0) throws Exception {
+    public <TArg0> void fire(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, TArg0 arg0) {
         Enforce.argumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0);
     }
@@ -156,9 +157,9 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param arg1    The second argument
      * @param <TArg0> Type of the first trigger argument
      * @param <TArg1> Type of the second trigger argument
-     * @throws Exception The current state does not allow the trigger to be fired
+     * @The current state does not allow the trigger to be fired
      */
-    public <TArg0, TArg1> void fire(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1) throws Exception {
+    public <TArg0, TArg1> void fire(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1) {
         Enforce.argumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0, arg1);
     }
@@ -177,14 +178,14 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg0> Type of the first trigger argument
      * @param <TArg1> Type of the second trigger argument
      * @param <TArg2> Type of the third trigger argument
-     * @throws Exception The current state does not allow the trigger to be fired
+     * @The current state does not allow the trigger to be fired
      */
-    public <TArg0, TArg1, TArg2> void fire(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) throws Exception {
+    public <TArg0, TArg1, TArg2> void fire(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) {
         Enforce.argumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0, arg1, arg2);
     }
 
-    protected void publicFire(TTrigger trigger, Object... args) throws Exception {
+    protected void publicFire(TTrigger trigger, Object... args) {
         TriggerWithParameters<TState, TTrigger> configuration;
         if (triggerConfiguration.containsKey(trigger)) {
             configuration = triggerConfiguration.get(trigger);
@@ -219,9 +220,9 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      *
      * @param unhandledTriggerAction An action to call when an unhandled trigger is fired
      */
-    public void onUnhandledTrigger(Action2<TState, TTrigger> unhandledTriggerAction) throws Exception {
+    public void onUnhandledTrigger(Action2<TState, TTrigger> unhandledTriggerAction) {
         if (unhandledTriggerAction == null) {
-            throw new Exception("unhandledTriggerAction");
+            throw new IllegalStateException("unhandledTriggerAction");
         }
         this.unhandledTriggerAction = unhandledTriggerAction;
     }
@@ -232,9 +233,8 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      *
      * @param state The state to test for
      * @return True if the current state is equal to, or a substate of, the supplied state
-     * @throws Exception
      */
-    public Boolean isInState(TState state) throws Exception {
+    public Boolean isInState(TState state) {
         return getCurrentRepresentation().isIncludedIn(state);
     }
 
@@ -245,7 +245,7 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param trigger Trigger to test
      * @return True if the trigger can be fired, false otherwise
      */
-    public Boolean canFire(TTrigger trigger) throws Exception {
+    public Boolean canFire(TTrigger trigger) {
         return getCurrentRepresentation().canHandle(trigger);
     }
 
@@ -256,32 +256,26 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @return A description of the current state and permitted triggers
      */
     public String toString() {
-        try {
-            List<TTrigger> permittedTriggers = getPermittedTriggers();
-            List<String> parameters = new ArrayList<>();
+        List<TTrigger> permittedTriggers = getPermittedTriggers();
+        List<String> parameters = new ArrayList<>();
 
-            for (TTrigger tTrigger : permittedTriggers) {
-                parameters.add(tTrigger.toString());
-            }
-
-            StringBuilder params = new StringBuilder();
-            String delim = "";
-            for (String param : parameters) {
-                params.append(delim);
-                params.append(param);
-                delim = ", ";
-            }
-
-
-            return String.format(
-                    "StateMachine {{ State = %s, PermittedTriggers = {{ %s }}}}",
-                    getState(),
-                    params.toString());
-        } catch (Exception e) {
-            // I'm not sure if this is the best thing to do but don't have any better ideas
-            // J. Oxley 2014/04/04
-            throw new RuntimeException(e);
+        for (TTrigger tTrigger : permittedTriggers) {
+            parameters.add(tTrigger.toString());
         }
+
+        StringBuilder params = new StringBuilder();
+        String delim = "";
+        for (String param : parameters) {
+            params.append(delim);
+            params.append(param);
+            delim = ", ";
+        }
+
+
+        return String.format(
+                "StateMachine {{ State = %s, PermittedTriggers = {{ %s }}}}",
+                getState(),
+                params.toString());
     }
 
 
@@ -293,7 +287,7 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg0> Type of the first trigger argument
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
-    public <TArg0> TriggerWithParameters1<TArg0, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0) throws Exception {
+    public <TArg0> TriggerWithParameters1<TArg0, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0) {
         TriggerWithParameters1<TArg0, TState, TTrigger> configuration = new TriggerWithParameters1<>(trigger, classe0);
         saveTriggerConfiguration(configuration);
         return configuration;
@@ -310,7 +304,7 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg1> Type of the second trigger argument
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
-    public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1) throws Exception {
+    public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1) {
         TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> configuration = new TriggerWithParameters2<>(trigger, classe0, classe1);
         saveTriggerConfiguration(configuration);
         return configuration;
@@ -329,36 +323,38 @@ public class StateMachine<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg2> Type of the third trigger argument
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
-    public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) throws Exception {
+    public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) {
         TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> configuration = new TriggerWithParameters3<>(trigger, classe0, classe1, classe2);
         saveTriggerConfiguration(configuration);
         return configuration;
     }
 
-    private void saveTriggerConfiguration(TriggerWithParameters<TState, TTrigger> trigger) throws Exception {
+    private void saveTriggerConfiguration(TriggerWithParameters<TState, TTrigger> trigger) {
         if (triggerConfiguration.containsKey(trigger.getTrigger())) {
-            throw new Exception(
+            throw new IllegalStateException(
                     String.format("Parameters for the trigger '%s' have already been configured.", trigger));
         }
 
         triggerConfiguration.put(trigger.getTrigger(), trigger);
     }
 
-    public void generateDotFileInto(OutputStream dotFile) throws Exception {
-        OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8");
-        PrintWriter writer = new PrintWriter(w);
-        writer.write("digraph G {\n");
-        for (Entry<TState, StateRepresentation<TState, TTrigger>> entry : this.stateConfiguration.entrySet()) {
-            Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviours = entry.getValue().getTriggerBehaviours();
-            for (Entry<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviour : behaviours.entrySet()) {
-                for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
-                    if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
-                        writer.write(String.format("\t%s -> %s;\n", entry.getKey(), triggerBehaviour.resultsInTransitionFrom(null)));
+    public void generateDotFileInto(OutputStream dotFile) {
+        try (OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8")) {
+            PrintWriter writer = new PrintWriter(w);
+            writer.write("digraph G {\n");
+            for (Entry<TState, StateRepresentation<TState, TTrigger>> entry : this.stateConfiguration.entrySet()) {
+                Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviours = entry.getValue().getTriggerBehaviours();
+                for (Entry<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviour : behaviours.entrySet()) {
+                    for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
+                        if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
+                            writer.write(String.format("\t%s -> %s;\n", entry.getKey(), triggerBehaviour.resultsInTransitionFrom(null)));
+                        }
                     }
                 }
             }
+            writer.write("}");
+        } catch (IOException ie) {
+            //
         }
-        writer.write("}");
-        writer.close();
     }
 }
