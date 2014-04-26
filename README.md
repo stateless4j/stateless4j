@@ -45,7 +45,7 @@ stateless4j is a port of [stateless](http://code.google.com/p/stateless/) for ja
     <dependency>
         <groupId>com.github.oxo42</groupId>
         <artifactId>stateless4j</artifactId>
-        <version>2.0.0</version>
+        <version>2.2.0</version>
     </dependency>
 ```
 
