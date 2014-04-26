@@ -5,9 +5,9 @@ public final class Enforce {
 
     }
 
-    public static <T> T argumentNotNull(T argument, String description) throws Exception {
+    public static <T> T argumentNotNull(T argument, String description) {
         if (argument == null) {
-            throw new Exception(description);
+            throw new IllegalStateException(description);
         }
 
         return argument;

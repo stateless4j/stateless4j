@@ -11,5 +11,5 @@ public interface Func<R> {
      *
      * @return Result
      */
-    R call() throws Exception;
+    R call();
 }

@@ -15,7 +15,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
     private final StateRepresentation<TState, TTrigger> representation;
     private final Func2<TState, StateRepresentation<TState, TTrigger>> lookup;
 
-    public StateConfiguration(StateRepresentation<TState, TTrigger> representation, Func2<TState, StateRepresentation<TState, TTrigger>> lookup) throws Exception {
+    public StateConfiguration(StateRepresentation<TState, TTrigger> representation, Func2<TState, StateRepresentation<TState, TTrigger>> lookup) {
         this.representation = Enforce.argumentNotNull(representation, "representation");
         this.lookup = Enforce.argumentNotNull(lookup, "lookup");
     }
@@ -28,7 +28,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param destinationState The state that the trigger will cause a transition to
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permit(TTrigger trigger, TState destinationState) throws Exception {
+    public StateConfiguration<TState, TTrigger> permit(TTrigger trigger, TState destinationState) {
         enforceNotIdentityTransition(destinationState);
         return publicPermit(trigger, destinationState);
     }
@@ -42,7 +42,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param guard            Function that must return true in order for the trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) throws Exception {
+    public StateConfiguration<TState, TTrigger> permitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) {
         enforceNotIdentityTransition(destinationState);
         return publicPermitIf(trigger, destinationState, guard);
     }
@@ -58,7 +58,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param trigger The accepted trigger
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitReentry(TTrigger trigger) throws Exception {
+    public StateConfiguration<TState, TTrigger> permitReentry(TTrigger trigger) {
         return publicPermit(trigger, representation.getUnderlyingState());
     }
 
@@ -74,7 +74,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param guard   Function that must return true in order for the trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitReentryIf(TTrigger trigger, Func<Boolean> guard) throws Exception {
+    public StateConfiguration<TState, TTrigger> permitReentryIf(TTrigger trigger, Func<Boolean> guard) {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard);
     }
 
@@ -85,7 +85,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param trigger The trigger to ignore
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> ignore(TTrigger trigger) throws Exception {
+    public StateConfiguration<TState, TTrigger> ignore(TTrigger trigger) {
         return ignoreIf(trigger, NO_GUARD);
     }
 
@@ -97,7 +97,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param guard   Function that must return true in order for the trigger to be ignored
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> ignoreIf(TTrigger trigger, Func<Boolean> guard) throws Exception {
+    public StateConfiguration<TState, TTrigger> ignoreIf(TTrigger trigger, Func<Boolean> guard) {
         Enforce.argumentNotNull(guard, "guard");
         representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<TState, TTrigger>(trigger, guard));
         return this;
@@ -110,10 +110,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param entryAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntry(final Action entryAction) throws Exception {
+    public StateConfiguration<TState, TTrigger> onEntry(final Action entryAction) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         return onEntry(new Action1<Transition<TState, TTrigger>>() {
-            public void doIt(Transition<TState, TTrigger> t) throws Exception {
+            public void doIt(Transition<TState, TTrigger> t) {
                 entryAction.doIt();
             }
         });
@@ -126,10 +126,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param entryAction Action to execute, providing details of the transition
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntry(final Action1<Transition<TState, TTrigger>> entryAction) throws Exception {
+    public StateConfiguration<TState, TTrigger> onEntry(final Action1<Transition<TState, TTrigger>> entryAction) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         representation.addEntryAction(new Action2<Transition<TState, TTrigger>, Object[]>() {
-            public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) throws Exception {
+            public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
             }
         });
@@ -144,10 +144,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param entryAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action entryAction) throws Exception {
+    public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action entryAction) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         return onEntryFrom(trigger, new Action1<Transition<TState, TTrigger>>() {
-            public void doIt(Transition<TState, TTrigger> arg1) throws Exception {
+            public void doIt(Transition<TState, TTrigger> arg1) {
                 entryAction.doIt();
             }
         });
@@ -161,10 +161,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param entryAction Action to execute, providing details of the transition
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action1<Transition<TState, TTrigger>> entryAction) throws Exception {
+    public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action1<Transition<TState, TTrigger>> entryAction) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         representation.addEntryAction(trigger, new Action2<Transition<TState, TTrigger>, Object[]>() {
-            public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) throws Exception {
+            public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
             }
         });
@@ -181,10 +181,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg0>     Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) throws Exception {
+    public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         return onEntryFrom(trigger, new Action2<TArg0, Transition<TState, TTrigger>>() {
-            public void doIt(TArg0 arg1, Transition<TState, TTrigger> arg2) throws Exception {
+            public void doIt(TArg0 arg1, Transition<TState, TTrigger> arg2) {
                 entryAction.doIt(arg1);
             }
         }, classe0);
@@ -200,12 +200,12 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg0>     Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action2<TArg0, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0) throws Exception {
+    public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action2<TArg0, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         Enforce.argumentNotNull(trigger, "trigger");
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
             @SuppressWarnings("unchecked")
-            public void doIt(Transition<TState, TTrigger> t, Object[] arg2) throws Exception {
+            public void doIt(Transition<TState, TTrigger> t, Object[] arg2) {
                 entryAction.doIt((TArg0) arg2[0], t);
             }
         });
@@ -224,10 +224,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg1>     Type of the second trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) throws Exception {
+    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<TState, TTrigger>>() {
-            public void doIt(TArg0 a0, TArg1 a1, Transition<TState, TTrigger> t) throws Exception {
+            public void doIt(TArg0 a0, TArg1 a1, Transition<TState, TTrigger> t) {
                 entryAction.doIt(a0, a1);
             }
         }, classe0, classe1);
@@ -245,12 +245,12 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg1>     Type of the second trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action3<TArg0, TArg1, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) throws Exception {
+    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action3<TArg0, TArg1, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         Enforce.argumentNotNull(trigger, "trigger");
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
             @SuppressWarnings("unchecked")
-            public void doIt(Transition<TState, TTrigger> t, Object[] args) throws Exception {
+            public void doIt(Transition<TState, TTrigger> t, Object[] args) {
                 entryAction.doIt(
                         (TArg0) args[0],
                         (TArg1) args[1], t);
@@ -273,10 +273,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg2>     Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) throws Exception {
+    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>>() {
-            public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<TState, TTrigger> t) throws Exception {
+            public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<TState, TTrigger> t) {
                 entryAction.doIt(a0, a1, a2);
             }
         }, classe0, classe1, classe2);
@@ -296,12 +296,12 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg2>     Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) throws Exception {
+    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
         Enforce.argumentNotNull(entryAction, "entryAction");
         Enforce.argumentNotNull(trigger, "trigger");
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
             @SuppressWarnings("unchecked")
-            public void doIt(Transition<TState, TTrigger> t, Object[] args) throws Exception {
+            public void doIt(Transition<TState, TTrigger> t, Object[] args) {
                 entryAction.doIt(
                         (TArg0) args[0],
                         (TArg1) args[1],
@@ -318,10 +318,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param exitAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onExit(final Action exitAction) throws Exception {
+    public StateConfiguration<TState, TTrigger> onExit(final Action exitAction) {
         Enforce.argumentNotNull(exitAction, "exitAction");
         return onExit(new Action1<Transition<TState, TTrigger>>() {
-            public void doIt(Transition<TState, TTrigger> arg1) throws Exception {
+            public void doIt(Transition<TState, TTrigger> arg1) {
                 exitAction.doIt();
             }
         });
@@ -334,7 +334,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param exitAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onExit(Action1<Transition<TState, TTrigger>> exitAction) throws Exception {
+    public StateConfiguration<TState, TTrigger> onExit(Action1<Transition<TState, TTrigger>> exitAction) {
         Enforce.argumentNotNull(exitAction, "exitAction");
         representation.addExitAction(exitAction);
         return this;
@@ -353,7 +353,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param superstate The superstate
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> substateOf(TState superstate) throws Exception {
+    public StateConfiguration<TState, TTrigger> substateOf(TState superstate) {
         StateRepresentation<TState, TTrigger> superRepresentation = lookup.call(superstate);
         representation.setSuperstate(superRepresentation);
         superRepresentation.addSubstate(representation);
@@ -369,7 +369,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param destinationStateSelector Function to calculate the state that the trigger will cause a transition to
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitDynamic(TTrigger trigger, final Func<TState> destinationStateSelector) throws Exception {
+    public StateConfiguration<TState, TTrigger> permitDynamic(TTrigger trigger, final Func<TState> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -383,7 +383,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg0>                  Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamic(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, Func2<TArg0, TState> destinationStateSelector) throws Exception {
+    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamic(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, Func2<TArg0, TState> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -400,7 +400,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      */
     public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamic(
             TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger,
-            Func3<TArg0, TArg1, TState> destinationStateSelector) throws Exception {
+            Func3<TArg0, TArg1, TState> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -415,7 +415,7 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg2>                  Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamic(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector) throws Exception {
+    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamic(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -429,10 +429,10 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param guard                    Function that must return true in order for the  trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitDynamicIf(TTrigger trigger, final Func<TState> destinationStateSelector, Func<Boolean> guard) throws Exception {
+    public StateConfiguration<TState, TTrigger> permitDynamicIf(TTrigger trigger, final Func<TState> destinationStateSelector, Func<Boolean> guard) {
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(trigger, new Func2<Object[], TState>() {
-            public TState call(Object[] arg0) throws Exception {
+            public TState call(Object[] arg0) {
                 return destinationStateSelector.call();
             }
         }, guard);
@@ -449,13 +449,13 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg0>                  Type of the first trigger argument
      * @return The reciever
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Func2<TArg0, TState> destinationStateSelector, Func<Boolean> guard) throws Exception {
+    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Func2<TArg0, TState> destinationStateSelector, Func<Boolean> guard) {
         Enforce.argumentNotNull(trigger, "trigger");
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], TState>() {
                     @SuppressWarnings("unchecked")
-                    public TState call(Object[] args) throws Exception {
+                    public TState call(Object[] args) {
                         return destinationStateSelector.call((TArg0) args[0]);
 
                     }
@@ -475,14 +475,14 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg1>                  Type of the second trigger argument
      * @return The reciever
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Func3<TArg0, TArg1, TState> destinationStateSelector, Func<Boolean> guard) throws Exception {
+    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Func3<TArg0, TArg1, TState> destinationStateSelector, Func<Boolean> guard) {
         Enforce.argumentNotNull(trigger, "trigger");
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], TState>() {
                     @SuppressWarnings("unchecked")
 
-                    public TState call(Object[] args) throws Exception {
+                    public TState call(Object[] args) {
                         return destinationStateSelector.call(
                                 (TArg0) args[0],
                                 (TArg1) args[1]);
@@ -504,14 +504,14 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
      * @param <TArg2>                  Type of the third trigger argument
      * @return The reciever
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector, Func<Boolean> guard) throws Exception {
+    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector, Func<Boolean> guard) {
         Enforce.argumentNotNull(trigger, "trigger");
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], TState>() {
                     @SuppressWarnings("unchecked")
 
-                    public TState call(Object[] args) throws Exception {
+                    public TState call(Object[] args) {
                         return destinationStateSelector.call(
                                 (TArg0) args[0],
                                 (TArg1) args[1],
@@ -522,13 +522,13 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
         );
     }
 
-    void enforceNotIdentityTransition(TState destination) throws Exception {
+    void enforceNotIdentityTransition(TState destination) {
         if (destination.equals(representation.getUnderlyingState())) {
-            throw new Exception("Permit() (and PermitIf()) require that the destination state is not equal to the source state. To accept a trigger without changing state, use either Ignore() or PermitReentry().");
+            throw new IllegalStateException("Permit() (and PermitIf()) require that the destination state is not equal to the source state. To accept a trigger without changing state, use either Ignore() or PermitReentry().");
         }
     }
 
-    StateConfiguration<TState, TTrigger> publicPermit(TTrigger trigger, TState destinationState) throws Exception {
+    StateConfiguration<TState, TTrigger> publicPermit(TTrigger trigger, TState destinationState) {
         return publicPermitIf(trigger, destinationState, new Func<Boolean>() {
             public Boolean call() {
                 return true;
@@ -536,17 +536,17 @@ public class StateConfiguration<TState extends Enum, TTrigger extends Enum> {
         });
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) throws Exception {
+    StateConfiguration<TState, TTrigger> publicPermitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) {
         Enforce.argumentNotNull(guard, "guard");
         representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard));
         return this;
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitDynamic(TTrigger trigger, Func2<Object[], TState> destinationStateSelector) throws Exception {
+    StateConfiguration<TState, TTrigger> publicPermitDynamic(TTrigger trigger, Func2<Object[], TState> destinationStateSelector) {
         return publicPermitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitDynamicIf(TTrigger trigger, Func2<Object[], TState> destinationStateSelector, Func<Boolean> guard) throws Exception {
+    StateConfiguration<TState, TTrigger> publicPermitDynamicIf(TTrigger trigger, Func2<Object[], TState> destinationStateSelector, Func<Boolean> guard) {
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         Enforce.argumentNotNull(guard, "guard");
         representation.addTriggerBehaviour(new DynamicTriggerBehaviour<>(trigger, destinationStateSelector, guard));

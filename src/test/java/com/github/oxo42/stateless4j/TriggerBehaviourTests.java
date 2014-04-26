@@ -16,7 +16,7 @@ public class TriggerBehaviourTests {
     }
 
     @Test
-    public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() throws Exception {
+    public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() {
         TransitioningTriggerBehaviour<State, Trigger> transtioning = new TransitioningTriggerBehaviour<State, Trigger>(
                 Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnFalse);
 
@@ -24,7 +24,7 @@ public class TriggerBehaviourTests {
     }
 
     @Test
-    public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() throws Exception {
+    public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() {
         TransitioningTriggerBehaviour<State, Trigger> transtioning = new TransitioningTriggerBehaviour<State, Trigger>(
                 Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue);
 
