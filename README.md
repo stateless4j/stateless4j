@@ -1,5 +1,14 @@
 Forked from [stateless4j](https://code.google.com/p/stateless4j/).
 
+## Maven ##
+```xml
+    <dependency>
+        <groupId>com.github.oxo42</groupId>
+        <artifactId>stateless4j</artifactId>
+        <version>2.3.0</version>
+    </dependency>
+```
+
 ## Introduction ##
 Create **state machines** and lightweight state machine-based workflows **directly in java code**:
 
@@ -40,14 +49,6 @@ assertEquals(State.Ringing, phoneCall.getState());
 
 stateless4j is a port of [stateless](http://code.google.com/p/stateless/) for java
 
-## Maven ##
-```xml
-    <dependency>
-        <groupId>com.github.oxo42</groupId>
-        <artifactId>stateless4j</artifactId>
-        <version>2.2.0</version>
-    </dependency>
-```
 
 ## Features ##
 Most standard state machine constructs are supported:
