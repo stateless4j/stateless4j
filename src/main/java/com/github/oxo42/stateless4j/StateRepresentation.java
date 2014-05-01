@@ -8,7 +8,7 @@ import com.github.oxo42.stateless4j.validation.Enforce;
 
 import java.util.*;
 
-public class StateRepresentation<TState extends Enum, TTrigger> {
+public class StateRepresentation<TState, TTrigger> {
     private final TState state;
 
     private final Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> triggerBehaviours = new HashMap<>();

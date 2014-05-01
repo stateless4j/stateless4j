@@ -23,7 +23,7 @@ import java.util.Map.Entry;
  * @param <TState>   The type used to represent the states
  * @param <TTrigger> The type used to represent the triggers that cause state transitions
  */
-public class StateMachine<TState extends Enum, TTrigger extends Enum> {
+public class StateMachine<TState , TTrigger > {
     protected final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
     protected final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<>();
     protected final Func<TState> stateAccessor;
