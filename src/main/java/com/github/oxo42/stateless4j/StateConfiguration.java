@@ -4,7 +4,6 @@ import com.github.oxo42.stateless4j.delegates.*;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
-import com.github.oxo42.stateless4j.validation.Enforce;
 
 public class StateConfiguration<TState , TTrigger > {
     private static final Func<Boolean> NO_GUARD = new Func<Boolean>() {
@@ -15,9 +14,11 @@ public class StateConfiguration<TState , TTrigger > {
     private final StateRepresentation<TState, TTrigger> representation;
     private final Func2<TState, StateRepresentation<TState, TTrigger>> lookup;
 
-    public StateConfiguration(StateRepresentation<TState, TTrigger> representation, Func2<TState, StateRepresentation<TState, TTrigger>> lookup) {
-        this.representation = Enforce.argumentNotNull(representation, "representation");
-        this.lookup = Enforce.argumentNotNull(lookup, "lookup");
+    public StateConfiguration(final StateRepresentation<TState, TTrigger> representation, final Func2<TState, StateRepresentation<TState, TTrigger>> lookup) {
+        assert representation != null : "representation is null";
+        assert lookup != null : "lookup is null";
+        this.representation = representation;
+        this.lookup = lookup;
     }
 
 
@@ -98,7 +99,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> ignoreIf(TTrigger trigger, Func<Boolean> guard) {
-        Enforce.argumentNotNull(guard, "guard");
+        assert guard != null : "guard is null";
         representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<TState, TTrigger>(trigger, guard));
         return this;
     }
@@ -111,7 +112,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> onEntry(final Action entryAction) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         return onEntry(new Action1<Transition<TState, TTrigger>>() {
             public void doIt(Transition<TState, TTrigger> t) {
                 entryAction.doIt();
@@ -127,7 +128,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> onEntry(final Action1<Transition<TState, TTrigger>> entryAction) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         representation.addEntryAction(new Action2<Transition<TState, TTrigger>, Object[]>() {
             public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
@@ -145,7 +146,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action entryAction) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action1<Transition<TState, TTrigger>>() {
             public void doIt(Transition<TState, TTrigger> arg1) {
                 entryAction.doIt();
@@ -162,7 +163,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action1<Transition<TState, TTrigger>> entryAction) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger, new Action2<Transition<TState, TTrigger>, Object[]>() {
             public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
@@ -182,7 +183,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action2<TArg0, Transition<TState, TTrigger>>() {
             public void doIt(TArg0 arg1, Transition<TState, TTrigger> arg2) {
                 entryAction.doIt(arg1);
@@ -201,8 +202,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action2<TArg0, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
-        Enforce.argumentNotNull(trigger, "trigger");
+        assert trigger != null : "trigger is null";
+        assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
             @SuppressWarnings("unchecked")
             public void doIt(Transition<TState, TTrigger> t, Object[] arg2) {
@@ -225,7 +226,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<TState, TTrigger>>() {
             public void doIt(TArg0 a0, TArg1 a1, Transition<TState, TTrigger> t) {
                 entryAction.doIt(a0, a1);
@@ -246,8 +247,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action3<TArg0, TArg1, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
-        Enforce.argumentNotNull(trigger, "trigger");
+        assert trigger != null : "trigger is null";
+        assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
             @SuppressWarnings("unchecked")
             public void doIt(Transition<TState, TTrigger> t, Object[] args) {
@@ -274,7 +275,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
+        assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>>() {
             public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<TState, TTrigger> t) {
                 entryAction.doIt(a0, a1, a2);
@@ -297,8 +298,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
-        Enforce.argumentNotNull(entryAction, "entryAction");
-        Enforce.argumentNotNull(trigger, "trigger");
+        assert trigger != null : "trigger is null";
+        assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
             @SuppressWarnings("unchecked")
             public void doIt(Transition<TState, TTrigger> t, Object[] args) {
@@ -319,7 +320,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> onExit(final Action exitAction) {
-        Enforce.argumentNotNull(exitAction, "exitAction");
+        assert exitAction != null : "exitAction is null";
         return onExit(new Action1<Transition<TState, TTrigger>>() {
             public void doIt(Transition<TState, TTrigger> arg1) {
                 exitAction.doIt();
@@ -335,7 +336,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The receiver
      */
     public StateConfiguration<TState, TTrigger> onExit(Action1<Transition<TState, TTrigger>> exitAction) {
-        Enforce.argumentNotNull(exitAction, "exitAction");
+        assert exitAction != null : "exitAction is null";
         representation.addExitAction(exitAction);
         return this;
     }
@@ -430,7 +431,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The reciever
      */
     public StateConfiguration<TState, TTrigger> permitDynamicIf(TTrigger trigger, final Func<TState> destinationStateSelector, Func<Boolean> guard) {
-        Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
+        assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(trigger, new Func2<Object[], TState>() {
             public TState call(Object[] arg0) {
                 return destinationStateSelector.call();
@@ -450,8 +451,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The reciever
      */
     public <TArg0> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Func2<TArg0, TState> destinationStateSelector, Func<Boolean> guard) {
-        Enforce.argumentNotNull(trigger, "trigger");
-        Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
+        assert trigger != null : "trigger is null";
+        assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], TState>() {
                     @SuppressWarnings("unchecked")
@@ -476,8 +477,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The reciever
      */
     public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Func3<TArg0, TArg1, TState> destinationStateSelector, Func<Boolean> guard) {
-        Enforce.argumentNotNull(trigger, "trigger");
-        Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
+        assert trigger != null : "trigger is null";
+        assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], TState>() {
                     @SuppressWarnings("unchecked")
@@ -505,8 +506,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @return The reciever
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector, Func<Boolean> guard) {
-        Enforce.argumentNotNull(trigger, "trigger");
-        Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
+        assert trigger != null : "trigger is null";
+        assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], TState>() {
                     @SuppressWarnings("unchecked")
@@ -537,7 +538,7 @@ public class StateConfiguration<TState , TTrigger > {
     }
 
     StateConfiguration<TState, TTrigger> publicPermitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) {
-        Enforce.argumentNotNull(guard, "guard");
+        assert guard != null : "guard is null";
         representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard));
         return this;
     }
@@ -547,8 +548,8 @@ public class StateConfiguration<TState , TTrigger > {
     }
 
     StateConfiguration<TState, TTrigger> publicPermitDynamicIf(TTrigger trigger, Func2<Object[], TState> destinationStateSelector, Func<Boolean> guard) {
-        Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
-        Enforce.argumentNotNull(guard, "guard");
+        assert destinationStateSelector != null : "destinationStateSelector is null";
+        assert guard != null : "guard is null";
         representation.addTriggerBehaviour(new DynamicTriggerBehaviour<>(trigger, destinationStateSelector, guard));
         return this;
     }
