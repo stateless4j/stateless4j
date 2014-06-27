@@ -8,10 +8,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-
 public class StateMachineTests {
-    final Enum
-            StateA = State.A, StateB = State.B, StateC = State.C,
+
+    final Enum StateA = State.A, StateB = State.B, StateC = State.C,
             TriggerX = Trigger.X, TriggerY = Trigger.Y;
     Boolean fired = false;
     String entryArgS = null;
@@ -153,7 +152,6 @@ public class StateMachineTests {
         sm.configure(State.B)
                 .onEntry(new Action() {
 
-
                     public void doIt() {
                         setFired();
                     }
@@ -174,7 +172,6 @@ public class StateMachineTests {
         sm.configure(State.B)
                 .onEntry(new Action() {
 
-
                     public void doIt() {
                         setFired();
                     }
@@ -186,32 +183,20 @@ public class StateMachineTests {
         assertTrue(fired);
     }
 
-    @Test
-    //[Test, ExpectedException(typeof(ArgumentException))]
+    @Test(expected = IllegalStateException.class)
     public void ImplicitReentryIsDisallowed() {
-        try {
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-
-            sm.configure(State.B)
-                    .permit(Trigger.X, State.B);
-        } catch (Exception e) {
-
-        }
+        sm.configure(State.B)
+                .permit(Trigger.X, State.B);
     }
 
-    @Test
-//        [Test, ExpectedException(typeof(InvalidOperationException))]
+    @Test(expected = IllegalStateException.class)
     public void TriggerParametersAreImmutableOnceSet() {
-        try {
-            StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
-            sm.setTriggerParameters(Trigger.X, String.class, int.class);
-            sm.setTriggerParameters(Trigger.X, String.class);
-            fail();
-        } catch (Exception e) {
-
-        }
+        sm.setTriggerParameters(Trigger.X, String.class, int.class);
+        sm.setTriggerParameters(Trigger.X, String.class);
     }
 
 //        @Test
@@ -260,4 +245,3 @@ public class StateMachineTests {
 //            AreEqual(Trigger.Z, trigger);
 //        }
 }
-
