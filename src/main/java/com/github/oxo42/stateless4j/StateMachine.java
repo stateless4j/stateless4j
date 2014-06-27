@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 /**
  * Models behaviour as transitions between a finite set of states
  *
  * @param <TState>   The type used to represent the states
  * @param <TTrigger> The type used to represent the triggers that cause state transitions
  */
-public class StateMachine<TState , TTrigger > {
+public class StateMachine<TState, TTrigger> {
+
     protected final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
     protected final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<>();
     protected final Func<TState> stateAccessor;
@@ -60,7 +60,6 @@ public class StateMachine<TState , TTrigger > {
         };
     }
 
-
     /**
      * The current state
      *
@@ -88,15 +87,14 @@ public class StateMachine<TState , TTrigger > {
     }
 
     protected StateRepresentation<TState, TTrigger> getRepresentation(TState state) {
-
-        if (!stateConfiguration.containsKey(state)) {
-            StateRepresentation<TState, TTrigger> result = new StateRepresentation<>(state);
+        StateRepresentation<TState, TTrigger> result = stateConfiguration.get(state);
+        if (result == null) {
+            result = new StateRepresentation<>(state);
             stateConfiguration.put(state, result);
         }
 
-        return stateConfiguration.get(state);
+        return result;
     }
-
 
     /**
      * Begin configuration of the entry/exit actions and allowed transitions
@@ -114,7 +112,6 @@ public class StateMachine<TState , TTrigger > {
         });
     }
 
-
     /**
      * Transition from the current state via the specified trigger.
      * The target state is determined by the configuration of the current state.
@@ -127,7 +124,6 @@ public class StateMachine<TState , TTrigger > {
     public void fire(TTrigger trigger) {
         publicFire(trigger);
     }
-
 
     /**
      * Transition from the current state via the specified trigger.
@@ -144,7 +140,6 @@ public class StateMachine<TState , TTrigger > {
         Enforce.argumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0);
     }
-
 
     /**
      * Transition from the current state via the specified trigger.
@@ -163,7 +158,6 @@ public class StateMachine<TState , TTrigger > {
         Enforce.argumentNotNull(trigger, "trigger");
         publicFire(trigger.getTrigger(), arg0, arg1);
     }
-
 
     /**
      * Transition from the current state via the specified trigger.
@@ -186,34 +180,27 @@ public class StateMachine<TState , TTrigger > {
     }
 
     protected void publicFire(TTrigger trigger, Object... args) {
-        TriggerWithParameters<TState, TTrigger> configuration;
-        if (triggerConfiguration.containsKey(trigger)) {
-            configuration = triggerConfiguration.get(trigger);
+        TriggerWithParameters<TState, TTrigger> configuration = triggerConfiguration.get(trigger);
+        if (configuration != null) {
             configuration.validateParameters(args);
         }
 
-        TriggerBehaviour<TState, TTrigger> triggerBehaviour;
-        try {
-            triggerBehaviour = getCurrentRepresentation().tryFindHandler(trigger);
-        } catch (Exception e) {
+        TriggerBehaviour<TState, TTrigger> triggerBehaviour = getCurrentRepresentation().tryFindHandler(trigger);
+        if (triggerBehaviour == null) {
             unhandledTriggerAction.doIt(getCurrentRepresentation().getUnderlyingState(), trigger);
             return;
         }
 
         TState source = getState();
-        TState destination;
-        try {
-            destination = triggerBehaviour.resultsInTransitionFrom(source, args);
-            Transition<TState, TTrigger> transition = new Transition<>(source, destination, trigger);
+        OutVar<TState> destination = new OutVar<>();
+        if (triggerBehaviour.resultsInTransitionFrom(source, args, destination)) {
+            Transition<TState, TTrigger> transition = new Transition<>(source, destination.get(), trigger);
 
             getCurrentRepresentation().exit(transition);
-            setState(destination);
+            setState(destination.get());
             getCurrentRepresentation().enter(transition, args);
-        } catch (Exception e) {
-
         }
     }
-
 
     /**
      * Override the default behaviour of throwing an exception when an unhandled trigger is fired
@@ -227,7 +214,6 @@ public class StateMachine<TState , TTrigger > {
         this.unhandledTriggerAction = unhandledTriggerAction;
     }
 
-
     /**
      * Determine if the state machine is in the supplied state
      *
@@ -237,7 +223,6 @@ public class StateMachine<TState , TTrigger > {
     public boolean isInState(TState state) {
         return getCurrentRepresentation().isIncludedIn(state);
     }
-
 
     /**
      * Returns true if {@code trigger} can be fired  in the current state
@@ -249,12 +234,12 @@ public class StateMachine<TState , TTrigger > {
         return getCurrentRepresentation().canHandle(trigger);
     }
 
-
     /**
      * A human-readable representation of the state machine
      *
      * @return A description of the current state and permitted triggers
      */
+    @Override
     public String toString() {
         List<TTrigger> permittedTriggers = getPermittedTriggers();
         List<String> parameters = new ArrayList<>();
@@ -271,13 +256,11 @@ public class StateMachine<TState , TTrigger > {
             delim = ", ";
         }
 
-
         return String.format(
                 "StateMachine {{ State = %s, PermittedTriggers = {{ %s }}}}",
                 getState(),
                 params.toString());
     }
-
 
     /**
      * Specify the arguments that must be supplied when a specific trigger is fired
@@ -292,7 +275,6 @@ public class StateMachine<TState , TTrigger > {
         saveTriggerConfiguration(configuration);
         return configuration;
     }
-
 
     /**
      * Specify the arguments that must be supplied when a specific trigger is fired
@@ -309,7 +291,6 @@ public class StateMachine<TState , TTrigger > {
         saveTriggerConfiguration(configuration);
         return configuration;
     }
-
 
     /**
      * Specify the arguments that must be supplied when a specific trigger is fired
@@ -331,30 +312,32 @@ public class StateMachine<TState , TTrigger > {
 
     private void saveTriggerConfiguration(TriggerWithParameters<TState, TTrigger> trigger) {
         if (triggerConfiguration.containsKey(trigger.getTrigger())) {
-            throw new IllegalStateException(
-                    String.format("Parameters for the trigger '%s' have already been configured.", trigger));
+            throw new IllegalStateException("Parameters for the trigger '" + trigger + "' have already been configured.");
         }
 
         triggerConfiguration.put(trigger.getTrigger(), trigger);
     }
 
-    public void generateDotFileInto(OutputStream dotFile) {
+    public void generateDotFileInto(final OutputStream dotFile) throws IOException {
         try (OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8")) {
             PrintWriter writer = new PrintWriter(w);
             writer.write("digraph G {\n");
+            OutVar<TState> destination = new OutVar<>();
             for (Entry<TState, StateRepresentation<TState, TTrigger>> entry : this.stateConfiguration.entrySet()) {
                 Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviours = entry.getValue().getTriggerBehaviours();
                 for (Entry<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviour : behaviours.entrySet()) {
                     for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
                         if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
-                            writer.write(String.format("\t%s -> %s;\n", entry.getKey(), triggerBehaviour.resultsInTransitionFrom(null)));
+                            destination.set(null);
+                            triggerBehaviour.resultsInTransitionFrom(null, null, destination);
+                            writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
                         }
                     }
                 }
             }
             writer.write("}");
-        } catch (IOException ie) {
-            //
+        } catch (IOException ex) {
+            throw ex;
         }
     }
 }

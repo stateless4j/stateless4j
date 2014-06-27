@@ -25,29 +25,23 @@ public class StateRepresentation<TState, TTrigger> {
         return triggerBehaviours;
     }
 
-    public boolean canHandle(TTrigger trigger) {
-        try {
-            tryFindHandler(trigger);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public Boolean canHandle(TTrigger trigger) {
+        return tryFindHandler(trigger) != null;
     }
 
     public TriggerBehaviour<TState, TTrigger> tryFindHandler(TTrigger trigger) {
-        try {
-            return tryFindLocalHandler(trigger);
-        } catch (Exception e) {
-            return getSuperstate().tryFindHandler(trigger);
+        TriggerBehaviour result = tryFindLocalHandler(trigger);
+        if (result == null && superstate != null) {
+            result = superstate.tryFindHandler(trigger);
         }
+        return result;
     }
 
     TriggerBehaviour<TState, TTrigger> tryFindLocalHandler(TTrigger trigger/*, out TriggerBehaviour handler*/) {
-        List<TriggerBehaviour<TState, TTrigger>> possible;
-        if (!triggerBehaviours.containsKey(trigger)) {
-            throw new IllegalStateException();
+        List<TriggerBehaviour<TState, TTrigger>> possible = triggerBehaviours.get(trigger);
+        if (possible == null) {
+            return null;
         }
-        possible = triggerBehaviours.get(trigger);
 
         List<TriggerBehaviour<TState, TTrigger>> actual = new ArrayList<>();
         for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : possible) {
@@ -57,17 +51,10 @@ public class StateRepresentation<TState, TTrigger> {
         }
 
         if (actual.size() > 1) {
-            throw new IllegalStateException(
-                    String.format("Multiple permitted exit transitions are configured from state '%s' for trigger '%s'. Guard clauses must be mutually exclusive.",
-                            trigger, state)
-            );
+            throw new IllegalStateException("Multiple permitted exit transitions are configured from state '" + trigger + "' for trigger '" + state + "'. Guard clauses must be mutually exclusive.");
         }
 
-        TriggerBehaviour<TState, TTrigger> handler = actual.get(0);
-        if (handler == null) {
-            throw new IllegalStateException();
-        }
-        return handler;
+        return actual.get(0);
     }
 
     public void addEntryAction(final TTrigger trigger, final Action2<Transition<TState, TTrigger>, Object[]> action) {
