@@ -5,11 +5,13 @@ import org.junit.Test;
 
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
-
+import static org.junit.Assert.assertFalse;
 
 public class IgnoredTriggerBehaviourTests {
+
     public static Func<Boolean> returnTrue = new Func<Boolean>() {
 
+        @Override
         public Boolean call() {
             return true;
         }
@@ -17,6 +19,7 @@ public class IgnoredTriggerBehaviourTests {
 
     public static Func<Boolean> returnFalse = new Func<Boolean>() {
 
+        @Override
         public Boolean call() {
             return false;
         }
@@ -24,36 +27,25 @@ public class IgnoredTriggerBehaviourTests {
 
     @Test
     public void StateRemainsUnchanged() {
-        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, returnTrue);
-        try {
-            ignored.resultsInTransitionFrom(State.B, new Object[0]);
-            Assert.fail();
-        } catch (Exception e) {
-
-        }
+        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnTrue);
+        assertFalse(ignored.resultsInTransitionFrom(State.B, new Object[0], new OutVar<State>()));
     }
 
     @Test
     public void ExposesCorrectUnderlyingTrigger() {
-        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(
-                Trigger.X, returnTrue);
-
+        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnTrue);
         Assert.assertEquals(Trigger.X, ignored.getTrigger());
     }
 
     @Test
     public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() {
-        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(
-                Trigger.X, returnFalse);
-
+        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnFalse);
         Assert.assertFalse(ignored.isGuardConditionMet());
     }
 
     @Test
     public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() {
-        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<State, Trigger>(
-                Trigger.X, returnTrue);
-
+        IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnTrue);
         Assert.assertTrue(ignored.isGuardConditionMet());
     }
 }

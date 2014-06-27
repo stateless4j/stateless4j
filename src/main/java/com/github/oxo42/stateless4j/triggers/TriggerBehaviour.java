@@ -1,5 +1,6 @@
 package com.github.oxo42.stateless4j.triggers;
 
+import com.github.oxo42.stateless4j.OutVar;
 import com.github.oxo42.stateless4j.delegates.Func;
 
 
@@ -20,5 +21,5 @@ public abstract class TriggerBehaviour<TState, TTrigger> {
         return guard.call();
     }
 
-    public abstract TState resultsInTransitionFrom(TState source, Object... args);
+    public abstract boolean resultsInTransitionFrom(TState source, Object[] args, OutVar<TState> dest);
 }
