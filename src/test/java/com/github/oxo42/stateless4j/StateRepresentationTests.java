@@ -13,7 +13,7 @@ import java.util.List;
 
 public class StateRepresentationTests {
     Transition<State, Trigger> actualTransition = null;
-    Boolean executed = false;
+    boolean executed = false;
     int order = 0, subOrder = 0, superOrder = 0;
 
     @Test

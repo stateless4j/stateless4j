@@ -7,8 +7,9 @@ import com.github.oxo42.stateless4j.triggers.*;
 import com.github.oxo42.stateless4j.validation.Enforce;
 
 public class StateConfiguration<TState , TTrigger > {
-    private static final Func<Boolean> NO_GUARD = new Func<Boolean>() {
-        public Boolean call() {
+    private static final FuncBoolean NO_GUARD = new FuncBoolean() {
+        @Override
+        public boolean call() {
             return true;
         }
     };
@@ -42,7 +43,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard            Function that must return true in order for the trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) {
+    public StateConfiguration<TState, TTrigger> permitIf(TTrigger trigger, TState destinationState, FuncBoolean guard) {
         enforceNotIdentityTransition(destinationState);
         return publicPermitIf(trigger, destinationState, guard);
     }
@@ -74,7 +75,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard   Function that must return true in order for the trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitReentryIf(TTrigger trigger, Func<Boolean> guard) {
+    public StateConfiguration<TState, TTrigger> permitReentryIf(TTrigger trigger, FuncBoolean guard) {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard);
     }
 
@@ -97,7 +98,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard   Function that must return true in order for the trigger to be ignored
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> ignoreIf(TTrigger trigger, Func<Boolean> guard) {
+    public StateConfiguration<TState, TTrigger> ignoreIf(TTrigger trigger, FuncBoolean guard) {
         Enforce.argumentNotNull(guard, "guard");
         representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<TState, TTrigger>(trigger, guard));
         return this;
@@ -429,7 +430,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard                    Function that must return true in order for the  trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitDynamicIf(TTrigger trigger, final Func<TState> destinationStateSelector, Func<Boolean> guard) {
+    public StateConfiguration<TState, TTrigger> permitDynamicIf(TTrigger trigger, final Func<TState> destinationStateSelector, FuncBoolean guard) {
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(trigger, new Func2<Object[], TState>() {
             public TState call(Object[] arg0) {
@@ -449,7 +450,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg0>                  Type of the first trigger argument
      * @return The reciever
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Func2<TArg0, TState> destinationStateSelector, Func<Boolean> guard) {
+    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Func2<TArg0, TState> destinationStateSelector, FuncBoolean guard) {
         Enforce.argumentNotNull(trigger, "trigger");
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(
@@ -475,7 +476,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg1>                  Type of the second trigger argument
      * @return The reciever
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Func3<TArg0, TArg1, TState> destinationStateSelector, Func<Boolean> guard) {
+    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Func3<TArg0, TArg1, TState> destinationStateSelector, FuncBoolean guard) {
         Enforce.argumentNotNull(trigger, "trigger");
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(
@@ -504,7 +505,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg2>                  Type of the third trigger argument
      * @return The reciever
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector, Func<Boolean> guard) {
+    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector, FuncBoolean guard) {
         Enforce.argumentNotNull(trigger, "trigger");
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         return publicPermitDynamicIf(
@@ -529,14 +530,10 @@ public class StateConfiguration<TState , TTrigger > {
     }
 
     StateConfiguration<TState, TTrigger> publicPermit(TTrigger trigger, TState destinationState) {
-        return publicPermitIf(trigger, destinationState, new Func<Boolean>() {
-            public Boolean call() {
-                return true;
-            }
-        });
+        return publicPermitIf(trigger, destinationState, NO_GUARD);
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitIf(TTrigger trigger, TState destinationState, Func<Boolean> guard) {
+    StateConfiguration<TState, TTrigger> publicPermitIf(TTrigger trigger, TState destinationState, FuncBoolean guard) {
         Enforce.argumentNotNull(guard, "guard");
         representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard));
         return this;
@@ -546,7 +543,7 @@ public class StateConfiguration<TState , TTrigger > {
         return publicPermitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitDynamicIf(TTrigger trigger, Func2<Object[], TState> destinationStateSelector, Func<Boolean> guard) {
+    StateConfiguration<TState, TTrigger> publicPermitDynamicIf(TTrigger trigger, Func2<Object[], TState> destinationStateSelector, FuncBoolean guard) {
         Enforce.argumentNotNull(destinationStateSelector, "destinationStateSelector");
         Enforce.argumentNotNull(guard, "guard");
         representation.addTriggerBehaviour(new DynamicTriggerBehaviour<>(trigger, destinationStateSelector, guard));

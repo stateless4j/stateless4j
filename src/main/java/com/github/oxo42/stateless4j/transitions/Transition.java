@@ -54,7 +54,7 @@ public class Transition<TState, TTrigger> {
      *
      * @return True if the transition is a re-entry
      */
-    public Boolean isReentry() {
+    public boolean isReentry() {
         return getSource().equals(getDestination());
     }
 }

@@ -3,21 +3,21 @@ package com.github.oxo42.stateless4j;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
 
 
 public class IgnoredTriggerBehaviourTests {
-    public static Func<Boolean> returnTrue = new Func<Boolean>() {
+    public static FuncBoolean returnTrue = new FuncBoolean() {
 
-        public Boolean call() {
+        public boolean call() {
             return true;
         }
     };
 
-    public static Func<Boolean> returnFalse = new Func<Boolean>() {
+    public static FuncBoolean returnFalse = new FuncBoolean() {
 
-        public Boolean call() {
+        public boolean call() {
             return false;
         }
     };
