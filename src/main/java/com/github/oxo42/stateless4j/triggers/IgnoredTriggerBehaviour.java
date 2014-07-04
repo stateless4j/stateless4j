@@ -1,11 +1,10 @@
 package com.github.oxo42.stateless4j.triggers;
 
 import com.github.oxo42.stateless4j.OutVar;
-import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 
 public class IgnoredTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<TState, TTrigger> {
-
-    public IgnoredTriggerBehaviour(TTrigger trigger, Func<Boolean> guard) {
+    public IgnoredTriggerBehaviour(TTrigger trigger, FuncBoolean guard) {
         super(trigger, guard);
     }
 

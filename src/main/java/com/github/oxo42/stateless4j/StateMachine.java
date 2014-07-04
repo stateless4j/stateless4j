@@ -220,7 +220,7 @@ public class StateMachine<TState, TTrigger> {
      * @param state The state to test for
      * @return True if the current state is equal to, or a substate of, the supplied state
      */
-    public Boolean isInState(TState state) {
+    public boolean isInState(TState state) {
         return getCurrentRepresentation().isIncludedIn(state);
     }
 
@@ -230,7 +230,7 @@ public class StateMachine<TState, TTrigger> {
      * @param trigger Trigger to test
      * @return True if the trigger can be fired, false otherwise
      */
-    public Boolean canFire(TTrigger trigger) {
+    public boolean canFire(TTrigger trigger) {
         return getCurrentRepresentation().canHandle(trigger);
     }
 

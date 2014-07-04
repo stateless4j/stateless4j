@@ -1,7 +1,7 @@
 package com.github.oxo42.stateless4j;
 
 import com.github.oxo42.stateless4j.delegates.Action;
-import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import org.junit.Test;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class StateMachineTests {
 
     final Enum StateA = State.A, StateB = State.B, StateC = State.C,
             TriggerX = Trigger.X, TriggerY = Trigger.Y;
-    Boolean fired = false;
+    boolean fired = false;
     String entryArgS = null;
     int entryArgI = 0;
 
@@ -116,9 +116,10 @@ public class StateMachineTests {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
 
         sm.configure(State.B)
-                .permitIf(Trigger.X, State.A, new Func<Boolean>() {
+                .permitIf(Trigger.X, State.A, new FuncBoolean() {
 
-                    public Boolean call() {
+                    @Override
+                    public boolean call() {
                         return false;
                     }
                 });

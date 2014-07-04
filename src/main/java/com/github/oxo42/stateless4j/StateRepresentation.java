@@ -152,17 +152,16 @@ public class StateRepresentation<TState, TTrigger> {
         substates.add(substate);
     }
 
-    public Boolean includes(TState stateToCheck) {
-        Boolean isIncluded = false;
+    public boolean includes(TState stateToCheck) {
         for (StateRepresentation<TState, TTrigger> s : substates) {
             if (s.includes(stateToCheck)) {
-                isIncluded = true;
+                return true;
             }
         }
-        return this.state.equals(stateToCheck) || isIncluded;
+        return this.state.equals(stateToCheck);
     }
 
-    public Boolean isIncludedIn(TState stateToCheck) {
+    public boolean isIncludedIn(TState stateToCheck) {
         return this.state.equals(stateToCheck) || (superstate != null && superstate.isIncludedIn(stateToCheck));
     }
 
@@ -171,14 +170,11 @@ public class StateRepresentation<TState, TTrigger> {
         Set<TTrigger> result = new HashSet<>();
 
         for (TTrigger t : triggerBehaviours.keySet()) {
-            boolean isOk = false;
             for (TriggerBehaviour<TState, TTrigger> v : triggerBehaviours.get(t)) {
                 if (v.isGuardConditionMet()) {
-                    isOk = true;
+                    result.add(t);
+                    break;
                 }
-            }
-            if (isOk) {
-                result.add(t);
             }
         }
 
