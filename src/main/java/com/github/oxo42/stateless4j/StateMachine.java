@@ -4,7 +4,6 @@ import com.github.oxo42.stateless4j.delegates.*;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
-import com.github.oxo42.stateless4j.validation.Enforce;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -137,7 +136,7 @@ public class StateMachine<TState, TTrigger> {
      * @The current state does not allow the trigger to be fired
      */
     public <TArg0> void fire(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, TArg0 arg0) {
-        Enforce.argumentNotNull(trigger, "trigger");
+        assert trigger != null : "trigger is null";
         publicFire(trigger.getTrigger(), arg0);
     }
 
@@ -155,7 +154,7 @@ public class StateMachine<TState, TTrigger> {
      * @The current state does not allow the trigger to be fired
      */
     public <TArg0, TArg1> void fire(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1) {
-        Enforce.argumentNotNull(trigger, "trigger");
+        assert trigger != null : "trigger is null";
         publicFire(trigger.getTrigger(), arg0, arg1);
     }
 
@@ -175,7 +174,7 @@ public class StateMachine<TState, TTrigger> {
      * @The current state does not allow the trigger to be fired
      */
     public <TArg0, TArg1, TArg2> void fire(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) {
-        Enforce.argumentNotNull(trigger, "trigger");
+        assert trigger != null : "trigger is null";
         publicFire(trigger.getTrigger(), arg0, arg1, arg2);
     }
 

@@ -11,7 +11,8 @@ public class DynamicTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<
 
     public DynamicTriggerBehaviour(TTrigger trigger, Func2<Object[], TState> destination, FuncBoolean guard) {
         super(trigger, guard);
-        this.destination = Enforce.argumentNotNull(destination, "destination");
+        assert destination != null : "destination is null";
+        this.destination = destination;
     }
 
     public boolean resultsInTransitionFrom(TState source, Object[] args, OutVar<TState> dest) {

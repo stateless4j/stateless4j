@@ -4,7 +4,6 @@ import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
-import com.github.oxo42.stateless4j.validation.Enforce;
 
 import java.util.*;
 
@@ -58,8 +57,7 @@ public class StateRepresentation<TState, TTrigger> {
     }
 
     public void addEntryAction(final TTrigger trigger, final Action2<Transition<TState, TTrigger>, Object[]> action) {
-        Enforce.argumentNotNull(action, "action");
-
+        assert action != null : "action is null";
 
         entryActions.add(new Action2<Transition<TState, TTrigger>, Object[]>() {
             @Override
@@ -72,19 +70,22 @@ public class StateRepresentation<TState, TTrigger> {
     }
 
     public void addEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) {
-        entryActions.add(Enforce.argumentNotNull(action, "action"));
+        assert action != null : "action is null";
+        entryActions.add(action);
     }
 
     public void insertEntryAction(Action2<Transition<TState, TTrigger>, Object[]> action) {
-        entryActions.add(0, Enforce.argumentNotNull(action, "action"));
+        assert action != null : "action is null";
+        entryActions.add(0, action);
     }
 
     public void addExitAction(Action1<Transition<TState, TTrigger>> action) {
-        exitActions.add(Enforce.argumentNotNull(action, "action"));
+        assert action != null : "action is null";
+        exitActions.add(action);
     }
 
     public void enter(Transition<TState, TTrigger> transition, Object... entryArgs) {
-        Enforce.argumentNotNull(transition, "transtion");
+        assert transition != null : "transition is null";
 
         if (transition.isReentry()) {
             executeEntryActions(transition, entryArgs);
@@ -98,7 +99,7 @@ public class StateRepresentation<TState, TTrigger> {
     }
 
     public void exit(Transition<TState, TTrigger> transition) {
-        Enforce.argumentNotNull(transition, "transtion");
+        assert transition != null : "transition is null";
 
         if (transition.isReentry()) {
             executeExitActions(transition);
@@ -111,15 +112,15 @@ public class StateRepresentation<TState, TTrigger> {
     }
 
     void executeEntryActions(Transition<TState, TTrigger> transition, Object[] entryArgs) {
-        Enforce.argumentNotNull(transition, "transtion");
-        Enforce.argumentNotNull(entryArgs, "entryArgs");
+        assert transition != null : "transition is null";
+        assert entryArgs != null : "entryArgs is null";
         for (Action2<Transition<TState, TTrigger>, Object[]> action : entryActions) {
             action.doIt(transition, entryArgs);
         }
     }
 
     void executeExitActions(Transition<TState, TTrigger> transition) {
-        Enforce.argumentNotNull(transition, "transtion");
+        assert transition != null : "transition is null";
         for (Action1<Transition<TState, TTrigger>> action : exitActions) {
             action.doIt(transition);
         }
@@ -148,7 +149,7 @@ public class StateRepresentation<TState, TTrigger> {
     }
 
     public void addSubstate(StateRepresentation<TState, TTrigger> substate) {
-        Enforce.argumentNotNull(substate, "substate");
+        assert substate != null : "substate is null";
         substates.add(substate);
     }
 

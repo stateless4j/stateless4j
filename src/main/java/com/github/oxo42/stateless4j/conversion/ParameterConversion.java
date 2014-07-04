@@ -1,13 +1,11 @@
 package com.github.oxo42.stateless4j.conversion;
 
-import com.github.oxo42.stateless4j.validation.Enforce;
-
 public final class ParameterConversion {
     private ParameterConversion() {
     }
 
     public static Object unpack(Object[] args, Class<?> argType, int index) {
-        Enforce.argumentNotNull(args, "args");
+        assert args != null : "args is null";
 
         if (args.length <= index) {
             throw new IllegalStateException(
