@@ -5,7 +5,7 @@ Forked from [stateless4j](https://code.google.com/p/stateless4j/).
     <dependency>
         <groupId>com.github.oxo42</groupId>
         <artifactId>stateless4j</artifactId>
-        <version>2.3.0</version>
+        <version>2.4.0</version>
     </dependency>
 ```
 

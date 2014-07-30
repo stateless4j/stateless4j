@@ -51,7 +51,7 @@ public class StateConfiguration<S, T> {
     /**
      * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
      * configured state transitions to an identical sibling state
-     * <p/>
+     * <p>
      * Applies to the current state only. Will not re-execute superstate actions, or  cause actions to execute
      * transitioning between super- and sub-states
      *
@@ -65,7 +65,7 @@ public class StateConfiguration<S, T> {
     /**
      * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
      * configured state transitions to an identical sibling state
-     * <p/>
+     * <p>
      * Applies to the current state only. Will not re-execute superstate actions, or  cause actions to execute
      * transitioning between super- and sub-states
      *
@@ -338,7 +338,7 @@ public class StateConfiguration<S, T> {
 
     /**
      * Sets the superstate that the configured state is a substate of
-     * <p/>
+     * <p>
      * Substates inherit the allowed transitions of their superstate.
      * When entering directly into a substate from outside of the superstate,
      * entry actions for the superstate are executed.
