@@ -25,6 +25,7 @@ public class StateRepresentationTests {
         stateRepresentation.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> t, Object[] a)
                     {
                 actualTransition = t;
@@ -43,6 +44,7 @@ public class StateRepresentationTests {
         stateRepresentation.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> t, Object[] a)
                     {
                 actualTransition = t;
@@ -61,6 +63,7 @@ public class StateRepresentationTests {
         actualTransition = null;
         stateRepresentation.addExitAction(new Action1<Transition<State, Trigger>>() {
 
+            @Override
             public void doIt(Transition<State, Trigger> t) {
                 actualTransition = t;
             }
@@ -77,6 +80,7 @@ public class StateRepresentationTests {
         actualTransition = null;
         stateRepresentation.addExitAction(new Action1<Transition<State, Trigger>>() {
 
+            @Override
             public void doIt(Transition<State, Trigger> t) {
                 actualTransition = t;
             }
@@ -147,6 +151,7 @@ public class StateRepresentationTests {
         sub.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> t, Object[] a)
                     {
                 executed = true;
@@ -168,6 +173,7 @@ public class StateRepresentationTests {
         sub.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 executed = true;
             }
@@ -188,6 +194,7 @@ public class StateRepresentationTests {
         superState.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> t, Object[] a)
                     {
                 executed = true;
@@ -209,6 +216,7 @@ public class StateRepresentationTests {
         superState.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 executed = true;
             }
@@ -229,6 +237,7 @@ public class StateRepresentationTests {
         superState.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> t, Object[] a)
                     {
                 executed = true;
@@ -250,6 +259,7 @@ public class StateRepresentationTests {
         superState.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 executed = true;
             }
@@ -267,6 +277,7 @@ public class StateRepresentationTests {
         rep.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
                     {
                 actual.add(0);
@@ -276,6 +287,7 @@ public class StateRepresentationTests {
         rep.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
                     {
                 actual.add(1);
@@ -298,6 +310,7 @@ public class StateRepresentationTests {
         rep.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 actual.add(0);
             }
@@ -305,6 +318,7 @@ public class StateRepresentationTests {
         rep.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 actual.add(1);
             }
@@ -353,6 +367,7 @@ public class StateRepresentationTests {
         superState.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
                     {
                 superOrder = order++;
@@ -361,6 +376,7 @@ public class StateRepresentationTests {
         sub.addEntryAction(new Action2<Transition<State, Trigger>, Object[]>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1, Object[] arg2)
                     {
                 subOrder = order++;
@@ -384,6 +400,7 @@ public class StateRepresentationTests {
         superState.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 superOrder = order++;
             }
@@ -391,6 +408,7 @@ public class StateRepresentationTests {
         sub.addExitAction(new Action1<Transition<State, Trigger>>() {
 
 
+            @Override
             public void doIt(Transition<State, Trigger> arg1) {
                 subOrder = order++;
             }

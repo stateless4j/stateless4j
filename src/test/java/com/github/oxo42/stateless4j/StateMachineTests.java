@@ -153,6 +153,7 @@ public class StateMachineTests {
         sm.configure(State.B)
                 .onEntry(new Action() {
 
+                    @Override
                     public void doIt() {
                         setFired();
                     }
@@ -173,6 +174,7 @@ public class StateMachineTests {
         sm.configure(State.B)
                 .onEntry(new Action() {
 
+                    @Override
                     public void doIt() {
                         setFired();
                     }

@@ -12,6 +12,7 @@ public class DynamicTriggerTests {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
         sm.configure(State.A).permitDynamic(Trigger.X, new Func<State>() {
 
+            @Override
             public State call() {
                 return State.B;
             }
@@ -28,6 +29,7 @@ public class DynamicTriggerTests {
         TriggerWithParameters1<Integer, State, Trigger> trigger = sm.setTriggerParameters(
                 Trigger.X, Integer.class);
         sm.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
+            @Override
             public State call(Integer i) {
                 return i == 1 ? State.B : State.C;
             }

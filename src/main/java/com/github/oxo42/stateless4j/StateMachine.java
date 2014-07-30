@@ -29,6 +29,7 @@ public class StateMachine<S, T> {
     protected final Action1<S> stateMutator;
     protected Action2<S, T> unhandledTriggerAction = new Action2<S, T>() {
 
+        @Override
         public void doIt(S state, T trigger) {
             throw new IllegalStateException(
                     String.format(
@@ -48,11 +49,13 @@ public class StateMachine<S, T> {
         final StateReference<S, T> reference = new StateReference<>();
         reference.setState(initialState);
         stateAccessor = new Func<S>() {
+            @Override
             public S call() {
                 return reference.getState();
             }
         };
         stateMutator = new Action1<S>() {
+            @Override
             public void doIt(S s) {
                 reference.setState(s);
             }
@@ -105,6 +108,7 @@ public class StateMachine<S, T> {
     public StateConfiguration<S, T> configure(S state) {
         return new StateConfiguration<>(getRepresentation(state), new Func2<S, StateRepresentation<S, T>>() {
 
+            @Override
             public StateRepresentation<S, T> call(S arg0) {
                 return getRepresentation(arg0);
             }

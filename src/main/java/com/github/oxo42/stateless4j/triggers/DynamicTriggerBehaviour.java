@@ -14,6 +14,7 @@ public class DynamicTriggerBehaviour<S, T> extends TriggerBehaviour<S, T> {
         this.destination = destination;
     }
 
+    @Override
     public boolean resultsInTransitionFrom(S source, Object[] args, OutVar<S> dest) {
         dest.set(destination.call(args));
         return true;
