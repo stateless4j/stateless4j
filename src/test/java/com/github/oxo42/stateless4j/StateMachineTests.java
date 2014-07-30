@@ -28,12 +28,12 @@ public class StateMachineTests {
         RunSimpleTest(State.values(), Trigger.values());
     }
 
-    <TState extends Enum, TTransition extends Enum> void RunSimpleTest(TState[] states, TTransition[] transitions) {
-        TState a = states[0];
-        TState b = states[1];
-        TTransition x = transitions[0];
+    <S extends Enum, T extends Enum> void RunSimpleTest(S[] states, T[] transitions) {
+        S a = states[0];
+        S b = states[1];
+        T x = transitions[0];
 
-        StateMachine<TState, TTransition> sm = new StateMachine<TState, TTransition>(a);
+        StateMachine<S, T> sm = new StateMachine<S, T>(a);
 
         sm.configure(a)
                 .permit(x, b);
