@@ -1,6 +1,9 @@
 package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless4j.delegates.*;
+import com.github.oxo42.stateless4j.delegates.Action1;
+import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
@@ -118,7 +121,6 @@ public class StateMachine<TState, TTrigger> {
      * will be invoked
      *
      * @param trigger The trigger to fire
-     * @The current state does not allow the trigger to be fired
      */
     public void fire(TTrigger trigger) {
         publicFire(trigger);
@@ -133,7 +135,6 @@ public class StateMachine<TState, TTrigger> {
      * @param trigger The trigger to fire
      * @param arg0    The first argument
      * @param <TArg0> Type of the first trigger argument
-     * @The current state does not allow the trigger to be fired
      */
     public <TArg0> void fire(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, TArg0 arg0) {
         assert trigger != null : "trigger is null";
@@ -151,7 +152,6 @@ public class StateMachine<TState, TTrigger> {
      * @param arg1    The second argument
      * @param <TArg0> Type of the first trigger argument
      * @param <TArg1> Type of the second trigger argument
-     * @The current state does not allow the trigger to be fired
      */
     public <TArg0, TArg1> void fire(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1) {
         assert trigger != null : "trigger is null";
@@ -171,7 +171,6 @@ public class StateMachine<TState, TTrigger> {
      * @param <TArg0> Type of the first trigger argument
      * @param <TArg1> Type of the second trigger argument
      * @param <TArg2> Type of the third trigger argument
-     * @The current state does not allow the trigger to be fired
      */
     public <TArg0, TArg1, TArg2> void fire(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) {
         assert trigger != null : "trigger is null";
@@ -335,8 +334,6 @@ public class StateMachine<TState, TTrigger> {
                 }
             }
             writer.write("}");
-        } catch (IOException ex) {
-            throw ex;
         }
     }
 }
