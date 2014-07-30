@@ -4,13 +4,15 @@ import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class DynamicTriggerTests {
 
     @Test
     public void DestinationStateIsDynamic() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A);
         sm.configure(State.A).permitDynamic(Trigger.X, new Func<State>() {
 
             @Override
@@ -21,12 +23,12 @@ public class DynamicTriggerTests {
 
         sm.fire(Trigger.X);
 
-        Assert.assertEquals(State.B, sm.getState());
+        assertEquals(State.B, sm.getState());
     }
 
     @Test
     public void DestinationStateIsCalculatedBasedOnTriggerParameters() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A);
         TriggerWithParameters1<Integer, State, Trigger> trigger = sm.setTriggerParameters(
                 Trigger.X, Integer.class);
         sm.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
@@ -38,6 +40,6 @@ public class DynamicTriggerTests {
 
         sm.fire(trigger, 1);
 
-        Assert.assertEquals(State.B, sm.getState());
+        assertEquals(State.B, sm.getState());
     }
 }

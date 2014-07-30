@@ -18,7 +18,7 @@ public class TestGenerateGraph {
     // Changing it to LinkedHashMap will make this test work all the time but will incur a runtime performance penalty
     // @Test
     public void testGenerateSimpleGraph() throws UnsupportedEncodingException, IOException {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A);
         sm.configure(State.A)
                 .permit(Trigger.X, State.B)
                 .permit(Trigger.Y, State.C);

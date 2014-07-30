@@ -30,7 +30,7 @@ public class NonEnumTests {
         S b = states[1];
         T x = transitions[0];
 
-        StateMachine<S, T> sm = new StateMachine<S, T>(a);
+        StateMachine<S, T> sm = new StateMachine<>(a);
 
         sm.configure(a)
                 .permit(x, b);

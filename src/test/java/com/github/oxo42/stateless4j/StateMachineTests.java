@@ -33,7 +33,7 @@ public class StateMachineTests {
         S b = states[1];
         T x = transitions[0];
 
-        StateMachine<S, T> sm = new StateMachine<S, T>(a);
+        StateMachine<S, T> sm = new StateMachine<>(a);
 
         sm.configure(a)
                 .permit(x, b);
@@ -46,13 +46,13 @@ public class StateMachineTests {
     @Test
     public void InitialStateIsCurrent() {
         State initial = State.B;
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial);
+        StateMachine<State, Trigger> sm = new StateMachine<>(initial);
         assertEquals(initial, sm.getState());
     }
 
     @Test
     public void SubstateIsIncludedInCurrentState() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
         sm.configure(State.B).substateOf(State.C);
 
         assertEquals(State.B, sm.getState());
@@ -61,7 +61,7 @@ public class StateMachineTests {
 
     @Test
     public void WhenInSubstate_TriggerIgnoredInSuperstate_RemainsInSubstate() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.B)
                 .substateOf(State.C);
@@ -76,7 +76,7 @@ public class StateMachineTests {
 
     @Test
     public void PermittedTriggersIncludeSuperstatePermittedTriggers() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.A)
                 .permit(Trigger.Z, State.B);
@@ -113,7 +113,7 @@ public class StateMachineTests {
 
     @Test
     public void AcceptedTriggersRespectGuards() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.B)
                 .permitIf(Trigger.X, State.A, new FuncBoolean() {
@@ -129,7 +129,7 @@ public class StateMachineTests {
 
     @Test
     public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.B)
                 .permitIf(Trigger.X, State.A, IgnoredTriggerBehaviourTests.returnFalse)
@@ -146,7 +146,7 @@ public class StateMachineTests {
 
     @Test
     public void WhenTriggerIsIgnored_ActionsNotExecuted() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         fired = false;
 
@@ -167,7 +167,7 @@ public class StateMachineTests {
 
     @Test
     public void IfSelfTransitionPermited_ActionsFire() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         fired = false;
 
@@ -188,7 +188,7 @@ public class StateMachineTests {
 
     @Test(expected = IllegalStateException.class)
     public void ImplicitReentryIsDisallowed() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.configure(State.B)
                 .permit(Trigger.X, State.B);
@@ -196,7 +196,7 @@ public class StateMachineTests {
 
     @Test(expected = IllegalStateException.class)
     public void TriggerParametersAreImmutableOnceSet() {
-        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B);
 
         sm.setTriggerParameters(Trigger.X, String.class, int.class);
         sm.setTriggerParameters(Trigger.X, String.class);

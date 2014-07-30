@@ -5,7 +5,9 @@ import org.junit.Test;
 
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class IgnoredTriggerBehaviourTests {
 
@@ -34,18 +36,18 @@ public class IgnoredTriggerBehaviourTests {
     @Test
     public void ExposesCorrectUnderlyingTrigger() {
         IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnTrue);
-        Assert.assertEquals(Trigger.X, ignored.getTrigger());
+        assertEquals(Trigger.X, ignored.getTrigger());
     }
 
     @Test
     public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() {
         IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnFalse);
-        Assert.assertFalse(ignored.isGuardConditionMet());
+        assertFalse(ignored.isGuardConditionMet());
     }
 
     @Test
     public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() {
         IgnoredTriggerBehaviour<State, Trigger> ignored = new IgnoredTriggerBehaviour<>(Trigger.X, returnTrue);
-        Assert.assertTrue(ignored.isGuardConditionMet());
+        assertTrue(ignored.isGuardConditionMet());
     }
 }
