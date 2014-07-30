@@ -5,17 +5,17 @@ import com.github.oxo42.stateless4j.OutVar;
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
 
-public class TransitioningTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<TState, TTrigger> {
+public class TransitioningTriggerBehaviour<S, T> extends TriggerBehaviour<S, T> {
 
-    private final TState destination;
+    private final S destination;
 
-    public TransitioningTriggerBehaviour(TTrigger trigger, TState destination, FuncBoolean guard) {
+    public TransitioningTriggerBehaviour(T trigger, S destination, FuncBoolean guard) {
         super(trigger, guard);
         this.destination = destination;
     }
 
     @Override
-    public boolean resultsInTransitionFrom(TState source, Object[] args, OutVar<TState> dest) {
+    public boolean resultsInTransitionFrom(S source, Object[] args, OutVar<S> dest) {
         dest.set(destination);
         return true;
     }

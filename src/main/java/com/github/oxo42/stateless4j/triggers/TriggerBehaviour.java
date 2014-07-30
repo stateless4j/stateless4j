@@ -4,16 +4,16 @@ import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.OutVar;
 
 
-public abstract class TriggerBehaviour<TState, TTrigger> {
-    private final TTrigger trigger;
+public abstract class TriggerBehaviour<S, T> {
+    private final T trigger;
     private final FuncBoolean guard;
 
-    protected TriggerBehaviour(TTrigger trigger, FuncBoolean guard) {
+    protected TriggerBehaviour(T trigger, FuncBoolean guard) {
         this.trigger = trigger;
         this.guard = guard;
     }
 
-    public TTrigger getTrigger() {
+    public T getTrigger() {
         return trigger;
     }
 
@@ -21,5 +21,5 @@ public abstract class TriggerBehaviour<TState, TTrigger> {
         return guard.call();
     }
 
-    public abstract boolean resultsInTransitionFrom(TState source, Object[] args, OutVar<TState> dest);
+    public abstract boolean resultsInTransitionFrom(S source, Object[] args, OutVar<S> dest);
 }

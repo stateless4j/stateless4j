@@ -5,17 +5,17 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
 
-public class StateConfiguration<TState , TTrigger > {
+public class StateConfiguration<S , T > {
     private static final FuncBoolean NO_GUARD = new FuncBoolean() {
         @Override
         public boolean call() {
             return true;
         }
     };
-    private final StateRepresentation<TState, TTrigger> representation;
-    private final Func2<TState, StateRepresentation<TState, TTrigger>> lookup;
+    private final StateRepresentation<S, T> representation;
+    private final Func2<S, StateRepresentation<S, T>> lookup;
 
-    public StateConfiguration(final StateRepresentation<TState, TTrigger> representation, final Func2<TState, StateRepresentation<TState, TTrigger>> lookup) {
+    public StateConfiguration(final StateRepresentation<S, T> representation, final Func2<S, StateRepresentation<S, T>> lookup) {
         assert representation != null : "representation is null";
         assert lookup != null : "lookup is null";
         this.representation = representation;
@@ -30,7 +30,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param destinationState The state that the trigger will cause a transition to
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permit(TTrigger trigger, TState destinationState) {
+    public StateConfiguration<S, T> permit(T trigger, S destinationState) {
         enforceNotIdentityTransition(destinationState);
         return publicPermit(trigger, destinationState);
     }
@@ -44,7 +44,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard            Function that must return true in order for the trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitIf(TTrigger trigger, TState destinationState, FuncBoolean guard) {
+    public StateConfiguration<S, T> permitIf(T trigger, S destinationState, FuncBoolean guard) {
         enforceNotIdentityTransition(destinationState);
         return publicPermitIf(trigger, destinationState, guard);
     }
@@ -60,7 +60,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param trigger The accepted trigger
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitReentry(TTrigger trigger) {
+    public StateConfiguration<S, T> permitReentry(T trigger) {
         return publicPermit(trigger, representation.getUnderlyingState());
     }
 
@@ -76,7 +76,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard   Function that must return true in order for the trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitReentryIf(TTrigger trigger, FuncBoolean guard) {
+    public StateConfiguration<S, T> permitReentryIf(T trigger, FuncBoolean guard) {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard);
     }
 
@@ -87,7 +87,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param trigger The trigger to ignore
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> ignore(TTrigger trigger) {
+    public StateConfiguration<S, T> ignore(T trigger) {
         return ignoreIf(trigger, NO_GUARD);
     }
 
@@ -99,9 +99,9 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard   Function that must return true in order for the trigger to be ignored
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> ignoreIf(TTrigger trigger, FuncBoolean guard) {
+    public StateConfiguration<S, T> ignoreIf(T trigger, FuncBoolean guard) {
         assert guard != null : "guard is null";
-        representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<TState, TTrigger>(trigger, guard));
+        representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<S, T>(trigger, guard));
         return this;
     }
 
@@ -112,10 +112,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param entryAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntry(final Action entryAction) {
+    public StateConfiguration<S, T> onEntry(final Action entryAction) {
         assert entryAction != null : "entryAction is null";
-        return onEntry(new Action1<Transition<TState, TTrigger>>() {
-            public void doIt(Transition<TState, TTrigger> t) {
+        return onEntry(new Action1<Transition<S, T>>() {
+            public void doIt(Transition<S, T> t) {
                 entryAction.doIt();
             }
         });
@@ -128,10 +128,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param entryAction Action to execute, providing details of the transition
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntry(final Action1<Transition<TState, TTrigger>> entryAction) {
+    public StateConfiguration<S, T> onEntry(final Action1<Transition<S, T>> entryAction) {
         assert entryAction != null : "entryAction is null";
-        representation.addEntryAction(new Action2<Transition<TState, TTrigger>, Object[]>() {
-            public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) {
+        representation.addEntryAction(new Action2<Transition<S, T>, Object[]>() {
+            public void doIt(Transition<S, T> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
             }
         });
@@ -146,10 +146,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param entryAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action entryAction) {
+    public StateConfiguration<S, T> onEntryFrom(T trigger, final Action entryAction) {
         assert entryAction != null : "entryAction is null";
-        return onEntryFrom(trigger, new Action1<Transition<TState, TTrigger>>() {
-            public void doIt(Transition<TState, TTrigger> arg1) {
+        return onEntryFrom(trigger, new Action1<Transition<S, T>>() {
+            public void doIt(Transition<S, T> arg1) {
                 entryAction.doIt();
             }
         });
@@ -163,10 +163,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param entryAction Action to execute, providing details of the transition
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onEntryFrom(TTrigger trigger, final Action1<Transition<TState, TTrigger>> entryAction) {
+    public StateConfiguration<S, T> onEntryFrom(T trigger, final Action1<Transition<S, T>> entryAction) {
         assert entryAction != null : "entryAction is null";
-        representation.addEntryAction(trigger, new Action2<Transition<TState, TTrigger>, Object[]>() {
-            public void doIt(Transition<TState, TTrigger> arg1, Object[] arg2) {
+        representation.addEntryAction(trigger, new Action2<Transition<S, T>, Object[]>() {
+            public void doIt(Transition<S, T> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
             }
         });
@@ -183,10 +183,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg0>     Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, S, T> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
         assert entryAction != null : "entryAction is null";
-        return onEntryFrom(trigger, new Action2<TArg0, Transition<TState, TTrigger>>() {
-            public void doIt(TArg0 arg1, Transition<TState, TTrigger> arg2) {
+        return onEntryFrom(trigger, new Action2<TArg0, Transition<S, T>>() {
+            public void doIt(TArg0 arg1, Transition<S, T> arg2) {
                 entryAction.doIt(arg1);
             }
         }, classe0);
@@ -202,12 +202,12 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg0>     Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Action2<TArg0, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0) {
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, S, T> trigger, final Action2<TArg0, Transition<S, T>> entryAction, final Class<TArg0> classe0) {
         assert trigger != null : "trigger is null";
         assert entryAction != null : "entryAction is null";
-        representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
+        representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
             @SuppressWarnings("unchecked")
-            public void doIt(Transition<TState, TTrigger> t, Object[] arg2) {
+            public void doIt(Transition<S, T> t, Object[] arg2) {
                 entryAction.doIt((TArg0) arg2[0], t);
             }
         });
@@ -226,10 +226,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg1>     Type of the second trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
         assert entryAction != null : "entryAction is null";
-        return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<TState, TTrigger>>() {
-            public void doIt(TArg0 a0, TArg1 a1, Transition<TState, TTrigger> t) {
+        return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<S, T>>() {
+            public void doIt(TArg0 a0, TArg1 a1, Transition<S, T> t) {
                 entryAction.doIt(a0, a1);
             }
         }, classe0, classe1);
@@ -247,12 +247,12 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg1>     Type of the second trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Action3<TArg0, TArg1, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Action3<TArg0, TArg1, Transition<S, T>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
         assert trigger != null : "trigger is null";
         assert entryAction != null : "entryAction is null";
-        representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
+        representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
             @SuppressWarnings("unchecked")
-            public void doIt(Transition<TState, TTrigger> t, Object[] args) {
+            public void doIt(Transition<S, T> t, Object[] args) {
                 entryAction.doIt(
                         (TArg0) args[0],
                         (TArg1) args[1], t);
@@ -275,10 +275,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg2>     Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
         assert entryAction != null : "entryAction is null";
-        return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>>() {
-            public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<TState, TTrigger> t) {
+        return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<S, T>>() {
+            public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<S, T> t) {
                 entryAction.doIt(a0, a1, a2);
             }
         }, classe0, classe1, classe2);
@@ -298,12 +298,12 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg2>     Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Action4<TArg0, TArg1, TArg2, Transition<TState, TTrigger>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, final Action4<TArg0, TArg1, TArg2, Transition<S, T>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
         assert trigger != null : "trigger is null";
         assert entryAction != null : "entryAction is null";
-        representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<TState, TTrigger>, Object[]>() {
+        representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
             @SuppressWarnings("unchecked")
-            public void doIt(Transition<TState, TTrigger> t, Object[] args) {
+            public void doIt(Transition<S, T> t, Object[] args) {
                 entryAction.doIt(
                         (TArg0) args[0],
                         (TArg1) args[1],
@@ -320,10 +320,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param exitAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onExit(final Action exitAction) {
+    public StateConfiguration<S, T> onExit(final Action exitAction) {
         assert exitAction != null : "exitAction is null";
-        return onExit(new Action1<Transition<TState, TTrigger>>() {
-            public void doIt(Transition<TState, TTrigger> arg1) {
+        return onExit(new Action1<Transition<S, T>>() {
+            public void doIt(Transition<S, T> arg1) {
                 exitAction.doIt();
             }
         });
@@ -336,7 +336,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param exitAction Action to execute
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> onExit(Action1<Transition<TState, TTrigger>> exitAction) {
+    public StateConfiguration<S, T> onExit(Action1<Transition<S, T>> exitAction) {
         assert exitAction != null : "exitAction is null";
         representation.addExitAction(exitAction);
         return this;
@@ -355,8 +355,8 @@ public class StateConfiguration<TState , TTrigger > {
      * @param superstate The superstate
      * @return The receiver
      */
-    public StateConfiguration<TState, TTrigger> substateOf(TState superstate) {
-        StateRepresentation<TState, TTrigger> superRepresentation = lookup.call(superstate);
+    public StateConfiguration<S, T> substateOf(S superstate) {
+        StateRepresentation<S, T> superRepresentation = lookup.call(superstate);
         representation.setSuperstate(superRepresentation);
         superRepresentation.addSubstate(representation);
         return this;
@@ -371,7 +371,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param destinationStateSelector Function to calculate the state that the trigger will cause a transition to
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitDynamic(TTrigger trigger, final Func<TState> destinationStateSelector) {
+    public StateConfiguration<S, T> permitDynamic(T trigger, final Func<S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -385,7 +385,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg0>                  Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamic(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, Func2<TArg0, TState> destinationStateSelector) {
+    public <TArg0> StateConfiguration<S, T> permitDynamic(TriggerWithParameters1<TArg0, S, T> trigger, Func2<TArg0, S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -400,9 +400,9 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg1>                  Type of the second trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamic(
-            TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger,
-            Func3<TArg0, TArg1, TState> destinationStateSelector) {
+    public <TArg0, TArg1> StateConfiguration<S, T> permitDynamic(
+            TriggerWithParameters2<TArg0, TArg1, S, T> trigger,
+            Func3<TArg0, TArg1, S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -417,7 +417,7 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg2>                  Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamic(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger, final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector) {
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> permitDynamic(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
@@ -431,10 +431,10 @@ public class StateConfiguration<TState , TTrigger > {
      * @param guard                    Function that must return true in order for the  trigger to be accepted
      * @return The reciever
      */
-    public StateConfiguration<TState, TTrigger> permitDynamicIf(TTrigger trigger, final Func<TState> destinationStateSelector, FuncBoolean guard) {
+    public StateConfiguration<S, T> permitDynamicIf(T trigger, final Func<S> destinationStateSelector, FuncBoolean guard) {
         assert destinationStateSelector != null : "destinationStateSelector is null";
-        return publicPermitDynamicIf(trigger, new Func2<Object[], TState>() {
-            public TState call(Object[] arg0) {
+        return publicPermitDynamicIf(trigger, new Func2<Object[], S>() {
+            public S call(Object[] arg0) {
                 return destinationStateSelector.call();
             }
         }, guard);
@@ -451,13 +451,13 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg0>                  Type of the first trigger argument
      * @return The reciever
      */
-    public <TArg0> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters1<TArg0, TState, TTrigger> trigger, final Func2<TArg0, TState> destinationStateSelector, FuncBoolean guard) {
+    public <TArg0> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters1<TArg0, S, T> trigger, final Func2<TArg0, S> destinationStateSelector, FuncBoolean guard) {
         assert trigger != null : "trigger is null";
         assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
-                trigger.getTrigger(), new Func2<Object[], TState>() {
+                trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
-                    public TState call(Object[] args) {
+                    public S call(Object[] args) {
                         return destinationStateSelector.call((TArg0) args[0]);
 
                     }
@@ -477,14 +477,14 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg1>                  Type of the second trigger argument
      * @return The reciever
      */
-    public <TArg0, TArg1> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> trigger, final Func3<TArg0, TArg1, TState> destinationStateSelector, FuncBoolean guard) {
+    public <TArg0, TArg1> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Func3<TArg0, TArg1, S> destinationStateSelector, FuncBoolean guard) {
         assert trigger != null : "trigger is null";
         assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
-                trigger.getTrigger(), new Func2<Object[], TState>() {
+                trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
 
-                    public TState call(Object[] args) {
+                    public S call(Object[] args) {
                         return destinationStateSelector.call(
                                 (TArg0) args[0],
                                 (TArg1) args[1]);
@@ -506,15 +506,15 @@ public class StateConfiguration<TState , TTrigger > {
      * @param <TArg2>                  Type of the third trigger argument
      * @return The reciever
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<TState, TTrigger> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> trigger,
-            final Func4<TArg0, TArg1, TArg2, TState> destinationStateSelector, FuncBoolean guard) {
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger,
+            final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector, FuncBoolean guard) {
         assert trigger != null : "trigger is null";
         assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
-                trigger.getTrigger(), new Func2<Object[], TState>() {
+                trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
 
-                    public TState call(Object[] args) {
+                    public S call(Object[] args) {
                         return destinationStateSelector.call(
                                 (TArg0) args[0],
                                 (TArg1) args[1],
@@ -525,27 +525,27 @@ public class StateConfiguration<TState , TTrigger > {
         );
     }
 
-    void enforceNotIdentityTransition(TState destination) {
+    void enforceNotIdentityTransition(S destination) {
         if (destination.equals(representation.getUnderlyingState())) {
             throw new IllegalStateException("Permit() (and PermitIf()) require that the destination state is not equal to the source state. To accept a trigger without changing state, use either Ignore() or PermitReentry().");
         }
     }
 
-    StateConfiguration<TState, TTrigger> publicPermit(TTrigger trigger, TState destinationState) {
+    StateConfiguration<S, T> publicPermit(T trigger, S destinationState) {
         return publicPermitIf(trigger, destinationState, NO_GUARD);
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitIf(TTrigger trigger, TState destinationState, FuncBoolean guard) {
+    StateConfiguration<S, T> publicPermitIf(T trigger, S destinationState, FuncBoolean guard) {
         assert guard != null : "guard is null";
         representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard));
         return this;
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitDynamic(TTrigger trigger, Func2<Object[], TState> destinationStateSelector) {
+    StateConfiguration<S, T> publicPermitDynamic(T trigger, Func2<Object[], S> destinationStateSelector) {
         return publicPermitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
-    StateConfiguration<TState, TTrigger> publicPermitDynamicIf(TTrigger trigger, Func2<Object[], TState> destinationStateSelector, FuncBoolean guard) {
+    StateConfiguration<S, T> publicPermitDynamicIf(T trigger, Func2<Object[], S> destinationStateSelector, FuncBoolean guard) {
         assert destinationStateSelector != null : "destinationStateSelector is null";
         assert guard != null : "guard is null";
         representation.addTriggerBehaviour(new DynamicTriggerBehaviour<>(trigger, destinationStateSelector, guard));

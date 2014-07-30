@@ -4,17 +4,17 @@ import com.github.oxo42.stateless4j.OutVar;
 import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 
-public class DynamicTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<TState, TTrigger> {
+public class DynamicTriggerBehaviour<S, T> extends TriggerBehaviour<S, T> {
 
-    private final Func2<Object[], TState> destination;
+    private final Func2<Object[], S> destination;
 
-    public DynamicTriggerBehaviour(TTrigger trigger, Func2<Object[], TState> destination, FuncBoolean guard) {
+    public DynamicTriggerBehaviour(T trigger, Func2<Object[], S> destination, FuncBoolean guard) {
         super(trigger, guard);
         assert destination != null : "destination is null";
         this.destination = destination;
     }
 
-    public boolean resultsInTransitionFrom(TState source, Object[] args, OutVar<TState> dest) {
+    public boolean resultsInTransitionFrom(S source, Object[] args, OutVar<S> dest) {
         dest.set(destination.call(args));
         return true;
     }

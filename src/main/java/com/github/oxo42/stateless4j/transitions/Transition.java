@@ -1,9 +1,9 @@
 package com.github.oxo42.stateless4j.transitions;
 
-public class Transition<TState, TTrigger> {
-    private final TState source;
-    private final TState destination;
-    private final TTrigger trigger;
+public class Transition<S, T> {
+    private final S source;
+    private final S destination;
+    private final T trigger;
 
 
     /**
@@ -13,7 +13,7 @@ public class Transition<TState, TTrigger> {
      * @param destination The state transitioned to
      * @param trigger     The trigger that caused the transition
      */
-    public Transition(TState source, TState destination, TTrigger trigger) {
+    public Transition(S source, S destination, T trigger) {
         this.source = source;
         this.destination = destination;
         this.trigger = trigger;
@@ -24,7 +24,7 @@ public class Transition<TState, TTrigger> {
      *
      * @return The state transitioned from
      */
-    public TState getSource() {
+    public S getSource() {
         return source;
     }
 
@@ -34,7 +34,7 @@ public class Transition<TState, TTrigger> {
      *
      * @return The state transitioned to
      */
-    public TState getDestination() {
+    public S getDestination() {
         return destination;
     }
 
@@ -44,7 +44,7 @@ public class Transition<TState, TTrigger> {
      *
      * @return The trigger that caused the transition
      */
-    public TTrigger getTrigger() {
+    public T getTrigger() {
         return trigger;
     }
 
