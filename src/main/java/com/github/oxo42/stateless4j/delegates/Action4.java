@@ -9,6 +9,7 @@ package com.github.oxo42.stateless4j.delegates;
  * @param <T3> The type of the input to the operation
  */
 public interface Action4<T, T1, T2, T3> {
+
     /**
      * Performs this operation on the given input
      *

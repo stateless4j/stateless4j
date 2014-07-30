@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class DynamicTriggerTests {
+
     @Test
     public void DestinationStateIsDynamic() {
         StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A);

@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 
-
 public class TriggerBehaviourTests {
+
     @Test
     public void ExposesCorrectUnderlyingTrigger() {
         TransitioningTriggerBehaviour<State, Trigger> transtioning = new TransitioningTriggerBehaviour<State, Trigger>(

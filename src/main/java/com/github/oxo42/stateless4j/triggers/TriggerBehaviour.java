@@ -3,8 +3,8 @@ package com.github.oxo42.stateless4j.triggers;
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.OutVar;
 
-
 public abstract class TriggerBehaviour<S, T> {
+
     private final T trigger;
     private final FuncBoolean guard;
 

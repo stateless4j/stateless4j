@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 public class InputStreamHelper {
+
     public static byte[] read(InputStream stream) {
         try {
             ByteArrayOutputStream res = new ByteArrayOutputStream();

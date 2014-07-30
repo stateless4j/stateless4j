@@ -8,6 +8,7 @@ import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
 import java.util.*;
 
 public class StateRepresentation<S, T> {
+
     private final S state;
 
     private final Map<T, List<TriggerBehaviour<S, T>>> triggerBehaviours = new HashMap<>();

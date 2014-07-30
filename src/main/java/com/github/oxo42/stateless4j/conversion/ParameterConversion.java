@@ -1,6 +1,7 @@
 package com.github.oxo42.stateless4j.conversion;
 
 public final class ParameterConversion {
+
     private ParameterConversion() {
     }
 

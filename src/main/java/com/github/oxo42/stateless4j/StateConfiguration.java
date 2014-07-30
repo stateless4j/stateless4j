@@ -5,7 +5,8 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
 
-public class StateConfiguration<S , T > {
+public class StateConfiguration<S, T> {
+
     private static final FuncBoolean NO_GUARD = new FuncBoolean() {
         @Override
         public boolean call() {
@@ -22,7 +23,6 @@ public class StateConfiguration<S , T > {
         this.lookup = lookup;
     }
 
-
     /**
      * Accept the specified trigger and transition to the destination state
      *
@@ -34,7 +34,6 @@ public class StateConfiguration<S , T > {
         enforceNotIdentityTransition(destinationState);
         return publicPermit(trigger, destinationState);
     }
-
 
     /**
      * Accept the specified trigger and transition to the destination state
@@ -49,7 +48,6 @@ public class StateConfiguration<S , T > {
         return publicPermitIf(trigger, destinationState, guard);
     }
 
-
     /**
      * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
      * configured state transitions to an identical sibling state
@@ -63,7 +61,6 @@ public class StateConfiguration<S , T > {
     public StateConfiguration<S, T> permitReentry(T trigger) {
         return publicPermit(trigger, representation.getUnderlyingState());
     }
-
 
     /**
      * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
@@ -80,7 +77,6 @@ public class StateConfiguration<S , T > {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard);
     }
 
-
     /**
      * ignore the specified trigger when in the configured state
      *
@@ -90,7 +86,6 @@ public class StateConfiguration<S , T > {
     public StateConfiguration<S, T> ignore(T trigger) {
         return ignoreIf(trigger, NO_GUARD);
     }
-
 
     /**
      * ignore the specified trigger when in the configured state, if the guard returns true
@@ -104,7 +99,6 @@ public class StateConfiguration<S , T > {
         representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<S, T>(trigger, guard));
         return this;
     }
-
 
     /**
      * Specify an action that will execute when transitioning into the configured state
@@ -121,7 +115,6 @@ public class StateConfiguration<S , T > {
             }
         });
     }
-
 
     /**
      * Specify an action that will execute when transitioning into the configured state
@@ -140,7 +133,6 @@ public class StateConfiguration<S , T > {
         return this;
     }
 
-
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -157,7 +149,6 @@ public class StateConfiguration<S , T > {
             }
         });
     }
-
 
     /**
      * Specify an action that will execute when transitioning into the configured state
@@ -177,7 +168,6 @@ public class StateConfiguration<S , T > {
         return this;
     }
 
-
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -196,7 +186,6 @@ public class StateConfiguration<S , T > {
             }
         }, classe0);
     }
-
 
     /**
      * Specify an action that will execute when transitioning into the configured state
@@ -220,7 +209,6 @@ public class StateConfiguration<S , T > {
         return this;
     }
 
-
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -241,7 +229,6 @@ public class StateConfiguration<S , T > {
             }
         }, classe0, classe1);
     }
-
 
     /**
      * Specify an action that will execute when transitioning into the configured state
@@ -269,7 +256,6 @@ public class StateConfiguration<S , T > {
         return this;
     }
 
-
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -292,7 +278,6 @@ public class StateConfiguration<S , T > {
             }
         }, classe0, classe1, classe2);
     }
-
 
     /**
      * Specify an action that will execute when transitioning into the configured state
@@ -323,7 +308,6 @@ public class StateConfiguration<S , T > {
         return this;
     }
 
-
     /**
      * Specify an action that will execute when transitioning from the configured state
      *
@@ -340,7 +324,6 @@ public class StateConfiguration<S , T > {
         });
     }
 
-
     /**
      * Specify an action that will execute when transitioning from the configured state
      *
@@ -352,7 +335,6 @@ public class StateConfiguration<S , T > {
         representation.addExitAction(exitAction);
         return this;
     }
-
 
     /**
      * Sets the superstate that the configured state is a substate of
@@ -373,7 +355,6 @@ public class StateConfiguration<S , T > {
         return this;
     }
 
-
     /**
      * Accept the specified trigger and transition to the destination state, calculated dynamically by the supplied
      * function
@@ -385,7 +366,6 @@ public class StateConfiguration<S , T > {
     public StateConfiguration<S, T> permitDynamic(T trigger, final Func<S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
-
 
     /**
      * Accept the specified trigger and transition to the destination state, calculated dynamically by the supplied
@@ -399,7 +379,6 @@ public class StateConfiguration<S , T > {
     public <TArg0> StateConfiguration<S, T> permitDynamic(TriggerWithParameters1<TArg0, S, T> trigger, Func2<TArg0, S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
-
 
     /**
      * Accept the specified trigger and transition to the destination state, calculated dynamically by the supplied
@@ -432,7 +411,6 @@ public class StateConfiguration<S , T > {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
     }
 
-
     /**
      * Accept the specified trigger and transition to the destination state, calculated dynamically by the supplied
      * function
@@ -451,7 +429,6 @@ public class StateConfiguration<S , T > {
             }
         }, guard);
     }
-
 
     /**
      * Accept the specified trigger and transition to the destination state, calculated dynamically by the supplied

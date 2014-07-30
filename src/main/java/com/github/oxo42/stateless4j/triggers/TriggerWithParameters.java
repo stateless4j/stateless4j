@@ -3,9 +3,9 @@ package com.github.oxo42.stateless4j.triggers;
 import com.github.oxo42.stateless4j.conversion.ParameterConversion;
 
 public abstract class TriggerWithParameters<TState, TTrigger> {
+
     private final TTrigger underlyingTrigger;
     private final Class<?>[] argumentTypes;
-
 
     /**
      * Create a configured trigger
@@ -20,7 +20,6 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
         this.argumentTypes = argumentTypes;
     }
 
-
     /**
      * Gets the underlying trigger value that has been configured
      *
@@ -29,7 +28,6 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
     public TTrigger getTrigger() {
         return underlyingTrigger;
     }
-
 
     /**
      * Ensure that the supplied arguments are compatible with those configured for this trigger

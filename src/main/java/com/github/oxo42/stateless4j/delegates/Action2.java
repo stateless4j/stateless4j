@@ -7,6 +7,7 @@ package com.github.oxo42.stateless4j.delegates;
  * @param <T1> The type of the input
  */
 public interface Action2<T, T1> {
+
     /**
      * Performs this operation on the given input
      *

@@ -1,6 +1,7 @@
 package com.github.oxo42.stateless4j;
 
 public class StateReference<S, T> {
+
     private S state;
 
     public S getState() {

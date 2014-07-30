@@ -9,6 +9,7 @@ package com.github.oxo42.stateless4j.delegates;
  * @param <R>  Result type
  */
 public interface Func4<T1, T2, T3, R> {
+
     /**
      * Applies this function to the given input
      *

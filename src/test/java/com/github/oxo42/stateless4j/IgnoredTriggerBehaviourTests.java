@@ -8,7 +8,7 @@ import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
 import static org.junit.Assert.assertFalse;
 
 public class IgnoredTriggerBehaviourTests {
-    
+
     public static FuncBoolean returnTrue = new FuncBoolean() {
 
         @Override

@@ -1,10 +1,10 @@
 package com.github.oxo42.stateless4j.transitions;
 
 public class Transition<S, T> {
+
     private final S source;
     private final S destination;
     private final T trigger;
-
 
     /**
      * Construct a transition
@@ -28,7 +28,6 @@ public class Transition<S, T> {
         return source;
     }
 
-
     /**
      * The state transitioned to
      *
@@ -38,7 +37,6 @@ public class Transition<S, T> {
         return destination;
     }
 
-
     /**
      * The trigger that caused the transition
      *
@@ -47,7 +45,6 @@ public class Transition<S, T> {
     public T getTrigger() {
         return trigger;
     }
-
 
     /**
      * True if the transition is a re-entry, i.e. the identity transition

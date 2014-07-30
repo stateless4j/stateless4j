@@ -7,6 +7,7 @@ package com.github.oxo42.stateless4j.delegates;
  * @param <R>  Result type
  */
 public interface Func2<T1, R> {
+
     /**
      * Applies this function to the given input
      *
