@@ -66,6 +66,19 @@ public class StateMachine<S, T> {
     }
 
     /**
+     * Construct a state machine with external state storage.
+     *
+     * @param initialState The initial state
+     * @param stateAccessor State accessor
+     * @param stateMutator State mutator
+     */
+    public StateMachine(S initialState, Func<S> stateAccessor, Action1<S> stateMutator) {
+        this.stateAccessor = stateAccessor;
+        this.stateMutator = stateMutator;
+        stateMutator.doIt(initialState);
+    }
+
+    /**
      * The current state
      *
      * @return The current state
