@@ -3,20 +3,16 @@ package com.github.oxo42.stateless4j;
 import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
 import com.github.oxo42.stateless4j.delegates.Func;
-import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
-import com.github.oxo42.stateless4j.triggers.*;
+import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters3;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  * Models behaviour as transitions between a finite set of states
@@ -26,13 +22,12 @@ import java.util.Map.Entry;
  */
 public class StateMachine<S, T> {
 
-    protected final Map<S, StateRepresentation<S, T>> stateConfiguration = new HashMap<>();
-    protected final Map<T, TriggerWithParameters<S, T>> triggerConfiguration = new HashMap<>();
+    private final Logger logger = Logger.getLogger(getClass().getName());
+    protected final StateMachineConfig<S, T> config;
     protected final Func<S> stateAccessor;
     protected final Action1<S> stateMutator;
     protected Action2<S, T> unhandledTriggerAction = new Action2<S, T>() {
 
-        @Override
         public void doIt(S state, T trigger) {
             throw new IllegalStateException(
                     String.format(
@@ -48,7 +43,8 @@ public class StateMachine<S, T> {
      *
      * @param initialState The initial state
      */
-    public StateMachine(S initialState) {
+    public StateMachine(S initialState, StateMachineConfig<S, T> config) {
+        this.config = config;
         final StateReference<S, T> reference = new StateReference<>();
         reference.setState(initialState);
         stateAccessor = new Func<S>() {
@@ -72,7 +68,8 @@ public class StateMachine<S, T> {
      * @param stateAccessor State accessor
      * @param stateMutator State mutator
      */
-    public StateMachine(S initialState, Func<S> stateAccessor, Action1<S> stateMutator) {
+    public StateMachine(S initialState, Func<S> stateAccessor, Action1<S> stateMutator, StateMachineConfig<S, T> config) {
+        this.config = config;
         this.stateAccessor = stateAccessor;
         this.stateMutator = stateMutator;
         stateMutator.doIt(initialState);
@@ -101,34 +98,8 @@ public class StateMachine<S, T> {
     }
 
     StateRepresentation<S, T> getCurrentRepresentation() {
-        return getRepresentation(getState());
-    }
-
-    protected StateRepresentation<S, T> getRepresentation(S state) {
-        StateRepresentation<S, T> result = stateConfiguration.get(state);
-        if (result == null) {
-            result = new StateRepresentation<>(state);
-            stateConfiguration.put(state, result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Begin configuration of the entry/exit actions and allowed transitions
-     * when the state machine is in a particular state
-     *
-     * @param state The state to configure
-     * @return A configuration object through which the state can be configured
-     */
-    public StateConfiguration<S, T> configure(S state) {
-        return new StateConfiguration<>(getRepresentation(state), new Func2<S, StateRepresentation<S, T>>() {
-
-            @Override
-            public StateRepresentation<S, T> call(S arg0) {
-                return getRepresentation(arg0);
-            }
-        });
+        StateRepresentation<S, T> representation = config.getRepresentation(getState());
+        return representation == null ? new StateRepresentation<S, T>(getState()) : representation;
     }
 
     /**
@@ -195,7 +166,8 @@ public class StateMachine<S, T> {
     }
 
     protected void publicFire(T trigger, Object... args) {
-        TriggerWithParameters<S, T> configuration = triggerConfiguration.get(trigger);
+        logger.info("Firing " + trigger);
+        TriggerWithParameters<S, T> configuration = config.getTriggerConfiguration(trigger);
         if (configuration != null) {
             configuration.validateParameters(args);
         }
@@ -277,80 +249,4 @@ public class StateMachine<S, T> {
                 params.toString());
     }
 
-    /**
-     * Specify the arguments that must be supplied when a specific trigger is fired
-     *
-     * @param trigger The underlying trigger value
-     * @param classe0 Class argument
-     * @param <TArg0> Type of the first trigger argument
-     * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
-     */
-    public <TArg0> TriggerWithParameters1<TArg0, S, T> setTriggerParameters(T trigger, Class<TArg0> classe0) {
-        TriggerWithParameters1<TArg0, S, T> configuration = new TriggerWithParameters1<>(trigger, classe0);
-        saveTriggerConfiguration(configuration);
-        return configuration;
-    }
-
-    /**
-     * Specify the arguments that must be supplied when a specific trigger is fired
-     *
-     * @param trigger The underlying trigger value
-     * @param classe0 Class argument
-     * @param classe1 Class argument
-     * @param <TArg0> Type of the first trigger argument
-     * @param <TArg1> Type of the second trigger argument
-     * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
-     */
-    public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, S, T> setTriggerParameters(T trigger, Class<TArg0> classe0, Class<TArg1> classe1) {
-        TriggerWithParameters2<TArg0, TArg1, S, T> configuration = new TriggerWithParameters2<>(trigger, classe0, classe1);
-        saveTriggerConfiguration(configuration);
-        return configuration;
-    }
-
-    /**
-     * Specify the arguments that must be supplied when a specific trigger is fired
-     *
-     * @param trigger The underlying trigger value
-     * @param classe0 Class argument
-     * @param classe1 Class argument
-     * @param classe2 Class argument
-     * @param <TArg0> Type of the first trigger argument
-     * @param <TArg1> Type of the second trigger argument
-     * @param <TArg2> Type of the third trigger argument
-     * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
-     */
-    public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> setTriggerParameters(T trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) {
-        TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> configuration = new TriggerWithParameters3<>(trigger, classe0, classe1, classe2);
-        saveTriggerConfiguration(configuration);
-        return configuration;
-    }
-
-    private void saveTriggerConfiguration(TriggerWithParameters<S, T> trigger) {
-        if (triggerConfiguration.containsKey(trigger.getTrigger())) {
-            throw new IllegalStateException("Parameters for the trigger '" + trigger + "' have already been configured.");
-        }
-
-        triggerConfiguration.put(trigger.getTrigger(), trigger);
-    }
-
-    public void generateDotFileInto(final OutputStream dotFile) throws IOException {
-        try (OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8")) {
-            PrintWriter writer = new PrintWriter(w);
-            writer.write("digraph G {\n");
-            OutVar<S> destination = new OutVar<>();
-            for (Entry<S, StateRepresentation<S, T>> entry : this.stateConfiguration.entrySet()) {
-                Map<T, List<TriggerBehaviour<S, T>>> behaviours = entry.getValue().getTriggerBehaviours();
-                for (Entry<T, List<TriggerBehaviour<S, T>>> behaviour : behaviours.entrySet()) {
-                    for (TriggerBehaviour<S, T> triggerBehaviour : behaviour.getValue()) {
-                        if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
-                            destination.set(null);
-                            triggerBehaviour.resultsInTransitionFrom(null, null, destination);
-                            writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
-                        }
-                    }
-                }
-            }
-            writer.write("}");
-        }
-    }
 }

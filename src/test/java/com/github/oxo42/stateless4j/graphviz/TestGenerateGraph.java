@@ -2,6 +2,7 @@ package com.github.oxo42.stateless4j.graphviz;
 
 import com.github.oxo42.stateless4j.State;
 import com.github.oxo42.stateless4j.StateMachine;
+import com.github.oxo42.stateless4j.StateMachineConfig;
 import com.github.oxo42.stateless4j.Trigger;
 import com.github.oxo42.stateless4j.helpers.InputStreamHelper;
 
@@ -18,19 +19,21 @@ public class TestGenerateGraph {
     // Changing it to LinkedHashMap will make this test work all the time but will incur a runtime performance penalty
     // @Test
     public void testGenerateSimpleGraph() throws UnsupportedEncodingException, IOException {
-        StateMachine<State, Trigger> sm = new StateMachine<>(State.A);
-        sm.configure(State.A)
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        config.configure(State.A)
                 .permit(Trigger.X, State.B)
                 .permit(Trigger.Y, State.C);
 
-        sm.configure(State.B)
+        config.configure(State.B)
                 .permit(Trigger.Y, State.C);
 
-        sm.configure(State.C)
+        config.configure(State.C)
                 .permit(Trigger.X, State.A);
 
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
+
         ByteArrayOutputStream dotFile = new ByteArrayOutputStream();
-        sm.generateDotFileInto(dotFile);
+        config.generateDotFileInto(dotFile);
         InputStream expected = this.getClass().getResourceAsStream("/simpleGraph.txt");
         String expectedStr = InputStreamHelper.readAsString(expected);
         String actual = new String(dotFile.toByteArray(), "UTF-8");
