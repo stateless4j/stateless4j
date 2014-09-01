@@ -4,40 +4,13 @@ import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 public class StateRepresentationTests {
 
@@ -340,6 +313,13 @@ public class StateRepresentationTests {
     @Test
     public void WhenTransitionExists_TriggerCanBeFired() {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
+        assertFalse(rep.canHandle(Trigger.X));
+    }
+
+    @Test
+    public void WhenTransitionExistsButGuardConditionNotMet_TriggerCanBeFired() {
+        StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
+        rep.addTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(Trigger.X, IgnoredTriggerBehaviourTests.returnFalse));
         assertFalse(rep.canHandle(Trigger.X));
     }
 
