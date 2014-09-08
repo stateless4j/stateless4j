@@ -4,8 +4,12 @@ import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class StateRepresentation<S, T> {
 
@@ -54,7 +58,7 @@ public class StateRepresentation<S, T> {
             throw new IllegalStateException("Multiple permitted exit transitions are configured from state '" + trigger + "' for trigger '" + state + "'. Guard clauses must be mutually exclusive.");
         }
 
-        return actual.get(0);
+        return actual.isEmpty() ? null : actual.get(0);
     }
 
     public void addEntryAction(final T trigger, final Action2<Transition<S, T>, Object[]> action) {
