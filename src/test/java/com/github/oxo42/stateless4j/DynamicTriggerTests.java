@@ -12,8 +12,8 @@ public class DynamicTriggerTests {
 
     @Test
     public void DestinationStateIsDynamic() {
-        StateMachine<State, Trigger> sm = new StateMachine<>(State.A);
-        sm.configure(State.A).permitDynamic(Trigger.X, new Func<State>() {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        config.configure(State.A).permitDynamic(Trigger.X, new Func<State>() {
 
             @Override
             public State call() {
@@ -21,6 +21,7 @@ public class DynamicTriggerTests {
             }
         });
 
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);
 
         assertEquals(State.B, sm.getState());
@@ -28,16 +29,17 @@ public class DynamicTriggerTests {
 
     @Test
     public void DestinationStateIsCalculatedBasedOnTriggerParameters() {
-        StateMachine<State, Trigger> sm = new StateMachine<>(State.A);
-        TriggerWithParameters1<Integer, State, Trigger> trigger = sm.setTriggerParameters(
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        TriggerWithParameters1<Integer, State, Trigger> trigger = config.setTriggerParameters(
                 Trigger.X, Integer.class);
-        sm.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
+        config.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
             @Override
             public State call(Integer i) {
                 return i == 1 ? State.B : State.C;
             }
         });
 
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(trigger, 1);
 
         assertEquals(State.B, sm.getState());
