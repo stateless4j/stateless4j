@@ -1,13 +1,13 @@
-Forked from [stateless4j](https://code.google.com/p/stateless4j/).
-
 ## Maven ##
 ```xml
     <dependency>
         <groupId>com.github.oxo42</groupId>
         <artifactId>stateless4j</artifactId>
-        <version>2.4.0</version>
+        <version>2.4.2</version>
     </dependency>
 ```
+
+[![Build Status](https://travis-ci.org/oxo42/stateless4j.svg?branch=master)](https://travis-ci.org/oxo42/stateless4j)
 
 ## Introduction ##
 Create **state machines** and lightweight state machine-based workflows **directly in java code**:
