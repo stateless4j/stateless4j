@@ -1,10 +1,9 @@
 package com.github.oxo42.stateless4j;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
