@@ -10,47 +10,31 @@
 [![Build Status](https://travis-ci.org/oxo42/stateless4j.svg?branch=master)](https://travis-ci.org/oxo42/stateless4j)
 
 ## Introduction ##
-Create **state machines** and lightweight state machine-based workflows **directly in java code**:
+Create **state machines** and lightweight state machine-based workflows **directly in java code**.
 
 ```java
-Action callStartTimer = new Action() {
-        @Override
-        public void doIt() {
-                startCallTimer();
-        }
-};
-Action callStopTimer = new Action() {
-        @Override
-        public void doIt() {
-                stopCallTimer();
-        }
-};
+StateMachineConfig<State, Trigger> phoneCallConfig = new StateMachineConfig<>();
 
-enum State {
-    Ringing, Connected, OnHold, OffHook
-}
+phoneCallConfig.configure(State.OffHook)
+        .permit(Trigger.CallDialed, State.Ringing);
 
-enum Trigger {
-    CallDialed, CallConnected, PlacedOnHold, LeftMessage, HungUp
-}
+phoneCallConfig.configure(State.Ringing)
+        .permit(Trigger.HungUp, State.OffHook)
+        .permit(Trigger.CallConnected, State.Connected);
 
-StateMachine<State, Trigger> phoneCall = new StateMachine<State, Trigger>(State.OffHook);
-
-phoneCall.configure(State.OffHook)
-                  .permit(Trigger.CallDialed, State.Ringing);
-
-phoneCall.configure(State.Ringing)
-                  .permit(Trigger.HungUp, State.OffHook)
-                  .permit(Trigger.CallConnected, State.Connected);
-
-phoneCall.configure(State.Connected)
-                  .onEntry(callStartTimer)
-                  .onExit(callStopTimer)
-                  .permit(Trigger.LeftMessage, State.OffHook)
-                  .permit(Trigger.HungUp, State.OffHook)
-                  .permit(Trigger.PlacedOnHold, State.OnHold);
+// this example uses Java 8 method references
+// a Java 7 example is provided in /examples
+phoneCallConfig.configure(State.Connected)
+        .onEntry(this::startCallTimer)
+        .onExit(this::stopCallTimer)
+        .permit(Trigger.LeftMessage, State.OffHook)
+        .permit(Trigger.HungUp, State.OffHook)
+        .permit(Trigger.PlacedOnHold, State.OnHold);
 
 // ...
+
+StateMachine<State, Trigger> phoneCall =
+        new StateMachine<>(State.OffHook, phoneCallConfig);
 
 phoneCall.fire(Trigger.CallDialed);
 assertEquals(State.Ringing, phoneCall.getState());
