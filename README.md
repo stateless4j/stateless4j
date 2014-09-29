@@ -47,7 +47,7 @@ phoneCall.fire(Trigger.CallDialed);
 assertEquals(State.Ringing, phoneCall.getState());
 ```
 
-stateless4j is a port of [stateless](http://code.google.com/p/stateless/) for java
+stateless4j is a port of [stateless](https://github.com/nblumhardt/stateless) for java
 
 
 ## Features ##
