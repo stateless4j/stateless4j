@@ -25,6 +25,15 @@ Action callStopTimer = new Action() {
                 stopCallTimer();
         }
 };
+
+enum State {
+    Ringing, Connected, OnHold, OffHook
+}
+
+enum Trigger {
+    CallDialed, CallConnected, PlacedOnHold, LeftMessage, HungUp
+}
+
 StateMachine<State, Trigger> phoneCall = new StateMachine<State, Trigger>(State.OffHook);
 
 phoneCall.configure(State.OffHook)
