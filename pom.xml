@@ -3,7 +3,7 @@
     <groupId>com.github.oxo42</groupId>
     <artifactId>stateless4j</artifactId>
     <version>2.4.3-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
     <name>stateless4j</name>
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -83,6 +83,12 @@
                         <include>**/*Test*.java</include>
                     </includes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.5.3</version>
+                <extensions>true</extensions>
             </plugin>
         </plugins>
     </build>
