@@ -34,7 +34,7 @@ public class StateRepresentation<S, T> {
     }
 
     public TriggerBehaviour<S, T> tryFindHandler(T trigger) {
-        TriggerBehaviour result = tryFindLocalHandler(trigger);
+        TriggerBehaviour<S, T> result = tryFindLocalHandler(trigger);
         if (result == null && superstate != null) {
             result = superstate.tryFindHandler(trigger);
         }
