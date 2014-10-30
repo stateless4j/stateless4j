@@ -90,3 +90,7 @@ methods being called repeatedly because the `OnHold` state is a substate of the 
 
 Entry/Exit event handlers can be supplied with a parameter of type `Transition` that describes the trigger,
 source and destination states.
+
+## License ##
+
+Apache 2.0 License
