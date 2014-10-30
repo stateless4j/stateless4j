@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.oxo42</groupId>
     <artifactId>stateless4j</artifactId>
-    <version>2.4.3-SNAPSHOT</version>
+    <version>2.5.0</version>
     <packaging>bundle</packaging>
     <name>stateless4j</name>
     <parent>
