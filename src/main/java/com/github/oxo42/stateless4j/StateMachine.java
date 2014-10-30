@@ -4,29 +4,25 @@ import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters3;
+import com.github.oxo42.stateless4j.triggers.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Models behaviour as transitions between a finite set of states
  *
- * @param <S>   The type used to represent the states
+ * @param <S> The type used to represent the states
  * @param <T> The type used to represent the triggers that cause state transitions
  */
 public class StateMachine<S, T> {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     protected final StateMachineConfig<S, T> config;
     protected final Func<S> stateAccessor;
     protected final Action1<S> stateMutator;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     protected Action2<S, T> unhandledTriggerAction = new Action2<S, T>() {
 
         public void doIt(S state, T trigger) {
@@ -42,7 +38,17 @@ public class StateMachine<S, T> {
     /**
      * Construct a state machine
      *
+     * @param intialState The initial state
+     */
+    public StateMachine(S intialState) {
+        this(intialState, new StateMachineConfig<S, T>());
+    }
+
+    /**
+     * Construct a state machine
+     *
      * @param initialState The initial state
+     * @param config       State machine configuration
      */
     public StateMachine(S initialState, StateMachineConfig<S, T> config) {
         this.config = config;
@@ -65,15 +71,19 @@ public class StateMachine<S, T> {
     /**
      * Construct a state machine with external state storage.
      *
-     * @param initialState The initial state
+     * @param initialState  The initial state
      * @param stateAccessor State accessor
-     * @param stateMutator State mutator
+     * @param stateMutator  State mutator
      */
     public StateMachine(S initialState, Func<S> stateAccessor, Action1<S> stateMutator, StateMachineConfig<S, T> config) {
         this.config = config;
         this.stateAccessor = stateAccessor;
         this.stateMutator = stateMutator;
         stateMutator.doIt(initialState);
+    }
+
+    public StateConfiguration<S, T> configure(S state) {
+        return config.configure(state);
     }
 
     /**
