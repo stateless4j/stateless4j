@@ -12,7 +12,8 @@ import com.github.oxo42.stateless4j.triggers.TriggerWithParameters3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Models behaviour as transitions between a finite set of states
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class StateMachine<S, T> {
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     protected final StateMachineConfig<S, T> config;
     protected final Func<S> stateAccessor;
     protected final Action1<S> stateMutator;
