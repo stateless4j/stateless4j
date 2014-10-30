@@ -1,15 +1,17 @@
-## Maven ##
+Maven
+=====
 ```xml
     <dependency>
         <groupId>com.github.oxo42</groupId>
         <artifactId>stateless4j</artifactId>
-        <version>2.4.2</version>
+        <version>2.5.0/version>
     </dependency>
 ```
 
 [![Build Status](https://travis-ci.org/oxo42/stateless4j.svg?branch=master)](https://travis-ci.org/oxo42/stateless4j)
 
-## Introduction ##
+Introduction
+============
 Create **state machines** and lightweight state machine-based workflows **directly in java code**.
 
 ```java
@@ -43,7 +45,8 @@ assertEquals(State.Ringing, phoneCall.getState());
 stateless4j is a port of [stateless](https://github.com/nblumhardt/stateless) for java
 
 
-## Features ##
+Features
+========
 Most standard state machine constructs are supported:
 
 * Generic support for states and triggers of any java type (numbers, strings, enums, etc.)
@@ -58,7 +61,8 @@ Some useful extensions are also provided:
 * Reentrant states
 
 
-## Hierarchical States ##
+Hierarchical States
+===================
 In the example below, the `OnHold` state is a substate of the `Connected` state. This means that an `OnHold` call is
 still connected.
 
@@ -74,7 +78,8 @@ In addition to the `StateMachine.getState()` property, which will report the pre
 method is provided. `isInState(State)` will take substates into account, so that if the example above was in the
 `OnHold` state, `isInState(State.Connected)` would also evaluate to `true`.
 
-## Entry/Exit Events ##
+Entry/Exit Events
+=================
 In the example, the `startCallTimer()` method will be executed when a call is connected. The `stopCallTimer()` will be
 executed when call completes (by either hanging up or hurling the phone against the wall.)
 
@@ -84,6 +89,6 @@ methods being called repeatedly because the `OnHold` state is a substate of the 
 Entry/Exit event handlers can be supplied with a parameter of type `Transition` that describes the trigger,
 source and destination states.
 
-## License ##
-
+License
+=======
 Apache 2.0 License
