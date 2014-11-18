@@ -38,4 +38,31 @@ public abstract class TriggerWithParameters<TState, TTrigger> {
         assert args != null : "args is null";
         ParameterConversion.validate(args, argumentTypes);
     }
+    @Override
+	public String toString() {
+    	return toString( underlyingTrigger, (Object[])argumentTypes);
+    }
+
+    public static <TTrigger> String toString(TTrigger trigger, Object ... args ) {
+    	if(args==null || args.length==0) {
+			return trigger.toString();
+		} else {
+    		StringBuilder b = new StringBuilder(trigger.toString());
+    		b.append('(');
+    		for(int i=0; i<args.length; i++) {
+    			if(args[i] instanceof Class) {
+    				b.append(((Class<?>)args[i]).getSimpleName());
+    			} else if(args[i] !=null) {
+    				b.append(args[i]);
+    			} else {
+    				b.append("null");
+    			}
+    			if(i<args.length-1) {
+    				b.append(',');
+    			}
+    		}
+    		b.append(')');
+    		return b.toString();
+    	}
+    }
 }

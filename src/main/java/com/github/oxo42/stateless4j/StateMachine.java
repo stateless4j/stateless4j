@@ -1,15 +1,20 @@
 package com.github.oxo42.stateless4j;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.transitions.Transition;
-import com.github.oxo42.stateless4j.triggers.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters3;
 
 /**
  * Models behaviour as transitions between a finite set of states
@@ -25,7 +30,8 @@ public class StateMachine<S, T> {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     protected Action2<S, T> unhandledTriggerAction = new Action2<S, T>() {
 
-        public void doIt(S state, T trigger) {
+        @Override
+		public void doIt(S state, T trigger) {
             throw new IllegalStateException(
                     String.format(
                             "No valid leaving transitions are permitted from state '%s' for trigger '%s'. Consider ignoring the trigger.",
@@ -177,7 +183,7 @@ public class StateMachine<S, T> {
     }
 
     protected void publicFire(T trigger, Object... args) {
-        logger.info("Firing " + trigger);
+        logger.info("Firing {}", trigger);
         TriggerWithParameters<S, T> configuration = config.getTriggerConfiguration(trigger);
         if (configuration != null) {
             configuration.validateParameters(args);
@@ -197,6 +203,12 @@ public class StateMachine<S, T> {
             getCurrentRepresentation().exit(transition);
             setState(destination.get());
             getCurrentRepresentation().enter(transition, args);
+        }
+        if(logger.isDebugEnabled()) {
+        	logger.debug("Fired [{}]--{}-->[{}]", new Object[] {
+        						source,
+        						TriggerWithParameters.toString(trigger,args),
+        						destination.toString()});
         }
     }
 
