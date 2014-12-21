@@ -55,7 +55,7 @@ public class StateRepresentation<S, T> {
         }
 
         if (actual.size() > 1) {
-            throw new IllegalStateException("Multiple permitted exit transitions are configured from state '" + trigger + "' for trigger '" + state + "'. Guard clauses must be mutually exclusive.");
+            throw new IllegalStateException("Multiple permitted exit transitions are configured from state '" + state + "' for trigger '" + trigger + "'. Guard clauses must be mutually exclusive.");
         }
 
         return actual.isEmpty() ? null : actual.get(0);
