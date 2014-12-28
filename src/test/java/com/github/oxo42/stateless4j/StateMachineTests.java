@@ -1,10 +1,10 @@
 package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless4j.delegates.Action;
-import com.github.oxo42.stateless4j.delegates.FuncBoolean;
+import com.github.oxo42.stateless4j.delegates.*;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.*;
 
@@ -198,6 +198,43 @@ public class StateMachineTests {
 
         assertTrue(fired);
     }
+
+    /**
+     * make sure the exit entry is fired on the correct state
+     */
+    @Test
+    public void fireCorrectExit() {
+        AtomicBoolean firedWrongExit = new AtomicBoolean(false);
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
+        config.configure(State.A)
+                .permit(Trigger.X, State.B)
+                .onExit(this::setFired);
+        config.configure(State.B)
+                .permit(Trigger.X, State.A)
+                .onExit(() -> firedWrongExit.set(true));  //should not be fired
+        fired = false;
+
+        sm.fire(Trigger.X);
+        assertTrue(fired);
+        assertFalse(firedWrongExit.get());
+    }
+
+    @Test
+    public void doNotFireExitOnSetStateFailed() {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        //create a stateMachine with a mutator that will return false on set state - failing set state
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, () -> State.A, (State arg1) -> false, config);
+        config.configure(State.A)
+                .permit(Trigger.X, State.B)
+                .onExit(this::setFired);
+
+        fired = false;
+
+        sm.fire(Trigger.X);
+        assertFalse(fired);
+    }
+
 
     @Test(expected = IllegalStateException.class)
     public void ImplicitReentryIsDisallowed() {

@@ -2,6 +2,7 @@ package com.github.oxo42.stateless4j;
 
 import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.delegates.BooleanAction;
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.*;
@@ -21,7 +22,7 @@ public class StateMachine<S, T> {
 
     protected final StateMachineConfig<S, T> config;
     protected final Func<S> stateAccessor;
-    protected final Action1<S> stateMutator;
+    protected final BooleanAction<S> stateMutator;
     private final Logger logger = LoggerFactory.getLogger(getClass());
     protected Action2<S, T> unhandledTriggerAction = new Action2<S, T>() {
 
@@ -60,11 +61,9 @@ public class StateMachine<S, T> {
                 return reference.getState();
             }
         };
-        stateMutator = new Action1<S>() {
-            @Override
-            public void doIt(S s) {
-                reference.setState(s);
-            }
+        stateMutator = s -> {
+            reference.setState(s);
+            return true;
         };
     }
 
@@ -76,6 +75,16 @@ public class StateMachine<S, T> {
      * @param stateMutator  State mutator
      */
     public StateMachine(S initialState, Func<S> stateAccessor, Action1<S> stateMutator, StateMachineConfig<S, T> config) {
+        this.config = config;
+        this.stateAccessor = stateAccessor;
+        this.stateMutator = arg1 -> {
+            stateMutator.doIt(arg1);
+            return true;
+        };
+        stateMutator.doIt(initialState);
+    }
+
+    public StateMachine(S initialState, Func<S> stateAccessor, BooleanAction<S> stateMutator, StateMachineConfig<S, T> config) {
         this.config = config;
         this.stateAccessor = stateAccessor;
         this.stateMutator = stateMutator;
@@ -95,8 +104,8 @@ public class StateMachine<S, T> {
         return stateAccessor.call();
     }
 
-    private void setState(S value) {
-        stateMutator.doIt(value);
+    private boolean setState(S value) {
+        return stateMutator.doIt(value);
     }
 
     /**
@@ -194,9 +203,11 @@ public class StateMachine<S, T> {
         if (triggerBehaviour.resultsInTransitionFrom(source, args, destination)) {
             Transition<S, T> transition = new Transition<>(source, destination.get(), trigger);
 
-            getCurrentRepresentation().exit(transition);
-            setState(destination.get());
-            getCurrentRepresentation().enter(transition, args);
+            final StateRepresentation<S, T> stateBeforeChange = getCurrentRepresentation();
+            if (setState(destination.get())) {
+                stateBeforeChange.exit(transition);
+                getCurrentRepresentation().enter(transition, args);
+            }
         }
     }
 
