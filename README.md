@@ -4,7 +4,7 @@ Maven
     <dependency>
         <groupId>com.github.oxo42</groupId>
         <artifactId>stateless4j</artifactId>
-        <version>2.5.0/version>
+        <version>2.5.0</version>
     </dependency>
 ```
 
