@@ -1,3 +1,16 @@
 language: java
 jdk:
   - openjdk7
+
+after_success:
+  - .buildscript/deploy_snapshot.sh
+
+env:
+  global:
+  # TODO see http://docs.travis-ci.com/user/environment-variables/#Secure-Variables
+    - secure: "CI_DEPLOY_USERNAME=<your_username>"
+    - secure: "CI_DEPLOY_PASSWORD=<your_password>"
+
+cache:
+  directories:
+    - $HOME/.m2

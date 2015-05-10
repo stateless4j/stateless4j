@@ -44,6 +44,8 @@ assertEquals(State.Ringing, phoneCall.getState());
 
 stateless4j is a port of [stateless](https://github.com/nblumhardt/stateless) for java
 
+Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
+
 
 Features
 ========
@@ -92,3 +94,5 @@ source and destination states.
 License
 =======
 Apache 2.0 License
+
+[snap]: https://oss.sonatype.org/content/repositories/snapshots/
