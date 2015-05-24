@@ -1,2 +1,13 @@
 bin/
 target/
+
+.idea/
+*.iml
+
+# Thumbnails
+._*
+.DS_Store
+
+.settings
+.classpath
+.project
