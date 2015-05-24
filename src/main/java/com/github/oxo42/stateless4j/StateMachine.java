@@ -72,6 +72,10 @@ public class StateMachine<S, T> {
                 reference.setState(s);
             }
         };
+        if (config.isEntryActionOfInitialStateEnabled()) {
+            Transition<S,T> initialTransition = new Transition(initialState, initialState, null);
+            getCurrentRepresentation().enter(initialTransition);
+        }
     }
 
     /**
@@ -90,6 +94,10 @@ public class StateMachine<S, T> {
 
     public StateConfiguration<S, T> configure(S state) {
         return config.configure(state);
+    }
+    
+    public StateMachineConfig<S, T> configuration() {
+        return config;
     }
 
     /**
@@ -271,5 +279,4 @@ public class StateMachine<S, T> {
                 getState(),
                 params.toString());
     }
-
 }
