@@ -36,10 +36,10 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-jdk14</artifactId>
-          <version>1.7.7</version>
+       <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-api</artifactId>
+        	<version>1.7.7</version>
         </dependency>
     </dependencies>
     <developers>
