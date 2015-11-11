@@ -18,8 +18,8 @@ public class TestGenerateGraph {
     // This isn't going to work because the StateMachine uses a HashMap which does not maintain a consistent output
     // Changing it to LinkedHashMap will make this test work all the time but will incur a runtime performance penalty
     // @Test
-    public void testGenerateSimpleGraph() throws UnsupportedEncodingException, IOException {
-        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+    public void testGenerateSimpleGraph() throws IOException {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<State, Trigger>();
         config.configure(State.A)
                 .permit(Trigger.X, State.B)
                 .permit(Trigger.Y, State.C);
@@ -30,7 +30,7 @@ public class TestGenerateGraph {
         config.configure(State.C)
                 .permit(Trigger.X, State.A);
 
-        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.A, config);
 
         ByteArrayOutputStream dotFile = new ByteArrayOutputStream();
         config.generateDotFileInto(dotFile);

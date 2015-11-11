@@ -8,7 +8,6 @@ import com.github.oxo42.stateless4j.triggers.*;
 public class StateConfiguration<S, T> {
 
     private static final FuncBoolean NO_GUARD = new FuncBoolean() {
-        @Override
         public boolean call() {
             return true;
         }
@@ -109,7 +108,6 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> onEntry(final Action entryAction) {
         assert entryAction != null : "entryAction is null";
         return onEntry(new Action1<Transition<S, T>>() {
-            @Override
             public void doIt(Transition<S, T> t) {
                 entryAction.doIt();
             }
@@ -125,7 +123,6 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> onEntry(final Action1<Transition<S, T>> entryAction) {
         assert entryAction != null : "entryAction is null";
         representation.addEntryAction(new Action2<Transition<S, T>, Object[]>() {
-            @Override
             public void doIt(Transition<S, T> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
             }
@@ -143,7 +140,6 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> onEntryFrom(T trigger, final Action entryAction) {
         assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action1<Transition<S, T>>() {
-            @Override
             public void doIt(Transition<S, T> arg1) {
                 entryAction.doIt();
             }
@@ -160,7 +156,6 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> onEntryFrom(T trigger, final Action1<Transition<S, T>> entryAction) {
         assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger, new Action2<Transition<S, T>, Object[]>() {
-            @Override
             public void doIt(Transition<S, T> arg1, Object[] arg2) {
                 entryAction.doIt(arg1);
             }
@@ -180,7 +175,6 @@ public class StateConfiguration<S, T> {
     public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, S, T> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
         assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action2<TArg0, Transition<S, T>>() {
-            @Override
             public void doIt(TArg0 arg1, Transition<S, T> arg2) {
                 entryAction.doIt(arg1);
             }
@@ -201,7 +195,6 @@ public class StateConfiguration<S, T> {
         assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
             @SuppressWarnings("unchecked")
-            @Override
             public void doIt(Transition<S, T> t, Object[] arg2) {
                 entryAction.doIt((TArg0) arg2[0], t);
             }
@@ -223,7 +216,6 @@ public class StateConfiguration<S, T> {
     public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
         assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<S, T>>() {
-            @Override
             public void doIt(TArg0 a0, TArg1 a1, Transition<S, T> t) {
                 entryAction.doIt(a0, a1);
             }
@@ -246,7 +238,6 @@ public class StateConfiguration<S, T> {
         assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
             @SuppressWarnings("unchecked")
-            @Override
             public void doIt(Transition<S, T> t, Object[] args) {
                 entryAction.doIt(
                         (TArg0) args[0],
@@ -272,7 +263,6 @@ public class StateConfiguration<S, T> {
     public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
         assert entryAction != null : "entryAction is null";
         return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<S, T>>() {
-            @Override
             public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<S, T> t) {
                 entryAction.doIt(a0, a1, a2);
             }
@@ -297,7 +287,6 @@ public class StateConfiguration<S, T> {
         assert entryAction != null : "entryAction is null";
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
             @SuppressWarnings("unchecked")
-            @Override
             public void doIt(Transition<S, T> t, Object[] args) {
                 entryAction.doIt(
                         (TArg0) args[0],
@@ -317,7 +306,6 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> onExit(final Action exitAction) {
         assert exitAction != null : "exitAction is null";
         return onExit(new Action1<Transition<S, T>>() {
-            @Override
             public void doIt(Transition<S, T> arg1) {
                 exitAction.doIt();
             }
@@ -423,7 +411,6 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> permitDynamicIf(T trigger, final Func<S> destinationStateSelector, FuncBoolean guard) {
         assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(trigger, new Func2<Object[], S>() {
-            @Override
             public S call(Object[] arg0) {
                 return destinationStateSelector.call();
             }
@@ -446,7 +433,6 @@ public class StateConfiguration<S, T> {
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
-                    @Override
                     public S call(Object[] args) {
                         return destinationStateSelector.call((TArg0) args[0]);
 
@@ -474,7 +460,6 @@ public class StateConfiguration<S, T> {
                 trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
 
-                    @Override
                     public S call(Object[] args) {
                         return destinationStateSelector.call(
                                 (TArg0) args[0],
@@ -505,7 +490,6 @@ public class StateConfiguration<S, T> {
                 trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
 
-                    @Override
                     public S call(Object[] args) {
                         return destinationStateSelector.call(
                                 (TArg0) args[0],
@@ -529,7 +513,7 @@ public class StateConfiguration<S, T> {
 
     StateConfiguration<S, T> publicPermitIf(T trigger, S destinationState, FuncBoolean guard) {
         assert guard != null : "guard is null";
-        representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard));
+        representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<S, T>(trigger, destinationState, guard));
         return this;
     }
 
@@ -540,7 +524,7 @@ public class StateConfiguration<S, T> {
     StateConfiguration<S, T> publicPermitDynamicIf(T trigger, Func2<Object[], S> destinationStateSelector, FuncBoolean guard) {
         assert destinationStateSelector != null : "destinationStateSelector is null";
         assert guard != null : "guard is null";
-        representation.addTriggerBehaviour(new DynamicTriggerBehaviour<>(trigger, destinationStateSelector, guard));
+        representation.addTriggerBehaviour(new DynamicTriggerBehaviour<S, T>(trigger, destinationStateSelector, guard));
         return this;
     }
 }

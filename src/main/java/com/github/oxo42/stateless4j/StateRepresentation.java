@@ -15,10 +15,10 @@ public class StateRepresentation<S, T> {
 
     private final S state;
 
-    private final Map<T, List<TriggerBehaviour<S, T>>> triggerBehaviours = new HashMap<>();
-    private final List<Action2<Transition<S, T>, Object[]>> entryActions = new ArrayList<>();
-    private final List<Action1<Transition<S, T>>> exitActions = new ArrayList<>();
-    private final List<StateRepresentation<S, T>> substates = new ArrayList<>();
+    private final Map<T, List<TriggerBehaviour<S, T>>> triggerBehaviours = new HashMap<T, List<TriggerBehaviour<S, T>>>();
+    private final List<Action2<Transition<S, T>, Object[]>> entryActions = new ArrayList<Action2<Transition<S, T>, Object[]>>();
+    private final List<Action1<Transition<S, T>>> exitActions = new ArrayList<Action1<Transition<S, T>>>();
+    private final List<StateRepresentation<S, T>> substates = new ArrayList<StateRepresentation<S, T>>();
     private StateRepresentation<S, T> superstate; // null
 
     public StateRepresentation(S state) {
@@ -47,7 +47,7 @@ public class StateRepresentation<S, T> {
             return null;
         }
 
-        List<TriggerBehaviour<S, T>> actual = new ArrayList<>();
+        List<TriggerBehaviour<S, T>> actual = new ArrayList<TriggerBehaviour<S, T>>();
         for (TriggerBehaviour<S, T> triggerBehaviour : possible) {
             if (triggerBehaviour.isGuardConditionMet()) {
                 actual.add(triggerBehaviour);
@@ -65,7 +65,6 @@ public class StateRepresentation<S, T> {
         assert action != null : "action is null";
 
         entryActions.add(new Action2<Transition<S, T>, Object[]>() {
-            @Override
             public void doIt(Transition<S, T> t, Object[] args) {
                 if (t.getTrigger().equals(trigger)) {
                     action.doIt(t, args);
@@ -134,7 +133,7 @@ public class StateRepresentation<S, T> {
     public void addTriggerBehaviour(TriggerBehaviour<S, T> triggerBehaviour) {
         List<TriggerBehaviour<S, T>> allowed;
         if (!triggerBehaviours.containsKey(triggerBehaviour.getTrigger())) {
-            allowed = new ArrayList<>();
+            allowed = new ArrayList<TriggerBehaviour<S, T>>();
             triggerBehaviours.put(triggerBehaviour.getTrigger(), allowed);
         }
         allowed = triggerBehaviours.get(triggerBehaviour.getTrigger());
@@ -173,7 +172,7 @@ public class StateRepresentation<S, T> {
 
     @SuppressWarnings("unchecked")
     public List<T> getPermittedTriggers() {
-        Set<T> result = new HashSet<>();
+        Set<T> result = new HashSet<T>();
 
         for (T t : triggerBehaviours.keySet()) {
             for (TriggerBehaviour<S, T> v : triggerBehaviours.get(t)) {
@@ -188,6 +187,6 @@ public class StateRepresentation<S, T> {
             result.addAll(getSuperstate().getPermittedTriggers());
         }
 
-        return new ArrayList<>(result);
+        return new ArrayList<T>(result);
     }
 }

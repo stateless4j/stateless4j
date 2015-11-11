@@ -30,11 +30,11 @@ public class NonEnumTests {
         S b = states[1];
         T x = transitions[0];
 
-        StateMachineConfig<S, T> config = new StateMachineConfig<>();
+        StateMachineConfig<S, T> config = new StateMachineConfig<S, T>();
         config.configure(a)
                 .permit(x, b);
 
-        StateMachine<S, T> sm = new StateMachine<>(a, config);
+        StateMachine<S, T> sm = new StateMachine<S, T>(a, config);
         sm.fire(x);
 
         assertEquals(b, sm.getState());
