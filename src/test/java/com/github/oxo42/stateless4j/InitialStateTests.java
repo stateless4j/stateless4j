@@ -1,10 +1,14 @@
 package com.github.oxo42.stateless4j;
 
 import com.github.oxo42.stateless4j.delegates.Action;
+import com.github.oxo42.stateless4j.delegates.Action1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 public class InitialStateTests {
 
@@ -44,5 +48,34 @@ public class InitialStateTests {
                     }
                 });
         return config;
+    }
+
+    @Test
+    public void testInitialStateEntryActionWithParameterNotExecuted() {
+        final State initial = State.B;
+
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+
+        TriggerWithParameters1<Object, State, Trigger> trigger =
+                config.setTriggerParameters(Trigger.X, Object.class);
+
+        config.configure(initial)
+                .onEntryFrom(
+                        trigger,
+                        new Action1<Object>() {
+
+                            @Override
+                            public void doIt(Object arg1) {
+                                executed = true;
+                            }
+                        },
+                        Object.class
+                );
+
+        config.enableEntryActionOfInitialState();
+
+        StateMachine<State, Trigger> sm = new StateMachine<>(initial, config);
+        assertEquals(initial, sm.getState());
+        assertFalse(executed);
     }
 }

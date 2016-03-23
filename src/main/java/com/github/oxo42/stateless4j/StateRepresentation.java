@@ -67,7 +67,8 @@ public class StateRepresentation<S, T> {
         entryActions.add(new Action2<Transition<S, T>, Object[]>() {
             @Override
             public void doIt(Transition<S, T> t, Object[] args) {
-                if (t.getTrigger().equals(trigger)) {
+                T trans_trigger = t.getTrigger();
+                if (trans_trigger != null && trans_trigger.equals(trigger)) {
                     action.doIt(t, args);
                 }
             }
