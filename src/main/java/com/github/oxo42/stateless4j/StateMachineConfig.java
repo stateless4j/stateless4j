@@ -59,7 +59,7 @@ public class StateMachineConfig<TState,TTrigger> {
      * This is the default.
      */
     public void disableEntryActionOfInitialState() {
-        this.entryActionOfInitialStateEnabled = true;
+        this.entryActionOfInitialStateEnabled = false;
     }
     
     /**
