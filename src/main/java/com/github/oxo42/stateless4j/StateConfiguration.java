@@ -108,6 +108,24 @@ public class StateConfiguration<S, T> {
      * <p>
      * Applies to the current state only. Will not re-execute superstate actions, or  cause actions to execute
      * transitioning between super- and sub-states
+     * <p>
+     * Additionally a given action is performed when transitioning. This action will be called after
+     * the onExit action and before the onEntry action (of the re-entered state).
+     *
+     * @param trigger The accepted trigger
+     * @param action  The action to be performed "during" transition
+     * @return The reciever
+     */
+    public StateConfiguration<S, T> permitReentry(T trigger, Action action) {
+        return publicPermit(trigger, representation.getUnderlyingState(), action);
+    }
+
+    /**
+     * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
+     * configured state transitions to an identical sibling state
+     * <p>
+     * Applies to the current state only. Will not re-execute superstate actions, or  cause actions to execute
+     * transitioning between super- and sub-states
      *
      * @param trigger The accepted trigger
      * @param guard   Function that must return true in order for the trigger to be accepted
@@ -115,6 +133,24 @@ public class StateConfiguration<S, T> {
      */
     public StateConfiguration<S, T> permitReentryIf(T trigger, FuncBoolean guard) {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard);
+    }
+
+    /**
+     * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
+     * configured state transitions to an identical sibling state
+     * <p>
+     * Applies to the current state only. Will not re-execute superstate actions, or  cause actions to execute
+     * transitioning between super- and sub-states
+     * <p>
+     * Additionally a given action is performed when transitioning. This action will be called after
+     * the onExit action and before the onEntry action (of the re-entered state).
+     *
+     * @param trigger The accepted trigger
+     * @param guard   Function that must return true in order for the trigger to be accepted
+     * @return The reciever
+     */
+    public StateConfiguration<S, T> permitReentryIf(T trigger, FuncBoolean guard, Action action) {
+        return publicPermitIf(trigger, representation.getUnderlyingState(), guard, action);
     }
 
     /**

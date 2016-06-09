@@ -70,7 +70,6 @@ public class TransitionActionTests {
         Action transitionAction = new CountingAction(list, new Integer(2));
         Action entryAction = new CountingAction(list, new Integer(3));
 
-        config.disableEntryActionOfInitialState();
         config.configure(State.A)
                 .onExit(exitAction)
                 .permit(Trigger.Z, State.B, transitionAction);
@@ -135,5 +134,62 @@ public class TransitionActionTests {
         assertEquals(State.C, sm.getState());
         assertTrue(correctAction.wasPerformed());
         assertFalse(wrongAction.wasPerformed());
+    }
+
+    @Test
+    public void UnguardedActionIsPerformedOnReentry() {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+
+        TripwireAction action = new TripwireAction();
+
+        config.configure(State.A)
+                .permitReentry(Trigger.Z, action);
+
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
+        sm.fire(Trigger.Z);
+        
+        assertEquals(State.A, sm.getState());
+        assertTrue(action.wasPerformed());
+    }
+
+    @Test
+    public void ReentryActionIsPerformedBetweenExitAndEntry() {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        
+        List<Integer> list = new ArrayList<Integer>();
+        Action entryAction = new CountingAction(list, new Integer(3));
+        Action transitionAction = new CountingAction(list, new Integer(2));
+        Action exitAction = new CountingAction(list, new Integer(1));
+
+        config.configure(State.A)
+        		.onEntry(entryAction)
+        		.onExit(exitAction)
+                .permitReentry(Trigger.Z, transitionAction);
+
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
+        sm.fire(Trigger.Z);
+        
+        assertEquals(State.A, sm.getState());
+        
+        assertEquals(3, list.size());
+        assertEquals(new Integer(1), list.get(0));
+        assertEquals(new Integer(2), list.get(1));
+        assertEquals(new Integer(3), list.get(2));
+    }
+    
+    @Test
+    public void ActionWithPositiveGuardIsPerformedOnReentry() {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        
+        TripwireAction action = new TripwireAction();
+
+        config.configure(State.A)
+        	.permitReentryIf(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue, action);
+
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
+        sm.fire(Trigger.X);
+
+        assertEquals(State.A, sm.getState());
+        assertTrue(action.wasPerformed());
     }
 }
