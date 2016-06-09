@@ -203,7 +203,7 @@ public class StateMachine<S, T> {
             Transition<S, T> transition = new Transition<>(source, destination.get(), trigger);
 
             getCurrentRepresentation().exit(transition);
-            triggerBehaviour.performAction();
+            triggerBehaviour.performAction(args);
             setState(destination.get());
             getCurrentRepresentation().enter(transition, args);
         }
