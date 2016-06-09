@@ -13,6 +13,11 @@ public class StateConfiguration<S, T> {
             return true;
         }
     };
+    private static final Action NO_ACTION = new Action() {
+        @Override
+        public void doIt() {
+        }
+    };
     private final StateRepresentation<S, T> representation;
     private final Func2<S, StateRepresentation<S, T>> lookup;
 
@@ -36,6 +41,23 @@ public class StateConfiguration<S, T> {
     }
 
     /**
+     * Accept the specified trigger and transition to the destination state.
+     * 
+     * Additionally a given action is performed when transitioning. This action will be called after
+     * the onExit action of the current state and before the onEntry action of
+     * the destination state.
+     *
+     * @param trigger          The accepted trigger
+     * @param destinationState The state that the trigger will cause a transition to
+     * @param action           The action to be performed "during" transition
+     * @return The reciever
+     */
+    public StateConfiguration<S, T> permit(T trigger, S destinationState, final Action action) {
+        enforceNotIdentityTransition(destinationState);
+        return publicPermit(trigger, destinationState, action);
+    }
+
+    /**
      * Accept the specified trigger and transition to the destination state
      *
      * @param trigger          The accepted trigger
@@ -46,6 +68,24 @@ public class StateConfiguration<S, T> {
     public StateConfiguration<S, T> permitIf(T trigger, S destinationState, FuncBoolean guard) {
         enforceNotIdentityTransition(destinationState);
         return publicPermitIf(trigger, destinationState, guard);
+    }
+
+    /**
+     * Accept the specified trigger and transition to the destination state
+     * 
+     * Additionally a given action is performed when transitioning. This action will be called after
+     * the onExit action of the current state and before the onEntry action of
+     * the destination state.
+     *
+     * @param trigger          The accepted trigger
+     * @param destinationState The state that the trigger will cause a transition to
+     * @param guard            Function that must return true in order for the trigger to be accepted
+     * @param action           The action to be performed "during" transition
+     * @return The reciever
+     */
+    public StateConfiguration<S, T> permitIf(T trigger, S destinationState, FuncBoolean guard, Action action) {
+        enforceNotIdentityTransition(destinationState);
+        return publicPermitIf(trigger, destinationState, guard, action);
     }
 
     /**
@@ -96,7 +136,7 @@ public class StateConfiguration<S, T> {
      */
     public StateConfiguration<S, T> ignoreIf(T trigger, FuncBoolean guard) {
         assert guard != null : "guard is null";
-        representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<S, T>(trigger, guard));
+        representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<S, T>(trigger, guard, NO_ACTION));
         return this;
     }
 
@@ -524,12 +564,21 @@ public class StateConfiguration<S, T> {
     }
 
     StateConfiguration<S, T> publicPermit(T trigger, S destinationState) {
-        return publicPermitIf(trigger, destinationState, NO_GUARD);
+        return publicPermitIf(trigger, destinationState, NO_GUARD, NO_ACTION);
+    }
+
+    StateConfiguration<S, T> publicPermit(T trigger, S destinationState, Action action) {
+        return publicPermitIf(trigger, destinationState, NO_GUARD, action);
     }
 
     StateConfiguration<S, T> publicPermitIf(T trigger, S destinationState, FuncBoolean guard) {
+        return publicPermitIf(trigger, destinationState, guard, NO_ACTION);
+    }
+
+    StateConfiguration<S, T> publicPermitIf(T trigger, S destinationState, FuncBoolean guard, Action action) {
         assert guard != null : "guard is null";
-        representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard));
+        assert action != null : "action is null";
+        representation.addTriggerBehaviour(new TransitioningTriggerBehaviour<>(trigger, destinationState, guard, action));
         return this;
     }
 
