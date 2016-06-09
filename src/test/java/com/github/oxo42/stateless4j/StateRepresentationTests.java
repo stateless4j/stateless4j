@@ -320,7 +320,7 @@ public class StateRepresentationTests {
     public void WhenTransitionExistsButGuardConditionNotMet_TriggerCanBeFired() {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
         rep.addTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(
-                Trigger.X, IgnoredTriggerBehaviourTests.returnFalse, IgnoredTriggerBehaviourTests.nopAction));
+                Trigger.X, IgnoredTriggerBehaviourTests.returnFalse));
         assertFalse(rep.canHandle(Trigger.X));
     }
 
@@ -328,7 +328,7 @@ public class StateRepresentationTests {
     public void WhenTransitionDoesNotExist_TriggerCannotBeFired() {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
         rep.addTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(
-                Trigger.X, IgnoredTriggerBehaviourTests.returnTrue, IgnoredTriggerBehaviourTests.nopAction));
+                Trigger.X, IgnoredTriggerBehaviourTests.returnTrue));
         assertTrue(rep.canHandle(Trigger.X));
     }
 
@@ -336,7 +336,7 @@ public class StateRepresentationTests {
     public void WhenTransitionExistsInSupersate_TriggerCanBeFired() {
         StateRepresentation<State, Trigger> rep = CreateRepresentation(State.B);
         rep.addTriggerBehaviour(new IgnoredTriggerBehaviour<State, Trigger>(
-                Trigger.X, IgnoredTriggerBehaviourTests.returnTrue, IgnoredTriggerBehaviourTests.nopAction));
+                Trigger.X, IgnoredTriggerBehaviourTests.returnTrue));
         StateRepresentation<State, Trigger> sub = CreateRepresentation(State.C);
         sub.setSuperstate(rep);
         rep.addSubstate(sub);
