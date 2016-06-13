@@ -23,6 +23,12 @@ public class PhoneCallJava7 {
                 stopCallTimer();
             }
         };
+        Action reportLeftMessage = new Action() {
+            @Override
+            public void doIt() {
+                System.out.println("Received 'LeftMessage' in 'Connected'");
+            }
+        };
 
         StateMachineConfig<State, Trigger> phoneCallConfig = new StateMachineConfig<>();
 
@@ -36,7 +42,7 @@ public class PhoneCallJava7 {
         phoneCallConfig.configure(State.Connected)
                 .onEntry(callStartTimer)
                 .onExit(callStopTimer)
-                .permit(Trigger.LeftMessage, State.OffHook)
+                .permit(Trigger.LeftMessage, State.OffHook, reportLeftMessage)
                 .permit(Trigger.HungUp, State.OffHook)
                 .permit(Trigger.PlacedOnHold, State.OnHold);
 

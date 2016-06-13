@@ -8,6 +8,11 @@ public class IgnoredTriggerBehaviour<TState, TTrigger> extends TriggerBehaviour<
     public IgnoredTriggerBehaviour(TTrigger trigger, FuncBoolean guard) {
         super(trigger, guard);
     }
+    
+    @Override
+    public void performAction(Object[] args) {
+        // no need to do anything. This is never called (no transition => no action)
+    }
 
     @Override
     public boolean resultsInTransitionFrom(TState source, Object[] args, OutVar<TState> dest) {

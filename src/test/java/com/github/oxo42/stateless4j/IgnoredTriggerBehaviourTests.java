@@ -1,5 +1,6 @@
 package com.github.oxo42.stateless4j;
 
+import com.github.oxo42.stateless4j.delegates.Action;
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 import com.github.oxo42.stateless4j.triggers.IgnoredTriggerBehaviour;
 import org.junit.Test;
@@ -23,6 +24,13 @@ public class IgnoredTriggerBehaviourTests {
         @Override
         public boolean call() {
             return false;
+        }
+    };
+
+    public static Action nopAction = new Action() {
+
+        @Override
+        public void doIt() {
         }
     };
 

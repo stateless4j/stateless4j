@@ -53,6 +53,7 @@ Most standard state machine constructs are supported:
 * Hierarchical states
 * Entry/exit events for states
 * Guard clauses to support conditional transitions
+* User-defined actions can be executed when transitioning
 * Introspection
 
 
@@ -88,6 +89,23 @@ methods being called repeatedly because the `OnHold` state is a substate of the 
 
 Entry/Exit event handlers can be supplied with a parameter of type `Transition` that describes the trigger,
 source and destination states.
+
+Action on transition
+===================
+It is possible to execute a user-defined action when doing a transition.
+For a 'normal' or 're-entrant' transition this action will be called
+without any parameters. For 'dynamic' transitions (those who compute the
+target state based on trigger-given parameters) the parameters of the
+trigger will be given to the action.
+
+This action is only executed if the transition is actually taken; so if
+the transition is guarded and the guard forbids a transition, then the
+action is not executed.
+
+If the transition is taken, the action will be executed between the
+`onExit` handler of the current state and the `onEntry` handler of the
+target state (which might be the same state in case of a re-entrant
+transition.
 
 License
 =======

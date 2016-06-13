@@ -17,6 +17,8 @@ public abstract class TriggerBehaviour<S, T> {
         return trigger;
     }
 
+    public abstract void performAction(Object[] args);
+
     public boolean isGuardConditionMet() {
         return guard.call();
     }
