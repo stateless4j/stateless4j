@@ -199,17 +199,14 @@ public class StateMachine<S, T> {
 
         if (triggerBehaviour.isInternal()) {
             triggerBehaviour.performAction(args);
-            return;
-        }
-
-        S source = getState();
-        OutVar<S> destination = new OutVar<>();
-        if (triggerBehaviour.resultsInTransitionFrom(source, args, destination)) {
-            Transition<S, T> transition = new Transition<>(source, destination.get(), trigger);
+        } else {
+            S source = getState();
+            S destination = triggerBehaviour.transitionsTo(source, args);
+            Transition<S, T> transition = new Transition<>(source, destination, trigger);
 
             getCurrentRepresentation().exit(transition);
             triggerBehaviour.performAction(args);
-            setState(destination.get());
+            setState(destination);
             getCurrentRepresentation().enter(transition, args);
         }
     }

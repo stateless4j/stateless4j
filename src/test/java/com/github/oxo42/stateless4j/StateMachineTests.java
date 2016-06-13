@@ -142,8 +142,8 @@ public class StateMachineTests {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
 
         config.configure(State.B)
-                .permitIf(Trigger.X, State.A, IgnoredTriggerBehaviourTests.returnFalse)
-                .permitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue);
+                .permitIf(Trigger.X, State.A, InternalTriggerBehaviourTests.returnFalse)
+                .permitIf(Trigger.X, State.C, InternalTriggerBehaviourTests.returnTrue);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.B, config);
         sm.fire(Trigger.X);

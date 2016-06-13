@@ -168,14 +168,12 @@ public class StateMachineConfig<TState,TTrigger> {
         try (OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8")) {
             PrintWriter writer = new PrintWriter(w);
             writer.write("digraph G {\n");
-            OutVar<TState> destination = new OutVar<>();
             for (Map.Entry<TState, StateRepresentation<TState, TTrigger>> entry : this.stateConfiguration.entrySet()) {
                 Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviours = entry.getValue().getTriggerBehaviours();
                 for (Map.Entry<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviour : behaviours.entrySet()) {
                     for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
                         if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
-                            destination.set(null);
-                            triggerBehaviour.resultsInTransitionFrom(null, null, destination);
+                            TState destination = triggerBehaviour.transitionsTo(null, null);
                             writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
                         }
                     }

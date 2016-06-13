@@ -216,7 +216,7 @@ public class StateConfiguration<S, T> {
      */
     public StateConfiguration<S, T> ignoreIf(T trigger, FuncBoolean guard) {
         assert guard != null : "guard is null";
-        representation.addTriggerBehaviour(new IgnoredTriggerBehaviour<S, T>(trigger, guard));
+        representation.addTriggerBehaviour(new InternalTriggerBehaviour<S, T>(trigger, guard, NO_ACTION));
         return this;
     }
 

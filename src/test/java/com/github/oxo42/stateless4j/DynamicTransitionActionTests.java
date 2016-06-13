@@ -159,11 +159,11 @@ public class DynamicTransitionActionTests {
         AccumulatingAction<Integer> actionThree = new AccumulatingAction<Integer>(list);
 
         config.configure(State.A)
-                .permitDynamicIf(Trigger.X, gotoB, IgnoredTriggerBehaviourTests.returnTrue, actionZero)
-                .permitDynamicIf(TriggerY2, gotoB, IgnoredTriggerBehaviourTests.returnTrue, actionTwo);
+                .permitDynamicIf(Trigger.X, gotoB, InternalTriggerBehaviourTests.returnTrue, actionZero)
+                .permitDynamicIf(TriggerY2, gotoB, InternalTriggerBehaviourTests.returnTrue, actionTwo);
         config.configure(State.B)
-        		.permitDynamicIf(TriggerX1, gotoA, IgnoredTriggerBehaviourTests.returnTrue, actionOne)
-        		.permitDynamicIf(TriggerY3, gotoA, IgnoredTriggerBehaviourTests.returnTrue, actionThree);
+                .permitDynamicIf(TriggerX1, gotoA, InternalTriggerBehaviourTests.returnTrue, actionOne)
+                .permitDynamicIf(TriggerY3, gotoA, InternalTriggerBehaviourTests.returnTrue, actionThree);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);

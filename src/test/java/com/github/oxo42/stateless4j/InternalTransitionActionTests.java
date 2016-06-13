@@ -71,7 +71,7 @@ public class InternalTransitionActionTests {
         TripwireAction action = new TripwireAction();
 
         config.configure(State.A)
-            .permitInternalIf(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue, action);
+            .permitInternalIf(Trigger.X, InternalTriggerBehaviourTests.returnTrue, action);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);
@@ -87,7 +87,7 @@ public class InternalTransitionActionTests {
         TripwireAction action = new TripwireAction();
 
         config.configure(State.A)
-            .permitInternalIf(Trigger.X, IgnoredTriggerBehaviourTests.returnFalse, action);
+            .permitInternalIf(Trigger.X, InternalTriggerBehaviourTests.returnFalse, action);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);

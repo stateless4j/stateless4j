@@ -1,7 +1,6 @@
 package com.github.oxo42.stateless4j.triggers;
 
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
-import com.github.oxo42.stateless4j.OutVar;
 
 public abstract class TriggerBehaviour<S, T> {
 
@@ -27,5 +26,5 @@ public abstract class TriggerBehaviour<S, T> {
         return guard.call();
     }
 
-    public abstract boolean resultsInTransitionFrom(S source, Object[] args, OutVar<S> dest);
+    public abstract S transitionsTo(S source, Object[] args);
 }

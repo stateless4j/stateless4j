@@ -37,9 +37,8 @@ public class InternalTriggerBehaviourTests {
     @Test
     public void StateRemainsUnchanged() {
         InternalTriggerBehaviour<State, Trigger> ignored = new InternalTriggerBehaviour<>(Trigger.X, returnTrue, nopAction);
-        OutVar<State> out = new OutVar<>();
-        ignored.resultsInTransitionFrom(State.B, new Object[0], out);
-        assertEquals(State.B, out.get());
+        State target = ignored.transitionsTo(State.B, new Object[0]);
+        assertEquals(State.B, target);
     }
 
     @Test

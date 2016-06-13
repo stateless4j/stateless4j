@@ -95,7 +95,7 @@ public class TransitionActionTests {
         TripwireAction action = new TripwireAction();
 
         config.configure(State.A)
-            .permitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue, action);
+            .permitIf(Trigger.X, State.C, InternalTriggerBehaviourTests.returnTrue, action);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);
@@ -111,7 +111,7 @@ public class TransitionActionTests {
         TripwireAction action = new TripwireAction();
 
         config.configure(State.A)
-            .permitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnFalse, action);
+            .permitIf(Trigger.X, State.C, InternalTriggerBehaviourTests.returnFalse, action);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);
@@ -125,8 +125,8 @@ public class TransitionActionTests {
         TripwireAction wrongAction = new TripwireAction();
 
         config.configure(State.A)
-            .permitIf(Trigger.X, State.B, IgnoredTriggerBehaviourTests.returnFalse, wrongAction)
-            .permitIf(Trigger.X, State.C, IgnoredTriggerBehaviourTests.returnTrue, correctAction);
+            .permitIf(Trigger.X, State.B, InternalTriggerBehaviourTests.returnFalse, wrongAction)
+            .permitIf(Trigger.X, State.C, InternalTriggerBehaviourTests.returnTrue, correctAction);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);
@@ -184,7 +184,7 @@ public class TransitionActionTests {
         TripwireAction action = new TripwireAction();
 
         config.configure(State.A)
-        	.permitReentryIf(Trigger.X, IgnoredTriggerBehaviourTests.returnTrue, action);
+            .permitReentryIf(Trigger.X, InternalTriggerBehaviourTests.returnTrue, action);
 
         StateMachine<State, Trigger> sm = new StateMachine<>(State.A, config);
         sm.fire(Trigger.X);
