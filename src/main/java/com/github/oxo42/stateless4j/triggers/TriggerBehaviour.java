@@ -19,6 +19,10 @@ public abstract class TriggerBehaviour<S, T> {
 
     public abstract void performAction(Object[] args);
 
+    public boolean isInternal() {
+        return false;
+    }
+
     public boolean isGuardConditionMet() {
         return guard.call();
     }

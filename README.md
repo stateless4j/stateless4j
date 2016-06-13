@@ -54,6 +54,7 @@ Most standard state machine constructs are supported:
 * Entry/exit events for states
 * Guard clauses to support conditional transitions
 * User-defined actions can be executed when transitioning
+* Internal transitions (not calling `onExit`/`onEntry`)
 * Introspection
 
 

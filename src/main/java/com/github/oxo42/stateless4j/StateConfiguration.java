@@ -94,6 +94,45 @@ public class StateConfiguration<S, T> {
     }
 
     /**
+     * Accept the specified trigger, execute action and stay in state
+     *
+     * Applies to the current state only. No exit or entry actions will be
+     * executed and the state will not change. The only thing that happens is
+     * the execution of a given action.
+     *
+     * @param trigger The accepted trigger
+     * @param action  The action to be performed
+     * @return The reciever
+     */
+    public StateConfiguration<S, T> permitInternal(T trigger, Action action) {
+        return permitInternalIf(trigger, NO_GUARD, action);
+    }
+
+    /**
+     * Accept the specified trigger, execute action and stay in state
+     *
+     * Applies to the current state only. No exit or entry actions will be
+     * executed and the state will not change. The only thing that happens is
+     * the execution of a given action.
+     * <p>
+     * The action is only executed if the given guard returns true. Otherwise
+     * this transition will not be taken into account (so it does not count
+     * as 'ignore', then).
+     *
+     * @param trigger The accepted trigger
+     * @param guard   Function that must return true in order for the trigger to be accepted
+     * @param action  The action to be performed
+     * @return The reciever
+     */
+    public StateConfiguration<S, T> permitInternalIf(T trigger, FuncBoolean guard, Action action) {
+        assert guard != null : "guard is null";
+        assert action != null : "action is null";
+        representation.addTriggerBehaviour(new InternalTriggerBehaviour<S, T>(
+              trigger, guard, action));
+        return this;
+    }
+
+    /**
      * Accept the specified trigger, execute exit actions and re-execute entry actions. Reentry behaves as though the
      * configured state transitions to an identical sibling state
      * <p>
@@ -837,7 +876,7 @@ public class StateConfiguration<S, T> {
 
     void enforceNotIdentityTransition(S destination) {
         if (destination.equals(representation.getUnderlyingState())) {
-            throw new IllegalStateException("Permit() (and PermitIf()) require that the destination state is not equal to the source state. To accept a trigger without changing state, use either Ignore() or PermitReentry().");
+            throw new IllegalStateException("Permit() (and PermitIf()) require that the destination state is not equal to the source state. To accept a trigger without changing state, use either ignore(), permitInternal() or permitReentry().");
         }
     }
 

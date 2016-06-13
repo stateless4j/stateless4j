@@ -197,6 +197,11 @@ public class StateMachine<S, T> {
             return;
         }
 
+        if (triggerBehaviour.isInternal()) {
+            triggerBehaviour.performAction(args);
+            return;
+        }
+
         S source = getState();
         OutVar<S> destination = new OutVar<>();
         if (triggerBehaviour.resultsInTransitionFrom(source, args, destination)) {
