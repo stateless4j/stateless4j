@@ -20,7 +20,7 @@ public class InitialStateTests {
         
         StateMachineConfig<State, Trigger> config = config(initial);
         
-        StateMachine<State, Trigger> sm = new StateMachine<>(initial, config);
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial, config);
         assertEquals(initial, sm.getState());
         assertFalse(executed);
     }
@@ -32,17 +32,16 @@ public class InitialStateTests {
         StateMachineConfig<State, Trigger> config = config(initial);
         config.enableEntryActionOfInitialState();
         
-        StateMachine<State, Trigger> sm = new StateMachine<>(initial, config);
+        StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(initial, config);
         assertEquals(initial, sm.getState());
         assertTrue(executed);
     }
 
     private StateMachineConfig<State, Trigger> config(final State initial) {
-        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<State, Trigger>();
         config.configure(initial)
                 .onEntry(new Action() {
 
-                    @Override
                     public void doIt() {
                         executed = true;
                     }

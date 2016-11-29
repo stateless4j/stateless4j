@@ -21,8 +21,8 @@ import java.util.Map;
  */
 public class StateMachineConfig<TState,TTrigger> {
 
-    private final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
-    private final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<>();
+    private final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<TState, StateRepresentation<TState, TTrigger>>();
+    private final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<TTrigger, TriggerWithParameters<TState, TTrigger>>();
     /**
      * Added in 2.5.2.
      * Default MUST be false for backward compatibility reasons. Prior to 2.5.2,
@@ -81,7 +81,7 @@ public class StateMachineConfig<TState,TTrigger> {
     private StateRepresentation<TState, TTrigger> getOrCreateRepresentation(TState state) {
         StateRepresentation<TState, TTrigger> result = stateConfiguration.get(state);
         if (result == null) {
-            result = new StateRepresentation<>(state);
+            result = new StateRepresentation<TState, TTrigger>(state);
             stateConfiguration.put(state, result);
         }
 
@@ -100,7 +100,7 @@ public class StateMachineConfig<TState,TTrigger> {
      * @return A configuration object through which the state can be configured
      */
     public StateConfiguration<TState, TTrigger> configure(TState state) {
-        return new StateConfiguration<>(getOrCreateRepresentation(state), new Func2<TState, StateRepresentation<TState, TTrigger>>() {
+        return new StateConfiguration<TState, TTrigger>(getOrCreateRepresentation(state), new Func2<TState, StateRepresentation<TState, TTrigger>>() {
 
             public StateRepresentation<TState, TTrigger> call(TState arg0) {
                 return getOrCreateRepresentation(arg0);
@@ -125,7 +125,7 @@ public class StateMachineConfig<TState,TTrigger> {
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
     public <TArg0> TriggerWithParameters1<TArg0, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0) {
-        TriggerWithParameters1<TArg0, TState, TTrigger> configuration = new TriggerWithParameters1<>(trigger, classe0);
+        TriggerWithParameters1<TArg0, TState, TTrigger> configuration = new TriggerWithParameters1<TArg0, TState, TTrigger>(trigger, classe0);
         saveTriggerConfiguration(configuration);
         return configuration;
     }
@@ -141,7 +141,7 @@ public class StateMachineConfig<TState,TTrigger> {
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
     public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1) {
-        TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> configuration = new TriggerWithParameters2<>(trigger, classe0, classe1);
+        TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> configuration = new TriggerWithParameters2<TArg0, TArg1, TState, TTrigger>(trigger, classe0, classe1);
         saveTriggerConfiguration(configuration);
         return configuration;
     }
@@ -159,30 +159,29 @@ public class StateMachineConfig<TState,TTrigger> {
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
     public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) {
-        TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> configuration = new TriggerWithParameters3<>(trigger, classe0, classe1, classe2);
+        TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> configuration = new TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger>(trigger, classe0, classe1, classe2);
         saveTriggerConfiguration(configuration);
         return configuration;
     }
 
     public void generateDotFileInto(final OutputStream dotFile) throws IOException {
-        try (OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8")) {
-            PrintWriter writer = new PrintWriter(w);
-            writer.write("digraph G {\n");
-            OutVar<TState> destination = new OutVar<>();
-            for (Map.Entry<TState, StateRepresentation<TState, TTrigger>> entry : this.stateConfiguration.entrySet()) {
-                Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviours = entry.getValue().getTriggerBehaviours();
-                for (Map.Entry<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviour : behaviours.entrySet()) {
-                    for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
-                        if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
-                            destination.set(null);
-                            triggerBehaviour.resultsInTransitionFrom(null, null, destination);
-                            writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
-                        }
+        OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8");
+        PrintWriter writer = new PrintWriter(w);
+        writer.write("digraph G {\n");
+        OutVar<TState> destination = new OutVar<TState>();
+        for (Map.Entry<TState, StateRepresentation<TState, TTrigger>> entry : this.stateConfiguration.entrySet()) {
+            Map<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviours = entry.getValue().getTriggerBehaviours();
+            for (Map.Entry<TTrigger, List<TriggerBehaviour<TState, TTrigger>>> behaviour : behaviours.entrySet()) {
+                for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
+                    if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
+                        destination.set(null);
+                        triggerBehaviour.resultsInTransitionFrom(null, null, destination);
+                        writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
                     }
                 }
             }
-            writer.write("}");
         }
+        writer.write("}");
     }
 
 

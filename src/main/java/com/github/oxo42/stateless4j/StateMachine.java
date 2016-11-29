@@ -52,22 +52,20 @@ public class StateMachine<S, T> {
      */
     public StateMachine(S initialState, StateMachineConfig<S, T> config) {
         this.config = config;
-        final StateReference<S, T> reference = new StateReference<>();
+        final StateReference<S, T> reference = new StateReference<S, T>();
         reference.setState(initialState);
         stateAccessor = new Func<S>() {
-            @Override
             public S call() {
                 return reference.getState();
             }
         };
         stateMutator = new Action1<S>() {
-            @Override
             public void doIt(S s) {
                 reference.setState(s);
             }
         };
         if (config.isEntryActionOfInitialStateEnabled()) {
-            Transition<S,T> initialTransition = new Transition(initialState, initialState, null);
+            Transition<S,T> initialTransition = new Transition<S,T>(initialState, initialState, null);
             getCurrentRepresentation().enter(initialTransition);
         }
     }
@@ -198,9 +196,9 @@ public class StateMachine<S, T> {
         }
 
         S source = getState();
-        OutVar<S> destination = new OutVar<>();
+        OutVar<S> destination = new OutVar<S>();
         if (triggerBehaviour.resultsInTransitionFrom(source, args, destination)) {
-            Transition<S, T> transition = new Transition<>(source, destination.get(), trigger);
+            Transition<S, T> transition = new Transition<S, T>(source, destination.get(), trigger);
 
             getCurrentRepresentation().exit(transition);
             setState(destination.get());
@@ -248,7 +246,7 @@ public class StateMachine<S, T> {
     @Override
     public String toString() {
         List<T> permittedTriggers = getPermittedTriggers();
-        List<String> parameters = new ArrayList<>();
+        List<String> parameters = new ArrayList<String>();
 
         for (T tTrigger : permittedTriggers) {
             parameters.add(tTrigger.toString());
