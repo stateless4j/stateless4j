@@ -187,6 +187,10 @@ public class StateConfiguration<S, T> {
         }, classe0);
     }
 
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, S, T> trigger, final Action1<TArg0> entryAction) {
+        return onEntryFrom(trigger, entryAction, null);
+    }
+
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -209,6 +213,10 @@ public class StateConfiguration<S, T> {
         return this;
     }
 
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, S, T> trigger, final Action2<TArg0, Transition<S, T>> entryAction) {
+        return onEntryFrom(trigger, entryAction);
+    }
+
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -228,6 +236,10 @@ public class StateConfiguration<S, T> {
                 entryAction.doIt(a0, a1);
             }
         }, classe0, classe1);
+    }
+
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Action2<TArg0, TArg1> entryAction) {
+        return onEntryFrom(trigger, entryAction, null, null);
     }
 
     /**
@@ -256,6 +268,10 @@ public class StateConfiguration<S, T> {
         return this;
     }
 
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Action3<TArg0, TArg1, Transition<S, T>> entryAction) {
+        return onEntryFrom(trigger, entryAction, null, null);
+    }
+
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
@@ -277,6 +293,10 @@ public class StateConfiguration<S, T> {
                 entryAction.doIt(a0, a1, a2);
             }
         }, classe0, classe1, classe2);
+    }
+
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, final Action3<TArg0, TArg1, TArg2> entryAction) {
+        return onEntryFrom(trigger, entryAction, null, null, null);
     }
 
     /**
@@ -306,6 +326,10 @@ public class StateConfiguration<S, T> {
             }
         });
         return this;
+    }
+
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, final Action4<TArg0, TArg1, TArg2, Transition<S, T>> entryAction) {
+        return onEntryFrom(trigger, entryAction);
     }
 
     /**
@@ -498,7 +522,7 @@ public class StateConfiguration<S, T> {
      * @return The reciever
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger,
-            final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector, FuncBoolean guard) {
+                                                                          final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector, FuncBoolean guard) {
         assert trigger != null : "trigger is null";
         assert destinationStateSelector != null : "destinationStateSelector is null";
         return publicPermitDynamicIf(
