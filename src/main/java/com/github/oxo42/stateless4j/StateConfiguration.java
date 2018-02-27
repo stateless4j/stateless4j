@@ -5,13 +5,9 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
 
-public class StateConfiguration<S, T> {
-    public static final String GUARD_IS_NULL = "guard is null";
-    public static final String ENTRY_ACTION_IS_NULL = "entryAction is null";
-    public static final String ACTION_IS_NULL = "action is null";
-    public static final String TRIGGER_IS_NULL = "trigger is null";
-    public static final String DESTINATION_STATE_SELECTOR_IS_NULL = "destinationStateSelector is null";
+import static com.github.oxo42.stateless4j.Settings.*;
 
+public class StateConfiguration<S, T> {
     private static final FuncBoolean NO_GUARD = new FuncBoolean() {
         @Override
         public boolean call() {
@@ -131,8 +127,8 @@ public class StateConfiguration<S, T> {
      * @return The reciever
      */
     public StateConfiguration<S, T> permitInternalIf(T trigger, FuncBoolean guard, Action action) {
-        assert guard != null : "guard is null";
-        assert action != null : "action is null";
+        assert guard != null : GUARD_IS_NULL;
+        assert action != null : ACTION_IS_NULL;
         representation.addTriggerBehaviour(new InternalTriggerBehaviour<S, T>(
                 trigger, guard, action));
         return this;
@@ -221,7 +217,7 @@ public class StateConfiguration<S, T> {
      * @return The receiver
      */
     public StateConfiguration<S, T> ignoreIf(T trigger, FuncBoolean guard) {
-        assert guard != null : "guard is null";
+        assert guard != null : GUARD_IS_NULL;
         representation.addTriggerBehaviour(new InternalTriggerBehaviour<S, T>(trigger, guard, NO_ACTION));
         return this;
     }
@@ -441,7 +437,7 @@ public class StateConfiguration<S, T> {
      * @return The receiver
      */
     public StateConfiguration<S, T> onExit(final Action exitAction) {
-        assert exitAction != null : "exitAction is null";
+        assert exitAction != null : EXIT_ACTION_IS_NULL;
         return onExit(new Action1<Transition<S, T>>() {
             @Override
             public void doIt(Transition<S, T> arg1) {
@@ -457,7 +453,7 @@ public class StateConfiguration<S, T> {
      * @return The receiver
      */
     public StateConfiguration<S, T> onExit(Action1<Transition<S, T>> exitAction) {
-        assert exitAction != null : "exitAction is null";
+        assert exitAction != null : EXIT_ACTION_IS_NULL;
         representation.addExitAction(exitAction);
         return this;
     }
@@ -651,7 +647,7 @@ public class StateConfiguration<S, T> {
      */
     public StateConfiguration<S, T> permitDynamicIf(T trigger, final Func<S> destinationStateSelector, FuncBoolean guard,
                                                     final Action action) {
-        assert destinationStateSelector != null : "destinationStateSelector is null";
+        assert destinationStateSelector != null : DESTINATION_STATE_SELECTOR_IS_NULL;
         return publicPermitDynamicIf(trigger, new Func2<Object[], S>() {
             @Override
             public S call(Object[] arg0) {
@@ -709,8 +705,8 @@ public class StateConfiguration<S, T> {
      */
     public <TArg0> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters1<TArg0, S, T> trigger, final Func2<TArg0, S> destinationStateSelector, FuncBoolean guard,
                                                             final Action1<TArg0> action) {
-        assert trigger != null : "trigger is null";
-        assert destinationStateSelector != null : "destinationStateSelector is null";
+        assert trigger != null : TRIGGER_IS_NULL;
+        assert destinationStateSelector != null : DESTINATION_STATE_SELECTOR_IS_NULL;
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
@@ -777,8 +773,8 @@ public class StateConfiguration<S, T> {
      */
     public <TArg0, TArg1> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, final Func3<TArg0, TArg1, S> destinationStateSelector, FuncBoolean guard,
                                                                    final Action2<TArg0, TArg1> action) {
-        assert trigger != null : "trigger is null";
-        assert destinationStateSelector != null : "destinationStateSelector is null";
+        assert trigger != null : TRIGGER_IS_NULL;
+        assert destinationStateSelector != null : DESTINATION_STATE_SELECTOR_IS_NULL;
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
@@ -853,8 +849,8 @@ public class StateConfiguration<S, T> {
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger,
                                                                           final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector, FuncBoolean guard, final Action3<TArg0, TArg1, TArg2> action) {
-        assert trigger != null : "trigger is null";
-        assert destinationStateSelector != null : "destinationStateSelector is null";
+        assert trigger != null : TRIGGER_IS_NULL;
+        assert destinationStateSelector != null : DESTINATION_STATE_SELECTOR_IS_NULL;
         return publicPermitDynamicIf(
                 trigger.getTrigger(), new Func2<Object[], S>() {
                     @SuppressWarnings("unchecked")
