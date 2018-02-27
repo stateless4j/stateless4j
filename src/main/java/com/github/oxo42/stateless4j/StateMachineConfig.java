@@ -2,11 +2,7 @@ package com.github.oxo42.stateless4j;
 
 import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
-import com.github.oxo42.stateless4j.triggers.TriggerBehaviour;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
-import com.github.oxo42.stateless4j.triggers.TriggerWithParameters3;
+import com.github.oxo42.stateless4j.triggers.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
