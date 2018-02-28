@@ -111,3 +111,6 @@ transition.
 License
 =======
 Apache 2.0 License
+
+Created by @oxo42
+Maintained by @Ktar5
