@@ -112,5 +112,7 @@ License
 =======
 Apache 2.0 License
 
-Created by @oxo42
-Maintained by @Ktar5
+
+Created by [@oxo42](https://github.com/oxo42)
+
+Maintained by [@Ktar5](https://github.com/ktar5)
