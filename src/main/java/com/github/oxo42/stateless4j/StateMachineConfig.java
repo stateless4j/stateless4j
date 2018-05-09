@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * The state machine configuration. Reusable.
  */
-public class StateMachineConfig<TState,TTrigger> {
+public class StateMachineConfig<TState, TTrigger> {
 
     private final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
     private final Map<TTrigger, TriggerWithParameters<TTrigger>> triggerConfiguration = new HashMap<>();
@@ -30,7 +30,7 @@ public class StateMachineConfig<TState,TTrigger> {
      * Gets whether the entry action of the initial state of the state machine
      * must be executed when the state machine starts.
      * Default is false for backward compatibility sake.
-     * 
+     * <p>
      * Added in 2.5.2
      *
      * @return true if the entry action of the initial state of the state machine
@@ -39,7 +39,7 @@ public class StateMachineConfig<TState,TTrigger> {
     public boolean isEntryActionOfInitialStateEnabled() {
         return entryActionOfInitialStateEnabled;
     }
-    
+
     /**
      * Enables the state machine to execute the entry action of the initial state
      * when the state machine starts.
@@ -48,7 +48,7 @@ public class StateMachineConfig<TState,TTrigger> {
     public void enableEntryActionOfInitialState() {
         this.entryActionOfInitialStateEnabled = true;
     }
-    
+
     /**
      * Disables the state machine to execute the entry action of the initial state
      * when the state machine starts.
@@ -57,7 +57,7 @@ public class StateMachineConfig<TState,TTrigger> {
     public void disableEntryActionOfInitialState() {
         this.entryActionOfInitialStateEnabled = false;
     }
-    
+
     /**
      * Return StateRepresentation for the specified state. May return null.
      *
@@ -65,7 +65,7 @@ public class StateMachineConfig<TState,TTrigger> {
      * @return StateRepresentation for the specified state, or null.
      */
     public StateRepresentation<TState, TTrigger> getRepresentation(TState state) {
-        return  stateConfiguration.get(state);
+        return stateConfiguration.get(state);
     }
 
     /**
@@ -161,6 +161,10 @@ public class StateMachineConfig<TState,TTrigger> {
     }
 
     public void generateDotFileInto(final OutputStream dotFile) throws IOException {
+        generateDotFileInto(dotFile, false);
+    }
+
+    public void generateDotFileInto(final OutputStream dotFile, boolean printLabels) throws IOException {
         try (OutputStreamWriter w = new OutputStreamWriter(dotFile, "UTF-8")) {
             PrintWriter writer = new PrintWriter(w);
             writer.write("digraph G {\n");
@@ -170,7 +174,11 @@ public class StateMachineConfig<TState,TTrigger> {
                     for (TriggerBehaviour<TState, TTrigger> triggerBehaviour : behaviour.getValue()) {
                         if (triggerBehaviour instanceof TransitioningTriggerBehaviour) {
                             TState destination = triggerBehaviour.transitionsTo(null, null);
-                            writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
+                            if (printLabels) {
+                                writer.write(String.format("\t%s -> %s [label = \"%s\" ];\n", entry.getKey(), destination, triggerBehaviour.getTrigger()));
+                            } else {
+                                writer.write(String.format("\t%s -> %s;\n", entry.getKey(), destination));
+                            }
                         }
                     }
                 }
@@ -178,7 +186,6 @@ public class StateMachineConfig<TState,TTrigger> {
             writer.write("}");
         }
     }
-
 
 
 }
