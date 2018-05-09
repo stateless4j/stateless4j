@@ -161,7 +161,7 @@ public class StateMachine<S, T> {
      * @param arg0    The first argument
      * @param <TArg0> Type of the first trigger argument
      */
-    public <TArg0> void fire(TriggerWithParameters1<TArg0, S, T> trigger, TArg0 arg0) {
+    public <TArg0> void fire(TriggerWithParameters1<TArg0, T> trigger, TArg0 arg0) {
         assert trigger != null : TRIGGER_IS_NULL;
         publicFire(trigger.getTrigger(), arg0);
     }
@@ -178,7 +178,7 @@ public class StateMachine<S, T> {
      * @param <TArg0> Type of the first trigger argument
      * @param <TArg1> Type of the second trigger argument
      */
-    public <TArg0, TArg1> void fire(TriggerWithParameters2<TArg0, TArg1, S, T> trigger, TArg0 arg0, TArg1 arg1) {
+    public <TArg0, TArg1> void fire(TriggerWithParameters2<TArg0, TArg1, T> trigger, TArg0 arg0, TArg1 arg1) {
         assert trigger != null : TRIGGER_IS_NULL;
         publicFire(trigger.getTrigger(), arg0, arg1);
     }
@@ -197,7 +197,7 @@ public class StateMachine<S, T> {
      * @param <TArg1> Type of the second trigger argument
      * @param <TArg2> Type of the third trigger argument
      */
-    public <TArg0, TArg1, TArg2> void fire(TriggerWithParameters3<TArg0, TArg1, TArg2, S, T> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) {
+    public <TArg0, TArg1, TArg2> void fire(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, TArg0 arg0, TArg1 arg1, TArg2 arg2) {
         assert trigger != null : TRIGGER_IS_NULL;
         publicFire(trigger.getTrigger(), arg0, arg1, arg2);
     }
@@ -206,7 +206,7 @@ public class StateMachine<S, T> {
         if (shouldLog) {
             log(trigger, args);
         }
-        TriggerWithParameters<S, T> configuration = config.getTriggerConfiguration(trigger);
+        TriggerWithParameters<T> configuration = config.getTriggerConfiguration(trigger);
         if (configuration != null) {
             configuration.validateParameters(args);
         }

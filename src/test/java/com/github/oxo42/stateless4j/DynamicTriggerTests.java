@@ -3,7 +3,7 @@ package com.github.oxo42.stateless4j;
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.delegates.Func2;
 import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
-import org.junit.Assert;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class DynamicTriggerTests {
     @Test
     public void DestinationStateIsCalculatedBasedOnTriggerParameters() {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
-        TriggerWithParameters1<Integer, State, Trigger> trigger = config.setTriggerParameters(
+        TriggerWithParameters1<Integer, Trigger> trigger = config.setTriggerParameters(
                 Trigger.X, Integer.class);
         config.configure(State.A).permitDynamic(trigger, new Func2<Integer, State>() {
             @Override

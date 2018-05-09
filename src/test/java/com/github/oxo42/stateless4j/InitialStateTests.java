@@ -68,7 +68,7 @@ public class InitialStateTests {
 
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
 
-        TriggerWithParameters1<Object, State, Trigger> trigger =
+        TriggerWithParameters1<Object, Trigger> trigger =
                 config.setTriggerParameters(Trigger.X, Object.class);
 
         config.configure(initial)

@@ -18,7 +18,7 @@ import java.util.Map;
 public class StateMachineConfig<TState, TTrigger> {
 
     private final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
-    private final Map<TTrigger, TriggerWithParameters<TState, TTrigger>> triggerConfiguration = new HashMap<>();
+    private final Map<TTrigger, TriggerWithParameters<TTrigger>> triggerConfiguration = new HashMap<>();
     /**
      * Added in 2.5.2.
      * Default MUST be false for backward compatibility reasons. Prior to 2.5.2,
@@ -84,7 +84,7 @@ public class StateMachineConfig<TState, TTrigger> {
         return result;
     }
 
-    public TriggerWithParameters<TState, TTrigger> getTriggerConfiguration(TTrigger trigger) {
+    public TriggerWithParameters<TTrigger> getTriggerConfiguration(TTrigger trigger) {
         return triggerConfiguration.get(trigger);
     }
 
@@ -104,7 +104,7 @@ public class StateMachineConfig<TState, TTrigger> {
         });
     }
 
-    private void saveTriggerConfiguration(TriggerWithParameters<TState, TTrigger> trigger) {
+    private void saveTriggerConfiguration(TriggerWithParameters<TTrigger> trigger) {
         if (triggerConfiguration.containsKey(trigger.getTrigger())) {
             throw new IllegalStateException("Parameters for the trigger '" + trigger + "' have already been configured.");
         }
@@ -120,8 +120,8 @@ public class StateMachineConfig<TState, TTrigger> {
      * @param <TArg0> Type of the first trigger argument
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
-    public <TArg0> TriggerWithParameters1<TArg0, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0) {
-        TriggerWithParameters1<TArg0, TState, TTrigger> configuration = new TriggerWithParameters1<>(trigger, classe0);
+    public <TArg0> TriggerWithParameters1<TArg0, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0) {
+        TriggerWithParameters1<TArg0, TTrigger> configuration = new TriggerWithParameters1<>(trigger, classe0);
         saveTriggerConfiguration(configuration);
         return configuration;
     }
@@ -136,8 +136,8 @@ public class StateMachineConfig<TState, TTrigger> {
      * @param <TArg1> Type of the second trigger argument
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
-    public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1) {
-        TriggerWithParameters2<TArg0, TArg1, TState, TTrigger> configuration = new TriggerWithParameters2<>(trigger, classe0, classe1);
+    public <TArg0, TArg1> TriggerWithParameters2<TArg0, TArg1, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1) {
+        TriggerWithParameters2<TArg0, TArg1, TTrigger> configuration = new TriggerWithParameters2<>(trigger, classe0, classe1);
         saveTriggerConfiguration(configuration);
         return configuration;
     }
@@ -154,8 +154,8 @@ public class StateMachineConfig<TState, TTrigger> {
      * @param <TArg2> Type of the third trigger argument
      * @return An object that can be passed to the fire() method in order to fire the parameterised trigger
      */
-    public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) {
-        TriggerWithParameters3<TArg0, TArg1, TArg2, TState, TTrigger> configuration = new TriggerWithParameters3<>(trigger, classe0, classe1, classe2);
+    public <TArg0, TArg1, TArg2> TriggerWithParameters3<TArg0, TArg1, TArg2, TTrigger> setTriggerParameters(TTrigger trigger, Class<TArg0> classe0, Class<TArg1> classe1, Class<TArg2> classe2) {
+        TriggerWithParameters3<TArg0, TArg1, TArg2, TTrigger> configuration = new TriggerWithParameters3<>(trigger, classe0, classe1, classe2);
         saveTriggerConfiguration(configuration);
         return configuration;
     }

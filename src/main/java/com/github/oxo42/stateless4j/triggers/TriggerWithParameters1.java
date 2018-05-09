@@ -1,6 +1,6 @@
 package com.github.oxo42.stateless4j.triggers;
 
-public class TriggerWithParameters1<TArg0, TState, TTrigger> extends TriggerWithParameters<TState, TTrigger> {
+public class TriggerWithParameters1<TArg0, TTrigger> extends TriggerWithParameters<TTrigger> {
 
     /**
      * Create a configured trigger
