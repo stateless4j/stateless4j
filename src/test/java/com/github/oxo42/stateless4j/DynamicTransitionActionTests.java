@@ -24,14 +24,14 @@ public class DynamicTransitionActionTests {
     final Enum StateA = State.A, StateB = State.B, StateC = State.C,
             TriggerX = Trigger.X, TriggerY = Trigger.Y;
     
-    final private TriggerWithParameters1<Integer, State, Trigger> TriggerX1 =
-    		new TriggerWithParameters1<Integer, State, Trigger>(Trigger.X, Integer.class);
+    final private TriggerWithParameters1<Integer, Trigger> TriggerX1 =
+    		new TriggerWithParameters1<Integer, Trigger>(Trigger.X, Integer.class);
     
-    final private TriggerWithParameters2<Integer, Integer, State, Trigger> TriggerY2 =
-    		new TriggerWithParameters2<Integer, Integer, State, Trigger>(Trigger.Y, Integer.class, Integer.class);
+    final private TriggerWithParameters2<Integer, Integer, Trigger> TriggerY2 =
+    		new TriggerWithParameters2<Integer, Integer, Trigger>(Trigger.Y, Integer.class, Integer.class);
     
-    final private TriggerWithParameters3<Integer, Integer, Integer, State, Trigger> TriggerY3 =
-    		new TriggerWithParameters3<Integer, Integer, Integer, State, Trigger>(Trigger.Y, Integer.class, Integer.class, Integer.class);
+    final private TriggerWithParameters3<Integer, Integer, Integer, Trigger> TriggerY3 =
+    		new TriggerWithParameters3<Integer, Integer, Integer, Trigger>(Trigger.Y, Integer.class, Integer.class, Integer.class);
 
     
     private class DynamicallyGotoState<T> implements Func<State>, Func2<T, State>, Func3<T, T, State>, Func4<T, T, T, State> {
