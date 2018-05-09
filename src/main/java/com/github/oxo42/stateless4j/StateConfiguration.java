@@ -295,18 +295,25 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger     The trigger by which the state must be entered in order for the action to execute
      * @param entryAction Action to execute, providing details of the transition
-     * @param classe0     Class argument
      * @param <TArg0>     Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, T> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, T> trigger, final Action1<TArg0> entryAction) {
         assert entryAction != null : ENTRY_ACTION_IS_NULL;
         return onEntryFrom(trigger, new Action2<TArg0, Transition<S, T>>() {
             @Override
             public void doIt(TArg0 arg1, Transition<S, T> arg2) {
                 entryAction.doIt(arg1);
             }
-        }, classe0);
+        });
+    }
+
+    /**
+     * @deprecated  replaced by {@link #onEntryFrom(TriggerWithParameters1, Action1)} ()}
+     */
+    @Deprecated
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, T> trigger, final Action1<TArg0> entryAction, final Class<TArg0> classe0) {
+        return onEntryFrom(trigger, entryAction);
     }
 
     /**
@@ -314,11 +321,10 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger     The trigger by which the state must be entered in order for the action to execute
      * @param entryAction Action to execute, providing details of the transition
-     * @param classe0     Class argument
      * @param <TArg0>     Type of the first trigger argument
      * @return The receiver
      */
-    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, T> trigger, final Action2<TArg0, Transition<S, T>> entryAction, final Class<TArg0> classe0) {
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, T> trigger, final Action2<TArg0, Transition<S, T>> entryAction) {
         assert trigger != null : TRIGGER_IS_NULL;
         assert entryAction != null : ENTRY_ACTION_IS_NULL;
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
@@ -332,24 +338,11 @@ public class StateConfiguration<S, T> {
     }
 
     /**
-     * Specify an action that will execute when transitioning into the configured state
-     *
-     * @param trigger     The trigger by which the state must be entered in order for the action to execute
-     * @param entryAction Action to execute, providing details of the transition
-     * @param classe0     Class argument
-     * @param classe1     Class argument
-     * @param <TArg0>     Type of the first trigger argument
-     * @param <TArg1>     Type of the second trigger argument
-     * @return The receiver
+     * @deprecated  replaced by {@link #onEntryFrom(TriggerWithParameters1, Action2)} ()}
      */
-    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
-        assert entryAction != null : ENTRY_ACTION_IS_NULL;
-        return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<S, T>>() {
-            @Override
-            public void doIt(TArg0 a0, TArg1 a1, Transition<S, T> t) {
-                entryAction.doIt(a0, a1);
-            }
-        }, classe0, classe1);
+    @Deprecated
+    public <TArg0> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters1<TArg0, T> trigger, final Action2<TArg0, Transition<S, T>> entryAction, final Class<TArg0> classe0) {
+        return onEntryFrom(trigger, entryAction);
     }
 
     /**
@@ -357,13 +350,38 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger     The trigger by which the state must be entered in order for the action to execute
      * @param entryAction Action to execute, providing details of the transition
-     * @param classe0     Class argument
-     * @param classe1     Class argument
      * @param <TArg0>     Type of the first trigger argument
      * @param <TArg1>     Type of the second trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Action3<TArg0, TArg1, Transition<S, T>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Action2<TArg0, TArg1> entryAction) {
+        assert entryAction != null : ENTRY_ACTION_IS_NULL;
+        return onEntryFrom(trigger, new Action3<TArg0, TArg1, Transition<S, T>>() {
+            @Override
+            public void doIt(TArg0 a0, TArg1 a1, Transition<S, T> t) {
+                entryAction.doIt(a0, a1);
+            }
+        });
+    }
+
+    /**
+     * @deprecated  replaced by {@link #onEntryFrom(TriggerWithParameters2, Action2)} ()}
+     */
+    @Deprecated
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Action2<TArg0, TArg1> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
+        return onEntryFrom(trigger, entryAction);
+    }
+
+    /**
+     * Specify an action that will execute when transitioning into the configured state
+     *
+     * @param trigger     The trigger by which the state must be entered in order for the action to execute
+     * @param entryAction Action to execute, providing details of the transition
+     * @param <TArg0>     Type of the first trigger argument
+     * @param <TArg1>     Type of the second trigger argument
+     * @return The receiver
+     */
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Action3<TArg0, TArg1, Transition<S, T>> entryAction) {
         assert trigger != null : TRIGGER_IS_NULL;
         assert entryAction != null : ENTRY_ACTION_IS_NULL;
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
@@ -379,26 +397,11 @@ public class StateConfiguration<S, T> {
     }
 
     /**
-     * Specify an action that will execute when transitioning into the configured state
-     *
-     * @param trigger     The trigger by which the state must be entered in order for the action to execute
-     * @param entryAction Action to execute, providing details of the transition
-     * @param classe0     Class argument
-     * @param classe1     Class argument
-     * @param classe2     Class argument
-     * @param <TArg0>     Type of the first trigger argument
-     * @param <TArg1>     Type of the second trigger argument
-     * @param <TArg2>     Type of the third trigger argument
-     * @return The receiver
+     * @deprecated  replaced by {@link #onEntryFrom(TriggerWithParameters2, Action3)} ()}
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
-        assert entryAction != null : ENTRY_ACTION_IS_NULL;
-        return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<S, T>>() {
-            @Override
-            public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<S, T> t) {
-                entryAction.doIt(a0, a1, a2);
-            }
-        }, classe0, classe1, classe2);
+    @Deprecated
+    public <TArg0, TArg1> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Action3<TArg0, TArg1, Transition<S, T>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1) {
+        return onEntryFrom(trigger, entryAction);
     }
 
     /**
@@ -406,15 +409,40 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger     The trigger by which the state must be entered in order for the action to execute
      * @param entryAction Action to execute, providing details of the transition
-     * @param classe0     Class argument
-     * @param classe1     Class argument
-     * @param classe2     Class argument
      * @param <TArg0>     Type of the first trigger argument
      * @param <TArg1>     Type of the second trigger argument
      * @param <TArg2>     Type of the third trigger argument
      * @return The receiver
      */
-    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, final Action4<TArg0, TArg1, TArg2, Transition<S, T>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, final Action3<TArg0, TArg1, TArg2> entryAction) {
+        assert entryAction != null : ENTRY_ACTION_IS_NULL;
+        return onEntryFrom(trigger, new Action4<TArg0, TArg1, TArg2, Transition<S, T>>() {
+            @Override
+            public void doIt(TArg0 a0, TArg1 a1, TArg2 a2, Transition<S, T> t) {
+                entryAction.doIt(a0, a1, a2);
+            }
+        });
+    }
+
+    /**
+     * @deprecated  replaced by {@link #onEntryFrom(TriggerWithParameters3, Action3)} ()}
+     */
+    @Deprecated
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, final Action3<TArg0, TArg1, TArg2> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
+        return onEntryFrom(trigger, entryAction);
+    }
+
+    /**
+     * Specify an action that will execute when transitioning into the configured state
+     *
+     * @param trigger     The trigger by which the state must be entered in order for the action to execute
+     * @param entryAction Action to execute, providing details of the transition
+     * @param <TArg0>     Type of the first trigger argument
+     * @param <TArg1>     Type of the second trigger argument
+     * @param <TArg2>     Type of the third trigger argument
+     * @return The receiver
+     */
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, final Action4<TArg0, TArg1, TArg2, Transition<S, T>> entryAction) {
         assert trigger != null : TRIGGER_IS_NULL;
         assert entryAction != null : ENTRY_ACTION_IS_NULL;
         representation.addEntryAction(trigger.getTrigger(), new Action2<Transition<S, T>, Object[]>() {
@@ -428,6 +456,14 @@ public class StateConfiguration<S, T> {
             }
         });
         return this;
+    }
+
+    /**
+     * @deprecated  replaced by {@link #onEntryFrom(TriggerWithParameters3, Action4)} ()}
+     */
+    @Deprecated
+    public <TArg0, TArg1, TArg2> StateConfiguration<S, T> onEntryFrom(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger, final Action4<TArg0, TArg1, TArg2, Transition<S, T>> entryAction, final Class<TArg0> classe0, final Class<TArg1> classe1, final Class<TArg2> classe2) {
+        return onEntryFrom(trigger, entryAction);
     }
 
     /**
