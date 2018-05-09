@@ -88,6 +88,10 @@ public class StateMachineConfig<TState, TTrigger> {
         return triggerConfiguration.get(trigger);
     }
 
+    public boolean isTriggerConfigured(TTrigger trigger) {
+        return triggerConfiguration.containsKey(trigger);
+    }
+
     /**
      * Begin configuration of the entry/exit actions and allowed transitions
      * when the state machine is in a particular state
