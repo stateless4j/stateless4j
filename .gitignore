@@ -4,4 +4,9 @@ target/
 .idea/
 *.iml
 
+._*
 .DS_Store
+
+.settings
+.classpath
+.project
