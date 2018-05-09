@@ -40,7 +40,7 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger          The accepted trigger
      * @param destinationState The state that the trigger will cause a transition to
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permit(T trigger, S destinationState) {
         enforceNotIdentityTransition(destinationState);
@@ -57,7 +57,7 @@ public class StateConfiguration<S, T> {
      * @param trigger          The accepted trigger
      * @param destinationState The state that the trigger will cause a transition to
      * @param action           The action to be performed "during" transition
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permit(T trigger, S destinationState, final Action action) {
         enforceNotIdentityTransition(destinationState);
@@ -70,7 +70,7 @@ public class StateConfiguration<S, T> {
      * @param trigger          The accepted trigger
      * @param destinationState The state that the trigger will cause a transition to
      * @param guard            Function that must return true in order for the trigger to be accepted
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitIf(T trigger, S destinationState, FuncBoolean guard) {
         enforceNotIdentityTransition(destinationState);
@@ -88,7 +88,7 @@ public class StateConfiguration<S, T> {
      * @param destinationState The state that the trigger will cause a transition to
      * @param guard            Function that must return true in order for the trigger to be accepted
      * @param action           The action to be performed "during" transition
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitIf(T trigger, S destinationState, FuncBoolean guard, Action action) {
         enforceNotIdentityTransition(destinationState);
@@ -104,7 +104,7 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger The accepted trigger
      * @param action  The action to be performed
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitInternal(T trigger, Action action) {
         return permitInternalIf(trigger, NO_GUARD, action);
@@ -124,7 +124,7 @@ public class StateConfiguration<S, T> {
      * @param trigger The accepted trigger
      * @param guard   Function that must return true in order for the trigger to be accepted
      * @param action  The action to be performed
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitInternalIf(T trigger, FuncBoolean guard, Action action) {
         assert guard != null : GUARD_IS_NULL;
@@ -142,7 +142,7 @@ public class StateConfiguration<S, T> {
      * transitioning between super- and sub-states
      *
      * @param trigger The accepted trigger
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitReentry(T trigger) {
         return publicPermit(trigger, representation.getUnderlyingState());
@@ -160,7 +160,7 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger The accepted trigger
      * @param action  The action to be performed "during" transition
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitReentry(T trigger, Action action) {
         return publicPermit(trigger, representation.getUnderlyingState(), action);
@@ -175,7 +175,7 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger The accepted trigger
      * @param guard   Function that must return true in order for the trigger to be accepted
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitReentryIf(T trigger, FuncBoolean guard) {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard);
@@ -193,7 +193,7 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger The accepted trigger
      * @param guard   Function that must return true in order for the trigger to be accepted
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitReentryIf(T trigger, FuncBoolean guard, Action action) {
         return publicPermitIf(trigger, representation.getUnderlyingState(), guard, action);
@@ -483,7 +483,7 @@ public class StateConfiguration<S, T> {
      *
      * @param trigger                  The accepted trigger
      * @param destinationStateSelector Function to calculate the state that the trigger will cause a transition to
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitDynamic(T trigger, final Func<S> destinationStateSelector) {
         return permitDynamicIf(trigger, destinationStateSelector, NO_GUARD);
@@ -620,7 +620,7 @@ public class StateConfiguration<S, T> {
      * @param trigger                  The accepted trigger
      * @param destinationStateSelector Function to calculate the state that the trigger will cause a transition to
      * @param guard                    Function that must return true in order for the  trigger to be accepted
-     * @return The reciever
+     * @return The receiver
      */
     public StateConfiguration<S, T> permitDynamicIf(T trigger, final Func<S> destinationStateSelector, FuncBoolean guard) {
         assert destinationStateSelector != null : DESTINATION_STATE_SELECTOR_IS_NULL;
@@ -670,7 +670,7 @@ public class StateConfiguration<S, T> {
      * @param destinationStateSelector Function to calculate the state that the trigger will cause a transition to
      * @param guard                    Function that must return true in order for the  trigger to be accepted
      * @param <TArg0>                  Type of the first trigger argument
-     * @return The reciever
+     * @return The receiver
      */
     public <TArg0> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters1<TArg0, T> trigger, final Func2<TArg0, S> destinationStateSelector, FuncBoolean guard) {
         assert trigger != null : TRIGGER_IS_NULL;
@@ -735,7 +735,7 @@ public class StateConfiguration<S, T> {
      * @param guard                    Function that must return true in order for the  trigger to be accepted
      * @param <TArg0>                  Type of the first trigger argument
      * @param <TArg1>                  Type of the second trigger argument
-     * @return The reciever
+     * @return The receiver
      */
     public <TArg0, TArg1> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters2<TArg0, TArg1, T> trigger, final Func3<TArg0, TArg1, S> destinationStateSelector, FuncBoolean guard) {
         assert trigger != null : TRIGGER_IS_NULL;
@@ -808,7 +808,7 @@ public class StateConfiguration<S, T> {
      * @param <TArg0>                  Type of the first trigger argument
      * @param <TArg1>                  Type of the second trigger argument
      * @param <TArg2>                  Type of the third trigger argument
-     * @return The reciever
+     * @return The receiver
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger,
                                                                           final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector, FuncBoolean guard) {
@@ -845,7 +845,7 @@ public class StateConfiguration<S, T> {
      * @param <TArg0>                  Type of the first trigger argument
      * @param <TArg1>                  Type of the second trigger argument
      * @param <TArg2>                  Type of the third trigger argument
-     * @return The reciever
+     * @return The receiver
      */
     public <TArg0, TArg1, TArg2> StateConfiguration<S, T> permitDynamicIf(TriggerWithParameters3<TArg0, TArg1, TArg2, T> trigger,
                                                                           final Func4<TArg0, TArg1, TArg2, S> destinationStateSelector, FuncBoolean guard, final Action3<TArg0, TArg1, TArg2> action) {

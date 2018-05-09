@@ -11,25 +11,25 @@ public class TriggerBehaviourTests {
 
     @Test
     public void ExposesCorrectUnderlyingTrigger() {
-        TransitioningTriggerBehaviour<State, Trigger> transtioning = new TransitioningTriggerBehaviour<>(
+        TransitioningTriggerBehaviour<State, Trigger> transitioning = new TransitioningTriggerBehaviour<>(
                 Trigger.X, State.C, InternalTriggerBehaviourTests.returnTrue, InternalTriggerBehaviourTests.nopAction);
 
-        assertEquals(Trigger.X, transtioning.getTrigger());
+        assertEquals(Trigger.X, transitioning.getTrigger());
     }
 
     @Test
     public void WhenGuardConditionFalse_IsGuardConditionMetIsFalse() {
-        TransitioningTriggerBehaviour<State, Trigger> transtioning = new TransitioningTriggerBehaviour<>(
+        TransitioningTriggerBehaviour<State, Trigger> transitioning = new TransitioningTriggerBehaviour<>(
                 Trigger.X, State.C, InternalTriggerBehaviourTests.returnFalse, InternalTriggerBehaviourTests.nopAction);
 
-        assertFalse(transtioning.isGuardConditionMet());
+        assertFalse(transitioning.isGuardConditionMet());
     }
 
     @Test
     public void WhenGuardConditionTrue_IsGuardConditionMetIsTrue() {
-        TransitioningTriggerBehaviour<State, Trigger> transtioning = new TransitioningTriggerBehaviour<>(
+        TransitioningTriggerBehaviour<State, Trigger> transitioning = new TransitioningTriggerBehaviour<>(
                 Trigger.X, State.C, InternalTriggerBehaviourTests.returnTrue, InternalTriggerBehaviourTests.nopAction);
 
-        assertTrue(transtioning.isGuardConditionMet());
+        assertTrue(transitioning.isGuardConditionMet());
     }
 }

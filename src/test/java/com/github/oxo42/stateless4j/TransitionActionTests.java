@@ -65,10 +65,10 @@ public class TransitionActionTests {
     public void TransitionActionIsPerformedBetweenExitAndEntry() {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
 
-        List<Integer> list = new ArrayList<Integer>();
-        Action exitAction = new CountingAction(list, new Integer(1));
-        Action transitionAction = new CountingAction(list, new Integer(2));
-        Action entryAction = new CountingAction(list, new Integer(3));
+        List<Integer> list = new ArrayList<>();
+        Action exitAction = new CountingAction(list, 1);
+        Action transitionAction = new CountingAction(list, 2);
+        Action entryAction = new CountingAction(list, 3);
 
         config.configure(State.A)
                 .onExit(exitAction)
@@ -83,9 +83,9 @@ public class TransitionActionTests {
         assertEquals(State.B, sm.getState());
 
         assertEquals(3, list.size());
-        assertEquals(new Integer(1), list.get(0));
-        assertEquals(new Integer(2), list.get(1));
-        assertEquals(new Integer(3), list.get(2));
+        assertEquals(Integer.valueOf(1), list.get(0));
+        assertEquals(Integer.valueOf(2), list.get(1));
+        assertEquals(Integer.valueOf(3), list.get(2));
     }
 
     @Test
@@ -156,10 +156,10 @@ public class TransitionActionTests {
     public void ReentryActionIsPerformedBetweenExitAndEntry() {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
         
-        List<Integer> list = new ArrayList<Integer>();
-        Action entryAction = new CountingAction(list, new Integer(3));
-        Action transitionAction = new CountingAction(list, new Integer(2));
-        Action exitAction = new CountingAction(list, new Integer(1));
+        List<Integer> list = new ArrayList<>();
+        Action entryAction = new CountingAction(list, 3);
+        Action transitionAction = new CountingAction(list, 2);
+        Action exitAction = new CountingAction(list, 1);
 
         config.configure(State.A)
         		.onEntry(entryAction)
@@ -172,9 +172,9 @@ public class TransitionActionTests {
         assertEquals(State.A, sm.getState());
         
         assertEquals(3, list.size());
-        assertEquals(new Integer(1), list.get(0));
-        assertEquals(new Integer(2), list.get(1));
-        assertEquals(new Integer(3), list.get(2));
+        assertEquals(Integer.valueOf(1), list.get(0));
+        assertEquals(Integer.valueOf(2), list.get(1));
+        assertEquals(Integer.valueOf(3), list.get(2));
     }
     
     @Test

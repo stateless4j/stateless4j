@@ -40,10 +40,10 @@ public class StateMachine<S, T> {
     /**
      * Construct a state machine
      *
-     * @param intialState The initial state
+     * @param initialState The initial state
      */
-    public StateMachine(S intialState) {
-        this(intialState, new StateMachineConfig<S, T>());
+    public StateMachine(S initialState) {
+        this(initialState, new StateMachineConfig<S, T>());
     }
     
     /**

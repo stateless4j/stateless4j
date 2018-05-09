@@ -138,7 +138,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void WhenDiscriminatedByGuard_ChoosesPermitedTransition() {
+    public void WhenDiscriminatedByGuard_ChoosesPermittedTransition() {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
 
         config.configure(State.B)
@@ -178,7 +178,7 @@ public class StateMachineTests {
     }
 
     @Test
-    public void IfSelfTransitionPermited_ActionsFire() {
+    public void IfSelfTransitionPermitted_ActionsFire() {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
 
         config.configure(State.B)

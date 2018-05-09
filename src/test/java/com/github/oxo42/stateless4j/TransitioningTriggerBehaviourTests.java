@@ -10,17 +10,17 @@ public class TransitioningTriggerBehaviourTests {
 
 	@Test
 	public void TransitionIsExternal() {
-		TransitioningTriggerBehaviour<State, Trigger> transtioning =
+		TransitioningTriggerBehaviour<State, Trigger> transitioning =
 				new TransitioningTriggerBehaviour<>(Trigger.X, State.C,
 						InternalTriggerBehaviourTests.returnTrue, InternalTriggerBehaviourTests.nopAction);
-		assertFalse(transtioning.isInternal());
+		assertFalse(transitioning.isInternal());
 	}
 
     @Test
     public void TransitionsToDestinationState() {
-        TransitioningTriggerBehaviour<State, Trigger> transtioning =
+        TransitioningTriggerBehaviour<State, Trigger> transitioning =
                 new TransitioningTriggerBehaviour<>(Trigger.X, State.C,
                         InternalTriggerBehaviourTests.returnTrue, InternalTriggerBehaviourTests.nopAction);
-        assertEquals(State.C, transtioning.transitionsTo(State.B, new Object[0]));
+        assertEquals(State.C, transitioning.transitionsTo(State.B, new Object[0]));
     }
 }
