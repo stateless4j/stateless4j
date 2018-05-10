@@ -1,7 +1,12 @@
 package com.github.oxo42.stateless4j;
 
 import com.github.oxo42.stateless4j.delegates.Action;
+import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.delegates.Action3;
 import com.github.oxo42.stateless4j.delegates.FuncBoolean;
+import com.github.oxo42.stateless4j.transitions.Transition;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters1;
+import com.github.oxo42.stateless4j.triggers.TriggerWithParameters2;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,6 +20,7 @@ public class StateMachineTests {
     boolean fired = false;
     String entryArgS = null;
     int entryArgI = 0;
+    Object[] receivedArgs;
 
     @Test
     public void CanUseReferenceTypeMarkers() {
@@ -177,6 +183,30 @@ public class StateMachineTests {
         assertFalse(fired);
     }
 
+
+
+    @Test
+    public void WhenUnhandledTriggerisFired_UnhandledTriggerActionIsCalled() {
+        StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
+        config.configure(State.B);
+
+        fired = false;
+        entryArgS = null;
+        StateMachine<State, Trigger> sm = new StateMachine<>(State.B, config);
+        sm.onUnhandledTrigger(new Action3<State, Trigger, Object[]>() {
+            @Override
+            public void doIt(State trigger, Trigger state, Object[] args) {
+                fired = true;
+                entryArgS = (String) args[0];
+            }
+        });
+
+        sm.fire(new TriggerWithParameters1<>(Trigger.X, String.class),"Param");
+
+        assertTrue(fired);
+        assertEquals(entryArgS, "Param");
+    }
+
     @Test
     public void IfSelfTransitionPermitted_ActionsFire() {
         StateMachineConfig<State, Trigger> config = new StateMachineConfig<>();
@@ -219,32 +249,30 @@ public class StateMachineTests {
         config.setTriggerParameters(Trigger.X, String.class);
     }
 
-//        @Test
-//        public void ParametersSuppliedToFireArePassedToEntryAction()
-//        {
-//        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
-//
-//        	TriggerWithParameters2<String, Integer, State, Trigger> x = sm.setTriggerParameters(Trigger.X, String.class, int.class);
-//
-//            sm.configure(State.B)
-//                .permit(Trigger.X, State.C);
-//
-//
-//            sm.configure(State.C)
-//                .onEntryFrom(x, new Action2<String, int>() {
-//                	public void doIt(String s, int i) {
-//                		entryArgS = s;
-//                        entryArgI = i;
-//				}); 
-//
-//            var suppliedArgS = "something";
-//            var suppliedArgI = 42;
-//
-//            sm.fire(x, suppliedArgS, suppliedArgI);
-//
-//            AreEqual(suppliedArgS, entryArgS);
-//            AreEqual(suppliedArgI, entryArgI);
-//        }
+        @Test
+        public void ParametersSuppliedToFireArePassedToEntryAction()
+        {
+        	StateMachine<State, Trigger> sm = new StateMachine<State, Trigger>(State.B);
+
+        	TriggerWithParameters2<String, Integer, Trigger> x = new TriggerWithParameters2<>(Trigger.X, String.class, int.class);
+
+            sm.configure(State.B)
+                .permit(Trigger.X, State.C);
+
+            sm.configure(State.C)
+                .onEntry(new Action2<Transition<State,Trigger>, Object[]>() {
+                	public void doIt(Transition<State, Trigger> trans, Object[] args) {
+                		receivedArgs = args;
+				}});
+
+            String suppliedArgS = "something";
+            int suppliedArgI = 42;
+
+            sm.fire(x, suppliedArgS, suppliedArgI);
+
+            assertEquals(receivedArgs[0], suppliedArgS);
+            assertEquals(receivedArgs[1], suppliedArgI);
+        }
 //
 //        @Test
 //        public void WhenAnUnhandledTriggerIsFired_TheProvidedHandlerIsCalledWithStateAndTrigger()
