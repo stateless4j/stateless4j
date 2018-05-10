@@ -5,6 +5,11 @@ import com.github.oxo42.stateless4j.delegates.FuncBoolean;
 public abstract class TriggerBehaviour<S, T> {
 
     private final T trigger;
+
+    /**
+     * Note that this guard gets called quite often, and sometimes multiple times per fire() call.
+     * Thus, it should not be anything performance intensive.
+     */
     private final FuncBoolean guard;
 
     protected TriggerBehaviour(T trigger, FuncBoolean guard) {
