@@ -2,6 +2,7 @@ package com.github.oxo42.stateless4j;
 
 import com.github.oxo42.stateless4j.delegates.Action1;
 import com.github.oxo42.stateless4j.delegates.Action2;
+import com.github.oxo42.stateless4j.delegates.Action3;
 import com.github.oxo42.stateless4j.delegates.Func;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.*;
@@ -25,9 +26,10 @@ public class StateMachine<S, T> {
     protected final Action1<S> stateMutator;
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean shouldLog = true;
-    protected Action2<S, T> unhandledTriggerAction = new Action2<S, T>() {
+
+    protected Action3<S, T, Object[]> unhandledTriggerAction = new Action3<S, T, Object[]>() {
         @Override
-        public void doIt(S state, T trigger) {
+        public void doIt(S state, T trigger, Object[] args) {
             throw new IllegalStateException(
                     String.format(
                             "No valid leaving transitions are permitted from state '%s' for trigger '%s'. Consider ignoring the trigger.",
@@ -213,7 +215,7 @@ public class StateMachine<S, T> {
         
         TriggerBehaviour<S, T> triggerBehaviour = getCurrentRepresentation().tryFindHandler(trigger);
         if (triggerBehaviour == null) {
-            unhandledTriggerAction.doIt(getCurrentRepresentation().getUnderlyingState(), trigger);
+            unhandledTriggerAction.doIt(getCurrentRepresentation().getUnderlyingState(), trigger, args);
             return;
         }
         
@@ -242,13 +244,30 @@ public class StateMachine<S, T> {
      *
      * @param unhandledTriggerAction An action to call when an unhandled trigger is fired
      */
-    public void onUnhandledTrigger(Action2<S, T> unhandledTriggerAction) {
+    public void onUnhandledTrigger(final Action2<S, T> unhandledTriggerAction) {
+        if (unhandledTriggerAction == null) {
+            throw new IllegalStateException("unhandledTriggerAction");
+        }
+        this.unhandledTriggerAction = new Action3<S, T, Object[]>() {
+            @Override
+            public void doIt(S state, T trigger, Object[] arg3) {
+                unhandledTriggerAction.doIt(state, trigger);
+            }
+        };
+    }
+
+    /**
+     * Override the default behaviour of throwing an exception when an unhandled trigger is fired
+     *
+     * @param unhandledTriggerAction An action to call with state, trigger and params when an unhandled trigger is fired
+     */
+    public void onUnhandledTrigger(Action3<S, T, Object[]> unhandledTriggerAction) {
         if (unhandledTriggerAction == null) {
             throw new IllegalStateException("unhandledTriggerAction");
         }
         this.unhandledTriggerAction = unhandledTriggerAction;
     }
-    
+
     /**
      * Determine if the state machine is in the supplied state
      *

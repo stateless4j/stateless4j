@@ -301,6 +301,25 @@ public class StateConfiguration<S, T> {
     /**
      * Specify an action that will execute when transitioning into the configured state
      *
+     * @param entryAction Action to execute, providing details of the transition and trigger parameters
+     * @return The receiver
+     */
+    public StateConfiguration<S, T> onEntry(final Action2<Transition<S, T>, Object[]> entryAction) {
+        assert entryAction != null : ENTRY_ACTION_IS_NULL;
+        representation.addEntryAction(new Action2<Transition<S, T>, Object[]>() {
+            @Override
+            public void doIt(Transition<S, T> arg1, Object[] arg2) {
+                entryAction.doIt(arg1, arg2);
+            }
+        });
+        return this;
+    }
+
+
+
+    /**
+     * Specify an action that will execute when transitioning into the configured state
+     *
      * @param trigger     The trigger by which the state must be entered in order for the action to execute
      * @param entryAction Action to execute
      * @return The receiver
