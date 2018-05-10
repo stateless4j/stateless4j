@@ -65,7 +65,7 @@ public class StateConfiguration<S, T> {
     }
 
     /**
-     * Accept the specified trigger and transition to the destination state
+     * Accept the specified trigger and transition to the destination state if guard is true
      *
      * @param trigger          The accepted trigger
      * @param destinationState The state that the trigger will cause a transition to
@@ -78,7 +78,7 @@ public class StateConfiguration<S, T> {
     }
 
     /**
-     * Accept the specified trigger and transition to the destination state
+     * Accept the specified trigger and transition to the destination state if guard is true
      * <p>
      * Additionally a given action is performed when transitioning. This action will be called after
      * the onExit action of the current state and before the onEntry action of
@@ -92,6 +92,49 @@ public class StateConfiguration<S, T> {
      */
     public StateConfiguration<S, T> permitIf(T trigger, S destinationState, FuncBoolean guard, Action action) {
         enforceNotIdentityTransition(destinationState);
+        return publicPermitIf(trigger, destinationState, guard, action);
+    }
+
+    /**
+     * Accept the specified trigger and transition to the destination state if guard true, otherwise ignore
+     *
+     * @param trigger          The accepted trigger
+     * @param destinationState The state that the trigger will cause a transition to
+     * @param guard            Function that must return true in order for the trigger to be accepted
+     * @return The receiver
+     */
+    public StateConfiguration<S, T> permitIfOtherwiseIgnore(T trigger, S destinationState, final FuncBoolean guard) {
+        enforceNotIdentityTransition(destinationState);
+        ignoreIf(trigger, new FuncBoolean() {
+            @Override
+            public boolean call() {
+                return !guard.call();
+            }
+        });
+        return publicPermitIf(trigger, destinationState, guard);
+    }
+
+    /**
+     * Accept the specified trigger and transition to the destination state if guard true, otherwise ignore
+     * <p>
+     * Additionally a given action is performed when transitioning. This action will be called after
+     * the onExit action of the current state and before the onEntry action of
+     * the destination state.
+     *
+     * @param trigger          The accepted trigger
+     * @param destinationState The state that the trigger will cause a transition to
+     * @param guard            Function that must return true in order for the trigger to be accepted
+     * @param action           The action to be performed "during" transition
+     * @return The receiver
+     */
+    public StateConfiguration<S, T> permitIfOtherwiseIgnore(T trigger, S destinationState, final FuncBoolean guard, Action action) {
+        enforceNotIdentityTransition(destinationState);
+        ignoreIf(trigger, new FuncBoolean() {
+            @Override
+            public boolean call() {
+                return !guard.call();
+            }
+        });
         return publicPermitIf(trigger, destinationState, guard, action);
     }
 
