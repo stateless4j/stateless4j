@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.oxo42</groupId>
+    <groupId>com.github.stateless4j</groupId>
     <artifactId>stateless4j</artifactId>
     <version>2.5.2-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     <name>stateless4j</name>
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -12,7 +12,7 @@
         <version>7</version>
     </parent>
     <description>A fluent interface for state machines</description>
-    <url>https://github.com/oxo42/stateless4j</url>
+    <url>https://github.com/stateless4j/stateless4j</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,9 +26,9 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/oxo42/stateless4j</url>
-        <connection>scm:git:https://github.com/oxo42/stateless4j.git</connection>
-        <developerConnection>scm:git:https://github.com/oxo42/stateless4j.git</developerConnection>
+        <url>https://github.com/stateless4j/stateless4j</url>
+        <connection>scm:git:https://github.com/stateless4j/stateless4j.git</connection>
+        <developerConnection>scm:git:https://github.com/stateless4j/stateless4j.git</developerConnection>
     </scm>
     <dependencies>
         <dependency>
@@ -53,13 +53,17 @@
         <developer>
             <name>John Oxley</name>
         </developer>
+        <developer>
+            <name>Chris Narkiewicz</name>
+            <email>hello@ezaquarii.com</email>
+        </developer>
     </developers>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.8</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -77,7 +81,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -86,7 +90,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
+                <version>3.0.0-M1</version>
                 <configuration>
                     <includes>
                         <include>**/*Test*.java</include>
@@ -96,6 +100,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -106,14 +111,27 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.5.3</version>
-                <extensions>true</extensions>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven-3</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.1.0</version>
+                                </requireMavenVersion>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-    <prerequisites>
-        <maven>3.0.0</maven>
-    </prerequisites>
 </project>
