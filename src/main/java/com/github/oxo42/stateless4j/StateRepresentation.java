@@ -9,8 +9,8 @@ import java.util.*;
 
 public class StateRepresentation<S, T> {
 
-    public static final String ACTION_IS_NULL = "action is null";
-    public static final String TRANSITION_IS_NULL = "transition is null";
+    private static final String ACTION_IS_NULL = "action is null";
+    private static final String TRANSITION_IS_NULL = "transition is null";
     private final S state;
 
     private final Map<T, List<TriggerBehaviour<S, T>>> triggerBehaviours = new HashMap<>();
