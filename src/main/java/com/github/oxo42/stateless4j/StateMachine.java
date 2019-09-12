@@ -1,13 +1,8 @@
 package com.github.oxo42.stateless4j;
 
-import com.github.oxo42.stateless4j.delegates.Action1;
-import com.github.oxo42.stateless4j.delegates.Action2;
-import com.github.oxo42.stateless4j.delegates.Action3;
-import com.github.oxo42.stateless4j.delegates.Func;
+import com.github.oxo42.stateless4j.delegates.*;
 import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.triggers.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +19,7 @@ public class StateMachine<S, T> {
     protected final StateMachineConfig<S, T> config;
     protected final Func<S> stateAccessor;
     protected final Action1<S> stateMutator;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-    private boolean shouldLog = true;
+    private Trace<S, T> trace = null;
 
     protected Action3<S, T, Object[]> unhandledTriggerAction = new Action3<S, T, Object[]>() {
         @Override
@@ -111,22 +105,6 @@ public class StateMachine<S, T> {
         stateMutator.doIt(value);
     }
     
-    public boolean getShouldLog() {
-        return shouldLog;
-    }
-    
-    public void setShouldLog(boolean enabled) {
-        shouldLog = enabled;
-    }
-    
-    public Logger getLogger() {
-        return logger;
-    }
-    
-    protected void log(T trigger, Object... args) {
-        getLogger().info("Firing " + trigger, args);
-    }
-    
     /**
      * The currently-permissible trigger values
      *
@@ -205,8 +183,8 @@ public class StateMachine<S, T> {
     }
     
     protected void publicFire(T trigger, Object... args) {
-        if (shouldLog) {
-            log(trigger, args);
+        if (trace != null) {
+            trace.trigger(trigger);
         }
         TriggerWithParameters<T> configuration = config.getTriggerConfiguration(trigger);
         if (configuration != null) {
@@ -230,11 +208,8 @@ public class StateMachine<S, T> {
             triggerBehaviour.performAction(args);
             setState(destination);
             getCurrentRepresentation().enter(transition, args);
-            if (shouldLog && logger.isDebugEnabled()) {
-                getLogger().debug("Fired [{}]--{}-->[{}]",
-                        source,
-                        TriggerWithParameters.toString(trigger, args),
-                        destination.toString());
+            if (trace != null) {
+                trace.transition(trigger, source, destination);
             }
         }
     }
@@ -287,7 +262,17 @@ public class StateMachine<S, T> {
     public boolean canFire(T trigger) {
         return getCurrentRepresentation().canHandle(trigger);
     }
-    
+
+    /**
+     * Set tracer delegate. Set trace delegate to investigate what the state machine is doing
+     * at runtime. Trace delegate will be called on {@link #fire(Object)} and on transition.
+     *
+     * @param trace Trace delegate or null, if trace should be disabled
+     */
+    public void setTrace(Trace<S, T> trace) {
+        this.trace = trace;
+    }
+
     /**
      * A human-readable representation of the state machine
      *
