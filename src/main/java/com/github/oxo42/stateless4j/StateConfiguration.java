@@ -5,9 +5,14 @@ import com.github.oxo42.stateless4j.transitions.Transition;
 import com.github.oxo42.stateless4j.transitions.TransitioningTriggerBehaviour;
 import com.github.oxo42.stateless4j.triggers.*;
 
-import static com.github.oxo42.stateless4j.Settings.*;
-
 public class StateConfiguration<S, T> {
+    private static final String GUARD_IS_NULL = "guard is null";
+    private static final String ENTRY_ACTION_IS_NULL = "entryAction is null";
+    private static final String EXIT_ACTION_IS_NULL = "exitAction is null";
+    private static final String ACTION_IS_NULL = "action is null";
+    private static final String TRIGGER_IS_NULL = "trigger is null";
+    private static final String DESTINATION_STATE_SELECTOR_IS_NULL = "destinationStateSelector is null";
+
     private static final FuncBoolean NO_GUARD = new FuncBoolean() {
         @Override
         public boolean call() {
