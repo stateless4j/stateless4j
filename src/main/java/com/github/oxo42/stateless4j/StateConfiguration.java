@@ -103,7 +103,7 @@ public class StateConfiguration<S, T> {
      * @param guard            Function that must return true in order for the trigger to be accepted
      * @return The receiver
      */
-    public StateConfiguration<S, T> permitIfOtherwiseIgnore(T trigger, S destinationState, final FuncBoolean guard) {
+    public StateConfiguration<S, T> permitIfElseIgnore(T trigger, S destinationState, final FuncBoolean guard) {
         enforceNotIdentityTransition(destinationState);
         ignoreIf(trigger, new FuncBoolean() {
             @Override
@@ -127,7 +127,7 @@ public class StateConfiguration<S, T> {
      * @param action           The action to be performed "during" transition
      * @return The receiver
      */
-    public StateConfiguration<S, T> permitIfOtherwiseIgnore(T trigger, S destinationState, final FuncBoolean guard, Action action) {
+    public StateConfiguration<S, T> permitIfElseIgnore(T trigger, S destinationState, final FuncBoolean guard, Action action) {
         enforceNotIdentityTransition(destinationState);
         ignoreIf(trigger, new FuncBoolean() {
             @Override

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class StateMachine<S, T> {
     
-    public static final String TRIGGER_IS_NULL = "trigger is null";
+    private static final String TRIGGER_IS_NULL = "trigger is null";
     protected final StateMachineConfig<S, T> config;
     protected final Func<S> stateAccessor;
     protected final Action1<S> stateMutator;
