@@ -20,6 +20,8 @@ public class StateMachine<S, T> {
     protected final Func<S> stateAccessor;
     protected final Action1<S> stateMutator;
     private Trace<S, T> trace = null;
+    private boolean isStarted = false;
+    private S initialState;
 
     protected Action3<S, T, Object[]> unhandledTriggerAction = new Action3<S, T, Object[]>() {
         @Override
@@ -30,7 +32,6 @@ public class StateMachine<S, T> {
                             state, trigger)
             );
         }
-        
     };
     
     /**
@@ -49,6 +50,7 @@ public class StateMachine<S, T> {
      * @param config       State machine configuration
      */
     public StateMachine(S initialState, StateMachineConfig<S, T> config) {
+        this.initialState = initialState;
         this.config = config;
         final StateReference<S, T> reference = new StateReference<>();
         reference.setState(initialState);
@@ -79,7 +81,23 @@ public class StateMachine<S, T> {
         this.stateMutator = stateMutator;
         stateMutator.doIt(initialState);
     }
-    
+
+    /**
+     * Fire initial transition into the initial state.
+     * All super-states are entered too.
+     *
+     * This method can be called only once, before state machine is used.
+     */
+    public void fireInitialTransition() {
+        S currentState = getCurrentRepresentation().getUnderlyingState();
+        if (isStarted || !currentState.equals(initialState)) {
+            throw new IllegalStateException("Firing initial transition after state machine has been started");
+        }
+        isStarted = true;
+        Transition<S, T> initialTransition = new Transition<>(null, currentState, null);
+        getCurrentRepresentation().enter(initialTransition);
+    }
+
     public StateConfiguration<S, T> configure(S state) {
         return config.configure(state);
     }
@@ -179,6 +197,7 @@ public class StateMachine<S, T> {
     }
     
     protected void publicFire(T trigger, Object... args) {
+        isStarted = true;
         if (trace != null) {
             trace.trigger(trigger);
         }
