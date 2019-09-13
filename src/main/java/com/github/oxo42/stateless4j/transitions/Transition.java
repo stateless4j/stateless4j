@@ -52,6 +52,7 @@ public class Transition<S, T> {
      * @return True if the transition is a re-entry
      */
     public boolean isReentry() {
-        return getSource().equals(getDestination());
+        final S source = getSource();
+        return source != null && source.equals(getDestination());
     }
 }
