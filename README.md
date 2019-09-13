@@ -2,9 +2,9 @@ Maven
 =====
 ```xml
     <dependency>
-        <groupId>com.github.oxo42</groupId>
+        <groupId>com.github.stateless4j</groupId>
         <artifactId>stateless4j</artifactId>
-        <version>2.5.0</version>
+        <version>2.6.0</version>
     </dependency>
 ```
 
