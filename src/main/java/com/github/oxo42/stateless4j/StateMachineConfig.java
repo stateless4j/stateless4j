@@ -19,44 +19,6 @@ public class StateMachineConfig<TState, TTrigger> {
 
     private final Map<TState, StateRepresentation<TState, TTrigger>> stateConfiguration = new HashMap<>();
     private final Map<TTrigger, TriggerWithParameters<TTrigger>> triggerConfiguration = new HashMap<>();
-    /**
-     * Added in 2.5.2.
-     * Default MUST be false for backward compatibility reasons. Prior to 2.5.2,
-     * entering the initial state never fires its entry action.
-     */
-    private boolean entryActionOfInitialStateEnabled = false;
-
-    /**
-     * Gets whether the entry action of the initial state of the state machine
-     * must be executed when the state machine starts.
-     * Default is false for backward compatibility sake.
-     * <p>
-     * Added in 2.5.2
-     *
-     * @return true if the entry action of the initial state of the state machine
-     * must be executed when the state machine starts.
-     */
-    public boolean isEntryActionOfInitialStateEnabled() {
-        return entryActionOfInitialStateEnabled;
-    }
-
-    /**
-     * Enables the state machine to execute the entry action of the initial state
-     * when the state machine starts.
-     * This configuration is disabled by default.
-     */
-    public void enableEntryActionOfInitialState() {
-        this.entryActionOfInitialStateEnabled = true;
-    }
-
-    /**
-     * Disables the state machine to execute the entry action of the initial state
-     * when the state machine starts.
-     * This is the default.
-     */
-    public void disableEntryActionOfInitialState() {
-        this.entryActionOfInitialStateEnabled = false;
-    }
 
     /**
      * Return StateRepresentation for the specified state. May return null.

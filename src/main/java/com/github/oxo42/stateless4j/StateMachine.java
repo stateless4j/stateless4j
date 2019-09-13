@@ -64,10 +64,6 @@ public class StateMachine<S, T> {
                 reference.setState(s);
             }
         };
-        if (config.isEntryActionOfInitialStateEnabled()) {
-            Transition<S, T> initialTransition = new Transition(initialState, initialState, null);
-            getCurrentRepresentation().enter(initialTransition);
-        }
     }
     
     /**
