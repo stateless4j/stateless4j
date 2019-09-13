@@ -6,6 +6,7 @@ package com.github.oxo42.stateless4j.delegates;
  * @param <T1> Input argument type
  * @param <R>  Result type
  */
+@FunctionalInterface
 public interface Func2<T1, R> {
 
     /**

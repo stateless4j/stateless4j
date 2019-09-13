@@ -8,6 +8,7 @@ package com.github.oxo42.stateless4j.delegates;
  * @param <T2> The type of the input to the operation
  * @param <T3> The type of the input to the operation
  */
+@FunctionalInterface
 public interface Action4<T, T1, T2, T3> {
 
     /**
