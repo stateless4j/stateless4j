@@ -5,6 +5,7 @@ package com.github.oxo42.stateless4j.delegates;
  *
  * @param <T> The type of the input to the operation
  */
+@FunctionalInterface
 public interface Action1<T> {
 
     /**
