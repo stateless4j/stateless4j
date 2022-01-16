@@ -62,6 +62,8 @@ Some useful extensions are also provided:
 * Parameterised triggers
 * Reentrant states
 
+Parallel states are not supported, but if you are looking for it, there is a fork that supports it: [ParallelStateless4j](https://gitlab.com/erasmusmc-public-health/parallelstateless4j/).
+
 
 Hierarchical States
 ===================
