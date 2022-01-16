@@ -8,8 +8,6 @@ Maven
     </dependency>
 ```
 
-[![Build Status](https://api.travis-ci.org/stateless4j/stateless4j.svg?branch=master)](https://travis-ci.org/stateless4j/stateless4j)
-
 Introduction
 ============
 Create **state machines** and lightweight state machine-based workflows **directly in java code**.
