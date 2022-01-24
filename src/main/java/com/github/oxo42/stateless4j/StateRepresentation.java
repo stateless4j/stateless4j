@@ -163,11 +163,11 @@ public class StateRepresentation<S, T> {
                 return true;
             }
         }
-        return this.state.equals(stateToCheck);
+        return this.state != null && this.state.equals(stateToCheck);
     }
 
     public boolean isIncludedIn(S stateToCheck) {
-        return this.state.equals(stateToCheck) || (superstate != null && superstate.isIncludedIn(stateToCheck));
+        return this.state != null && this.state.equals(stateToCheck) || (superstate != null && superstate.isIncludedIn(stateToCheck));
     }
 
     @SuppressWarnings("unchecked")
