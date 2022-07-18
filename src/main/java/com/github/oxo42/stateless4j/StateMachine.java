@@ -76,6 +76,7 @@ public class StateMachine<S, T> {
      * @param stateMutator  State mutator
      */
     public StateMachine(S initialState, Func<S> stateAccessor, Action1<S> stateMutator, StateMachineConfig<S, T> config) {
+        this.initialState = initialState;
         this.config = config;
         this.stateAccessor = stateAccessor;
         this.stateMutator = stateMutator;
