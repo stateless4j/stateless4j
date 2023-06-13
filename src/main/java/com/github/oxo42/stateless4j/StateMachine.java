@@ -82,6 +82,21 @@ public class StateMachine<S, T> {
         this.stateMutator = stateMutator;
         stateMutator.doIt(initialState);
     }
+    
+    /**
+     * Construct a state machine with external state storage. Assumes that external storage
+     * has the initial state available
+     *
+     * @param stateAccessor State accessor
+     * @param stateMutator  State mutator
+     * @param config        Configuration
+     */
+    public StateMachine(Func<S> stateAccessor, Action1<S> stateMutator, StateMachineConfig<S, T> config) {
+        this.initialState = stateAccessor.call();
+        this.config = config;
+        this.stateAccessor = stateAccessor;
+        this.stateMutator = stateMutator;
+    }
 
     /**
      * Fire initial transition into the initial state.
